@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-  <title><?php echo $__env->yieldContent('title', 'My App'); ?></title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>@yield('title', 'My App')</title>
 
   <!-- Single Tailwind CDN link for consistency -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/dist/tailwind.min.css" rel="stylesheet">
@@ -35,9 +35,9 @@
   <!-- Navigation Bar -->
   <nav class="nav-bg p-4 shadow-md">
     <div class="flex justify-between items-center px-6">
-      <a href="<?php echo e(route('cities.index')); ?>" class="text-white text-xl font-bold">My App</a>
+      <a href="{{ route('cities.index') }}" class="text-white text-xl font-bold">My App</a>
       <div class="space-x-4">
-        <a href="<?php echo e(route('cities.index')); ?>" class="text-white hover:text-gray-300">Cities</a>
+        <a href="{{ route('cities.index') }}" class="text-white hover:text-gray-300">Cities</a>
         <a href="#" class="text-white hover:text-gray-300">About</a>
       </div>
     </div>
@@ -46,19 +46,19 @@
   <!-- Main Content Area -->
   <div class="content-wrapper">
     <div>
-      <?php echo $__env->yieldContent('content'); ?>
+      @yield('content')
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="footer text-center">
     <div>
-      &copy; <?php echo e(date('Y')); ?> My App
+      &copy; {{ date('Y') }} My App
     </div>
   </footer>
 
   <!-- Alpine.js and Scripts Stack -->
   <script src="//unpkg.com/alpinejs" defer></script>
-  <?php echo $__env->yieldPushContent('scripts'); ?>
+  @stack('scripts')
 </body>
-</html><?php /**PATH D:\myPractice\Flutter\POS\backend\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html>
