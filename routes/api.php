@@ -13,9 +13,9 @@ use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\CityController;
 
-use App\Http\Controllers\API\CustomerApiController;
+use App\Http\Controllers\Api\CustomerApiController;
 
-use App\Http\Controllers\API\EmployeeApiController;
+use App\Http\Controllers\Api\EmployeeApiController;
 
 use App\Http\Controllers\Api\VendorController;
 
@@ -28,6 +28,14 @@ use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\PurchaseReturnDetailController;
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\PosDetailController;
+use App\Http\Controllers\PosReturnController;
+
+
+
 
 
 
@@ -105,3 +113,37 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('purchases', [PurchaseController::class, 'apiIndex']);
     Route::post('purchases', [PurchaseController::class, 'store']);
 
+    Route::get('purchase_returns', [PurchaseReturnController::class, 'apiIndex']);
+    Route::post('purchase_returns', [PurchaseReturnController::class, 'store']);
+    Route::get('purchase_return_details', [PurchaseReturnDetailController::class, 'apiIndex']);
+    Route::post('purchase_return_details', [PurchaseReturnDetailController::class, 'store']);
+
+    // Route::get('pos', [PosController::class, 'apiIndex']);
+    // Route::post('pos', [PosController::class, 'store']);
+
+    // use App\Http\Controllers\PosController;
+
+    // All CRUD API routes for POS
+    Route::prefix('pos')->group(function () {
+        Route::get('/', [PosController::class, 'apiIndex']);     // List all invoices
+        Route::post('/', [PosController::class, 'store']);       // Create new invoice
+        Route::get('/{id}', [PosController::class, 'show']);     // Show single invoice
+        Route::put('/{id}', [PosController::class, 'update']);   // Update invoice
+        Route::delete('/{id}', [PosController::class, 'destroy']); // Delete invoice
+    });
+
+    Route::prefix('pos_details')->group(function () {
+        Route::get('/', [PosDetailController::class, 'apiIndex']);
+        Route::post('/', [PosDetailController::class, 'store']);
+        Route::get('/{id}', [PosDetailController::class, 'show']);
+        Route::put('/{id}', [PosDetailController::class, 'update']);
+        Route::delete('/{id}', [PosDetailController::class, 'destroy']);
+    });
+
+    Route::prefix('pos_returns')->group(function () {
+        Route::get('/', [PosReturnController::class, 'apiIndex']);
+        Route::post('/', [PosReturnController::class, 'store']);
+        Route::get('/{id}', [PosReturnController::class, 'show']);
+        Route::put('/{id}', [PosReturnController::class, 'update']);
+        Route::delete('/{id}', [PosReturnController::class, 'destroy']);
+    });

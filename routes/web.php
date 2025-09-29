@@ -17,6 +17,17 @@ use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\PurchaseReturnDetailController;
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\PosDetailController;
+use App\Http\Controllers\PosReturnController;
+
+
+
+
+
+
 
 
 
@@ -61,3 +72,8 @@ Route::resource('materials', MaterialController::class);
 Route::resource('products', ProductController::class);
 
 Route::resource('purchases', PurchaseController::class);
+Route::resource('purchase_returns', PurchaseReturnController::class);
+Route::resource('purchase_return_details', PurchaseReturnDetailController::class);
+Route::resource('pos', PosController::class);
+Route::resource('pos_details', PosDetailController::class);
+Route::resource('pos_returns', PosReturnController::class);

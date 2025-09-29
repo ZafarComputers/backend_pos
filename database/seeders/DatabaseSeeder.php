@@ -38,6 +38,10 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             PurchaseSeeder::class,
             PurchaseReturnSeeder::class,
+            PurchaseReturnDetailSeeder::class,
+            PosSeeder::class,
+            PosDetailSeeder::class,
+            PosReturnSeeder::class,
         ]);
 
 
