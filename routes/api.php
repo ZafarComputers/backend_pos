@@ -34,8 +34,8 @@ use App\Http\Controllers\PosController;
 use App\Http\Controllers\PosDetailController;
 use App\Http\Controllers\PosReturnController;
 
-
-
+use App\Http\Controllers\Api\PosReturnDetailApiController;
+// use App\Http\Controllers\Api\POS_Return_DetailController;
 
 
 
@@ -93,6 +93,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+
+// Routes OK
     Route::apiResource('countries', CountryController::class);
     Route::apiResource('states', StateController::class);
     Route::apiResource('cities', CityController::class);
@@ -147,3 +149,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [PosReturnController::class, 'update']);
         Route::delete('/{id}', [PosReturnController::class, 'destroy']);
     });
+
+    Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
+    // Route::apiResource('pos-return-details', POS_Return_DetailController::class);

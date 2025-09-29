@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             PosSeeder::class,
             PosDetailSeeder::class,
             PosReturnSeeder::class,
+            PosReturnDetailSeeder::class,
         ]);
 
 

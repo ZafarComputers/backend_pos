@@ -22,6 +22,7 @@ use App\Http\Controllers\PurchaseReturnDetailController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\PosDetailController;
 use App\Http\Controllers\PosReturnController;
+use App\Http\Controllers\PosReturnDetailController;
 
 
 
@@ -46,34 +47,37 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('roles', RoleController::class);
-Route::resource('users', UserController::class);
+// Route::resource('roles', RoleController::class);
+// Route::resource('users', UserController::class);
 
-Route::resource('countries', CountryController::class);
-Route::resource('states', StateController::class);
-Route::resource('cities', CityController::class);
+// Route::resource('countries', CountryController::class);
+// Route::resource('states', StateController::class);
+// Route::resource('cities', CityController::class);
 
-Route::middleware(['web'])->group(function () {
-    // Resource routes for web (index, create, store, edit, update, delete)
-    Route::resource('customers', CustomerController::class);
-});
+// Route::middleware(['web'])->group(function () {
+//     // Resource routes for web (index, create, store, edit, update, delete)
+//     Route::resource('customers', CustomerController::class);
+// });
 
-Route::resource('employees', EmployeeController::class);
+// Route::resource('employees', EmployeeController::class);
 
-Route::resource('vendors', VendorController::class);
+// Route::resource('vendors', VendorController::class);
 
-Route::resource('categories', CategoryController::class);
-Route::resource('subcategories', SubCategoryController::class);
+// Route::resource('categories', CategoryController::class);
+// Route::resource('subcategories', SubCategoryController::class);
 
-Route::resource('sizes', SizeController::class);
-Route::resource('colors', ColorController::class);
-Route::resource('seasons', SeasonController::class);
-Route::resource('materials', MaterialController::class);
-Route::resource('products', ProductController::class);
+// Route::resource('sizes', SizeController::class);
+// Route::resource('colors', ColorController::class);
+// Route::resource('seasons', SeasonController::class);
+// Route::resource('materials', MaterialController::class);
+// Route::resource('products', ProductController::class);
 
-Route::resource('purchases', PurchaseController::class);
-Route::resource('purchase_returns', PurchaseReturnController::class);
-Route::resource('purchase_return_details', PurchaseReturnDetailController::class);
-Route::resource('pos', PosController::class);
-Route::resource('pos_details', PosDetailController::class);
-Route::resource('pos_returns', PosReturnController::class);
+// Route::resource('purchases', PurchaseController::class);
+// Route::resource('purchase_returns', PurchaseReturnController::class);
+// Route::resource('purchase_return_details', PurchaseReturnDetailController::class);
+// Route::resource('pos', PosController::class);
+// Route::resource('pos_details', PosDetailController::class);
+// Route::resource('pos_returns', PosReturnController::class);
+
+Route::resource('pos_return_details', PosReturnDetailController::class);
+

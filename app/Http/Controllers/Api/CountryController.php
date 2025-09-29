@@ -1,56 +1,42 @@
 <?php
 
-// namespace App\Http\Controllers\API;
-
-// use App\Http\Controllers\Controller;
-// use App\Models\Country;
-// use Illuminate\Http\Request;
-// use Illuminate\Http\JsonResponse;
-// use Illuminate\Support\Facades\Validator;
-
-
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\State;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Country;
 
 /**
  * Class CountryController
  *
  * Handles API operations for the Country resource.
- * Last updated: 02:39 PM PKT, September 27, 2025.
+ * Last updated: September 27, 2025.
  */
 class CountryController extends Controller
 {
     /**
-     * Display a paginated listing of all countries.
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * Display a paginated listing of countries.
      */
     public function index(Request $request): JsonResponse
     {
         try {
-            $perPage = $request->input('per_page', 10);
+            $perPage = (int) $request->input('per_page', 10);
 
-            // Fetch countries with pagination
             $countries = Country::paginate($perPage);
 
             return response()->json([
-                'success' => true,
-                'data' => $countries->items(),
+                'success'    => true,
+                'data'       => $countries->items(),
                 'pagination' => [
                     'current_page' => $countries->currentPage(),
                     'per_page'     => $countries->perPage(),
                     'total'        => $countries->total(),
                     'last_page'    => $countries->lastPage(),
                 ],
-            ], 200);
-
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve countries: ' . $e->getMessage(),
@@ -60,30 +46,25 @@ class CountryController extends Controller
 
     /**
      * Store a newly created country.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'title'    => 'required|string|max:255',
+            'code'     => 'required|string|max:10|unique:countries,code',
+            'currency' => 'required|string|max:10',
+            'status'   => 'required|in:active,inactive',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
         try {
-            // Validate request data
-            $validator = Validator::make($request->all(), [
-                'title'    => 'required|string|max:255',
-                'code'     => 'required|string|max:10|unique:countries,code',
-                'currency' => 'required|string|max:10',
-                'status'   => 'required|in:active,inactive',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Validation failed',
-                    'errors'  => $validator->errors(),
-                ], 422);
-            }
-
-            // Create country
             $country = Country::create($request->only(['title', 'code', 'currency', 'status']));
 
             return response()->json([
@@ -91,8 +72,7 @@ class CountryController extends Controller
                 'message' => 'Country created successfully',
                 'data'    => $country,
             ], 201);
-
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create country: ' . $e->getMessage(),
@@ -101,54 +81,45 @@ class CountryController extends Controller
     }
 
     /**
-     * Display a specific country.
-     *
-     * @param Country $country
-     * @return JsonResponse
+     * Display the specified country.
      */
     public function show(Country $country): JsonResponse
     {
         return response()->json([
             'success' => true,
             'data'    => $country,
-        ], 200);
+        ]);
     }
 
     /**
-     * Update a country.
-     *
-     * @param Request $request
-     * @param Country $country
-     * @return JsonResponse
+     * Update the specified country.
      */
     public function update(Request $request, Country $country): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'title'    => 'required|string|max:255',
+            'code'     => 'required|string|max:10|unique:countries,code,' . $country->id,
+            'currency' => 'required|string|max:10',
+            'status'   => 'required|in:active,inactive',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
         try {
-            $validator = Validator::make($request->all(), [
-                'title'    => 'required|string|max:255',
-                'code'     => 'required|string|max:10|unique:countries,code,' . $country->id,
-                'currency' => 'required|string|max:10',
-                'status'   => 'required|in:active,inactive',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Validation failed',
-                    'errors'  => $validator->errors(),
-                ], 422);
-            }
-
-            // Update country
             $country->update($request->only(['title', 'code', 'currency', 'status']));
 
             return response()->json([
                 'success' => true,
                 'message' => 'Country updated successfully',
                 'data'    => $country,
-            ], 200);
-
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update country: ' . $e->getMessage(),
@@ -157,10 +128,7 @@ class CountryController extends Controller
     }
 
     /**
-     * Delete a country.
-     *
-     * @param Country $country
-     * @return JsonResponse
+     * Remove the specified country.
      */
     public function destroy(Country $country): JsonResponse
     {
@@ -170,9 +138,8 @@ class CountryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Country deleted successfully',
-            ], 200);
-
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete country: ' . $e->getMessage(),
