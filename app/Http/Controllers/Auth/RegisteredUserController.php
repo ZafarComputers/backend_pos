@@ -2,67 +2,39 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Fortify\Contracts\RegisterResponse;
-use Laravel\Fortify\Contracts\RegisterViewResponse;
-use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\Hash;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * The guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected $guard;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
-     * @return void
-     */
-    public function __construct(StatefulGuard $guard)
+    public function create()
     {
-        $this->guard = $guard;
+        return view('auth.register');
     }
 
-    /**
-     * Show the registration view.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Fortify\Contracts\RegisterViewResponse
-     */
-    public function create(Request $request): RegisterViewResponse
-    {
-        return app(RegisterViewResponse::class);
-    }
+    public function store(Request $request)
+{
+    $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name'  => 'required|string|max:255',
+        'email'      => 'required|string|email|max:255|unique:users',
+        'password'   => 'required|string|min:6|confirmed',
+    ]);
 
-    /**
-     * Create a new registered user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
-     * @return \Laravel\Fortify\Contracts\RegisterResponse
-     */
-    public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
-    {
-        if (config('fortify.lowercase_usernames') && $request->has(Fortify::username())) {
-            $request->merge([
-                Fortify::username() => Str::lower($request->{Fortify::username()}),
-            ]);
-        }
+    $user = User::create([
+        'first_name' => $request->first_name,
+        'last_name'  => $request->last_name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'status' => 1,
+        'role_id' => 2, // 👈 default role for normal users
+    ]);
 
-        event(new Registered($user = $creator->create($request->all())));
+    auth()->login($user);
 
-        $this->guard->login($user, $request->boolean('remember'));
+    return redirect('/dashboard')->with('success', 'Registration successful!');
+}
 
-        return app(RegisterResponse::class);
-    }
 }

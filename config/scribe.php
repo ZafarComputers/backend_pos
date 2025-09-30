@@ -8,17 +8,11 @@ use function Knuckles\Scribe\Config\{removeStrategies, configureStrategy};
 // Only the most common configs are shown. See the https://scribe.knuckles.wtf/laravel/reference/config for all.
 
 return [
+    // The HTML <title> for the generated documentation.
+    'title' => config('app.name') . ' API Documentation',
 
-    'title' => 'Zafar Computers API',
-    'description' => 'API documentation for POS, Purchases, Returns, and more.',
-    'base_url' => env('APP_URL', 'http://zafarcomputers/api'),
-
-
-    // // The HTML <title> for the generated documentation.
-    // 'title' => config('app.name') . ' API Documentation',
-
-    // // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
-    // 'description' => '',
+    // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
+    'description' => '',
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<INTRO
@@ -28,9 +22,9 @@ return [
         You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
     INTRO,
 
-    // // The base URL displayed in the docs.
-    // // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
-    // 'base_url' => config("app.url"),
+    // The base URL displayed in the docs.
+    // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
+    'base_url' => config("app.url"),
 
     // Routes to include in the docs
     'routes' => [
@@ -60,6 +54,7 @@ return [
     // - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
     // - "external_static" and "external_laravel" do the same as above, but pass the OpenAPI spec as a URL to an external UI template
     'type' => 'laravel',
+    // 'type' => 'static',
 
     // See https://scribe.knuckles.wtf/laravel/reference/config#theme for supported options
     'theme' => 'default',
@@ -81,7 +76,8 @@ return [
         // Directory within `public` in which to store CSS and JS assets.
         // By default, assets are stored in `public/vendor/scribe`.
         // If set, assets will be stored in `public/{{assets_directory}}`
-        'assets_directory' => null,
+        // 'assets_directory' => null,
+        'assets_directory' => 'public/docs',
 
         // Middleware to attach to the docs endpoint (if `add_routes` is true).
         'middleware' => [],

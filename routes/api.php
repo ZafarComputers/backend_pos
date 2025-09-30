@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
+use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\CityController;
@@ -36,6 +37,10 @@ use App\Http\Controllers\PosReturnController;
 
 use App\Http\Controllers\Api\PosReturnDetailApiController;
 // use App\Http\Controllers\Api\POS_Return_DetailController;
+use App\Http\Controllers\Api\CoaMainApiController;
+use App\Http\Controllers\Api\CoaSubApiController;
+
+
 
 
 
@@ -61,18 +66,23 @@ Route::get('/ping', function () {
 // Route::post('/login', [AuthController::class, 'login']);
 // Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+//         ->name('login');
+// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//         ->name('logout');
+// Route::get('/register', [RegisteredUserController::class, 'create'])
+//         ->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthApiController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthApiController::class, 'logout']);
+    Route::get('/me', [AuthApiController::class, 'me']);
+});
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
 
-Route::get('/register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-Route::post('/register', [RegisteredUserController::class, 'store']);
 
 // Role routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -152,3 +162,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
     // Route::apiResource('pos-return-details', POS_Return_DetailController::class);
+
+    Route::apiResource('coa-mains', CoaMainApiController::class);
+    Route::apiResource('coa-subs', CoaSubApiController::class);

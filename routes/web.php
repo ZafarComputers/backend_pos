@@ -23,6 +23,10 @@ use App\Http\Controllers\PosController;
 use App\Http\Controllers\PosDetailController;
 use App\Http\Controllers\PosReturnController;
 use App\Http\Controllers\PosReturnDetailController;
+use App\Http\Controllers\CoaMainController;
+use App\Http\Controllers\CoaSubController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+
 
 
 
@@ -37,15 +41,19 @@ Route::get('/', function () {
 });
 
 
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
+
+
+// // Route::get('/dashboard', function () {
+// //     // dd('you are in dashboard');
+// //     return view('dashboard');
+// // })->middleware(['auth'])->name('dashboard');
+
 // Route::get('/dashboard', function () {
 //     // dd('you are in dashboard');
 //     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
-
-Route::get('/dashboard', function () {
-    // dd('you are in dashboard');
-    return view('dashboard');
-})->name('dashboard');
+// })->name('dashboard');
 
 // Route::resource('roles', RoleController::class);
 // Route::resource('users', UserController::class);
@@ -79,5 +87,9 @@ Route::get('/dashboard', function () {
 // Route::resource('pos_details', PosDetailController::class);
 // Route::resource('pos_returns', PosReturnController::class);
 
-Route::resource('pos_return_details', PosReturnDetailController::class);
+// Route::resource('pos_return_details', PosReturnDetailController::class);
+// Route::resource('coa-mains', CoaMainController::class);
+// Route::resource('coa-subs', CoaSubController::class);
+
+
 

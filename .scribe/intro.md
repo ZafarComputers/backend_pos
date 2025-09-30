@@ -1,6 +1,6 @@
 # Introduction
 
-API documentation for POS, Purchases, Returns, and more.
+
 
 <aside>
     <strong>Base URL</strong>: <code>http://localhost</code>

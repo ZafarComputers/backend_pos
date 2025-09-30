@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\POSReturnDetail;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
  *
  * APIs for managing POS Return Details
  */
-class POS_Return_DetailController extends Controller
+class PosReturnDetailController extends Controller
 {
     /**
      * List POS Return Details (paginated).
