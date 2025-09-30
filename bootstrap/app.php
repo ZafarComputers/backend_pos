@@ -14,6 +14,18 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        $middleware->alias([
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // other aliases
+            ]);
+
+            // prepend or append middleware globally:
+            // $middleware->append(\App\Http\Middleware\MyMiddleware::class);
+
+            // add to specific groups (web, api) via appendToGroup or prependToGroup:
+                $middleware->appendToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

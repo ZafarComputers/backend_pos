@@ -2,81 +2,114 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
 class AuthController extends Controller
 {
     /**
-     * Register new user.
+     * Register a new user
      */
     public function register(Request $request)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users',
-            'cell_no1' => 'nullable|string|max:20',
-            'cell_no2' => 'nullable|string|max:20',
-            'password' => 'required|string|min:6|confirmed',
+        $validated = $request->validate([
+            'first_name'            => 'required|string|max:255',
+            'last_name'             => 'required|string|max:255',
+            'email'                 => 'required|string|email|max:255|unique:users',
+            'cell_no1'              => 'nullable|string|max:20',
+            'cell_no2'              => 'nullable|string|max:20',
+            'img_path'              => 'nullable|string|max:255',
+            'role_id'               => 'required|exists:roles,id',
+            'password'              => 'required|string|min:6|confirmed',
+            'status'                => 'in:active,inactive'
         ]);
 
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => $request->email,
-            'cell_no1'   => $request->cell_no1,
-            'cell_no2'   => $request->cell_no2,
-            'password'   => Hash::make($request->password),
-            'role_id'    => $request->role_id ?? 2, // default: Admin/User
-            'status'     => 'active',
+            'first_name' => $validated['first_name'],
+            'last_name'  => $validated['last_name'],
+            'email'      => $validated['email'],
+            'cell_no1'   => $validated['cell_no1'] ?? null,
+            'cell_no2'   => $validated['cell_no2'] ?? null,
+            'img_path'   => $validated['img_path'] ?? null,
+            'role_id'    => $validated['role_id'],
+            'password'   => Hash::make($validated['password']),
+            'status'     => $validated['status'] ?? 'active',
         ]);
 
-        $token = $user->createToken('api-token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user'  => $user,
-            'token' => $token,
-        ]);
+            'status'  => 'success',
+            'message' => 'User registered successfully',
+            'user'    => $user,
+            'token'   => $token,
+        ], 201);
     }
 
     /**
-     * Login existing user.
+     * Login user
      */
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email'    => 'required|email',
-            'password' => 'required|string',
+            'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (!Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['Invalid credentials provided.'],
             ]);
         }
 
-        $token = $user->createToken('api-token')->plainTextToken;
+        $user = Auth::user();
+
+        // Optional: block inactive users
+        if ($user->status === 'inactive') {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Account is inactive. Contact admin.'
+            ], 403);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user'  => $user,
-            'token' => $token,
+            'status'  => 'success',
+            'message' => 'Login successful',
+            'user'    => $user,
+            'token'   => $token,
         ]);
     }
 
     /**
-     * Logout user (revoke token).
+     * Logout user (Revoke current token)
      */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
+            'status'  => 'success',
             'message' => 'Logged out successfully'
+        ]);
+    }
+
+    /**
+     * Get authenticated user profile
+     */
+    public function profile(Request $request)
+    {
+        // dd($request);
+        // $users = User::all();
+        // dd($users);
+        // dd('you are here... Profile', $request->user());
+        return response()->json([
+            'status' => 'success',
+            'user'   => $request->user()
         ]);
     }
 }

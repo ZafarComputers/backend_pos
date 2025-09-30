@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "http://localhost";
+        var tryItOutBaseUrl = "https://zafarcomputers.com";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -38,22 +38,22 @@
 
 <body data-languages="[&quot;bash&quot;,&quot;javascript&quot;]">
 
-<a href="#" id="nav-button">
+{{-- <a href="#" id="nav-button">
     <span>
         MENU
         <img src="{{ asset("/public/docs/images/navbar.png") }}" alt="navbar-image"/>
     </span>
-</a>
+</a> --}}
 <div class="tocify-wrapper">
     
-            <div class="lang-selector">
+            {{-- <div class="lang-selector">
                                             <button type="button" class="lang-button" data-language-name="bash">bash</button>
                                             <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
                     </div>
     
     <div class="search">
         <input type="text" class="search" id="input-search" placeholder="Search">
-    </div>
+    </div> --}}
 
     <div id="toc">
                     <ul id="tocify-header-introduction" class="tocify-header">
@@ -424,7 +424,7 @@
     <div class="content">
         <h1 id="introduction">Introduction</h1>
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost</code>
+    <strong>Base URL</strong>: <code>https://zafarcomputers.com/api/</code>
 </aside>
 <pre><code>This documentation aims to provide all the information you need to work with our API.
 

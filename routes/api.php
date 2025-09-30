@@ -41,6 +41,26 @@ use App\Http\Controllers\Api\CoaMainApiController;
 use App\Http\Controllers\Api\CoaSubApiController;
 
 
+use App\Http\Controllers\Api\UserApiController;
+
+
+
+// Test Routes
+// ********************************
+
+
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('/profile', [UserApiController::class, 'profile']);
+// });
+
+Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
+    return $request->user();
+});
+
+
+// **** End Test Routes
+
+Route::apiResource('users', UserApiController::class);
 
 
 
@@ -75,13 +95,31 @@ Route::get('/ping', function () {
 //         ->name('register');
 // Route::post('/register', [RegisteredUserController::class, 'store']);
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthApiController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthApiController::class, 'logout']);
-    Route::get('/me', [AuthApiController::class, 'me']);
-});
+// Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/login', [AuthApiController::class, 'login']);
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::post('/logout', [AuthApiController::class, 'logout']);
+//     Route::get('/me', [AuthApiController::class, 'me']);
+// });
 
+
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+// Route::get('/profile', [AuthController::class, 'profile']);
+// Route::middleware('auth:sanctum')->get('/profile', [UserController::class, 'profile']);
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // User CRUD
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::put('/users/{user}', [UserController::class, 'update']);
+    Route::delete('/users/{user}', [UserController::class, 'destroy']);
+});
 
 
 // Role routes

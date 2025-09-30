@@ -28,10 +28,12 @@ use App\Http\Controllers\CoaSubController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
 
-
-
-
-
+// Testing Routes
+Route::resource('users', UserController::class);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
+});
+// End Testing Routes
 
 
 
@@ -39,6 +41,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+// });
 
 
 // Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');

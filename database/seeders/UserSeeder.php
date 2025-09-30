@@ -24,6 +24,20 @@ class UserSeeder extends Seeder
             'status' => 'active',
         ]);
 
+         User::create([
+            'first_name' => 'User',
+            'last_name' => 'User',
+            'email' => 'user@example.com',
+            'cell_no1' => '03001234567',
+            'cell_no2' => null,
+            'img_path' => null,
+            'role_id' => 1, // Super Admin role ID
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'status' => 'active',
+        ]);
+
+
         User::factory(10)->create();
     }
 }

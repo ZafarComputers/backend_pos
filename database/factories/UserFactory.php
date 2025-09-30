@@ -12,16 +12,28 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->unique()->safeEmail,
-            'cell_no1' => $this->faker->phoneNumber,
-            'cell_no2' => $this->faker->optional()->phoneNumber,
-            'img_path' => $this->faker->imageUrl(100, 100, 'people'),
-            'role_id' => Role::inRandomOrder()->first()?->id ?? Role::factory(),
+            'first_name'        => $this->faker->firstName,
+            'last_name'         => $this->faker->lastName,
+            'email'             => $this->faker->unique()->safeEmail(),
+            'cell_no1'          => $this->faker->phoneNumber,
+            'cell_no2'          => $this->faker->optional()->phoneNumber,
+            'img_path'          => null,
+            'role_id'           => Role::inRandomOrder()->first()->id ?? 1,
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'status' => $this->faker->randomElement(['active','inactive']),
+            'password'          => bcrypt('password'),
+            'status'            => 'active',
+            'remember_token'    => Str::random(10),
+            
+            // 'first_name' => $this->faker->firstName,
+            // 'last_name' => $this->faker->lastName,
+            // 'email' => $this->faker->unique()->safeEmail,
+            // 'cell_no1' => $this->faker->phoneNumber,
+            // 'cell_no2' => $this->faker->optional()->phoneNumber,
+            // 'img_path' => $this->faker->imageUrl(100, 100, 'people'),
+            // 'role_id' => Role::inRandomOrder()->first()?->id ?? Role::factory(),
+            // 'email_verified_at' => now(),
+            // 'password' => Hash::make('password'),
+            // 'status' => $this->faker->randomElement(['active','inactive']),
         ];
     }
 }
