@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "https://zafarcomputers.com";
+        var tryItOutBaseUrl = "http://localhost";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -38,22 +38,22 @@
 
 <body data-languages="[&quot;bash&quot;,&quot;javascript&quot;]">
 
-{{-- <a href="#" id="nav-button">
+<a href="#" id="nav-button">
     <span>
         MENU
         <img src="{{ asset("/public/docs/images/navbar.png") }}" alt="navbar-image"/>
     </span>
-</a> --}}
+</a>
 <div class="tocify-wrapper">
     
-            {{-- <div class="lang-selector">
+            <div class="lang-selector">
                                             <button type="button" class="lang-button" data-language-name="bash">bash</button>
                                             <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
                     </div>
     
     <div class="search">
         <input type="text" class="search" id="input-search" placeholder="Search">
-    </div> --}}
+    </div>
 
     <div id="toc">
                     <ul id="tocify-header-introduction" class="tocify-header">
@@ -71,20 +71,35 @@
                     <a href="#endpoints">Endpoints</a>
                 </li>
                                     <ul id="tocify-subheader-endpoints" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-ping">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-profile">
+                                <a href="#endpoints-GETapi-profile">GET api/profile</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-users">
+                                <a href="#endpoints-GETapi-users">GET api/users</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-users">
+                                <a href="#endpoints-POSTapi-users">POST api/users</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-users--id-">
+                                <a href="#endpoints-PUTapi-users--id-">PUT api/users/{id}</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-users--user_id-">
+                                <a href="#endpoints-DELETEapi-users--user_id-">DELETE api/users/{user_id}</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-ping">
                                 <a href="#endpoints-GETapi-ping">GET api/ping</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-register">
-                                <a href="#endpoints-POSTapi-register">Register new user.</a>
+                                <a href="#endpoints-POSTapi-register">Register a new user</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-login">
                                 <a href="#endpoints-POSTapi-login">POST api/login</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-logout">
-                                <a href="#endpoints-POSTapi-logout">POST api/logout</a>
+                                <a href="#endpoints-POSTapi-logout">Logout user (Revoke current token)</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-me">
-                                <a href="#endpoints-GETapi-me">GET api/me</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-users--user_id-">
+                                <a href="#endpoints-PUTapi-users--user_id-">PUT api/users/{user_id}</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-roles">
                                 <a href="#endpoints-GETapi-roles">GET api/roles</a>
@@ -100,15 +115,6 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-roles--role_id-">
                                 <a href="#endpoints-DELETEapi-roles--role_id-">DELETE api/roles/{role_id}</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-users">
-                                <a href="#endpoints-GETapi-users">GET api/users</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-users">
-                                <a href="#endpoints-POSTapi-users">POST api/users</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-users--user_id-">
-                                <a href="#endpoints-PUTapi-users--user_id-">PUT api/users/{user_id}</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-countries">
                                 <a href="#endpoints-GETapi-countries">Display a paginated listing of countries.</a>
@@ -424,7 +430,7 @@
     <div class="content">
         <h1 id="introduction">Introduction</h1>
 <aside>
-    <strong>Base URL</strong>: <code>https://zafarcomputers.com/api/</code>
+    <strong>Base URL</strong>: <code>http://localhost</code>
 </aside>
 <pre><code>This documentation aims to provide all the information you need to work with our API.
 
@@ -438,7 +444,751 @@ You can switch the language used with the tabs at the top right (or from the nav
 
     
 
-                                <h2 id="endpoints-GETapi-ping">GET api/ping</h2>
+                                <h2 id="endpoints-GETapi-profile">GET api/profile</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-profile">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/profile" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/profile"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-profile">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-profile" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-profile"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-profile"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-profile" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-profile">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-profile" data-method="GET"
+      data-path="api/profile"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-profile', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-profile"
+                    onclick="tryItOut('GETapi-profile');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-profile"
+                    onclick="cancelTryOut('GETapi-profile');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-profile"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/profile</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-profile"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-profile"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-GETapi-users">GET api/users</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-users">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/users" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/users"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-users">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-users" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-users"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-users"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-users" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-users">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-users" data-method="GET"
+      data-path="api/users"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-users', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-users"
+                    onclick="tryItOut('GETapi-users');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-users"
+                    onclick="cancelTryOut('GETapi-users');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-users"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/users</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-users"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-users"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-POSTapi-users">POST api/users</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-users">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/users" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"first_name\": \"architecto\",
+    \"last_name\": \"architecto\",
+    \"email\": \"zbailey@example.net\",
+    \"password\": \"-0pBNvYgxw\",
+    \"role_id\": \"architecto\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/users"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "first_name": "architecto",
+    "last_name": "architecto",
+    "email": "zbailey@example.net",
+    "password": "-0pBNvYgxw",
+    "role_id": "architecto"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-users">
+</span>
+<span id="execution-results-POSTapi-users" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-users"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-users"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-users" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-users">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-users" data-method="POST"
+      data-path="api/users"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-users', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-users"
+                    onclick="tryItOut('POSTapi-users');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-users"
+                    onclick="cancelTryOut('POSTapi-users');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-users"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/users</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-users"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-users"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>first_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="first_name"                data-endpoint="POSTapi-users"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="last_name"                data-endpoint="POSTapi-users"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-users"
+               value="zbailey@example.net"
+               data-component="body">
+    <br>
+<p>Must be a valid email address. Example: <code>zbailey@example.net</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="POSTapi-users"
+               value="-0pBNvYgxw"
+               data-component="body">
+    <br>
+<p>Must be at least 6 characters. Example: <code>-0pBNvYgxw</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="role_id"                data-endpoint="POSTapi-users"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the roles table. Example: <code>architecto</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-PUTapi-users--id-">PUT api/users/{id}</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-PUTapi-users--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost/api/users/1" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"first_name\": \"architecto\",
+    \"last_name\": \"architecto\",
+    \"role_id\": \"architecto\",
+    \"password\": \"]|{+-0pBNvYg\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/users/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "first_name": "architecto",
+    "last_name": "architecto",
+    "role_id": "architecto",
+    "password": "]|{+-0pBNvYg"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-users--id-">
+</span>
+<span id="execution-results-PUTapi-users--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-users--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-users--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-users--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-users--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-users--id-" data-method="PUT"
+      data-path="api/users/{id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-users--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-users--id-"
+                    onclick="tryItOut('PUTapi-users--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-users--id-"
+                    onclick="cancelTryOut('PUTapi-users--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-users--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/users/{id}</code></b>
+        </p>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/users/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-users--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-users--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="PUTapi-users--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the user. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>first_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="first_name"                data-endpoint="PUTapi-users--id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="last_name"                data-endpoint="PUTapi-users--id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="PUTapi-users--id-"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="role_id"                data-endpoint="PUTapi-users--id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the roles table. Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="PUTapi-users--id-"
+               value="]|{+-0pBNvYg"
+               data-component="body">
+    <br>
+<p>Must be at least 6 characters. Example: <code>]|{+-0pBNvYg</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-DELETEapi-users--user_id-">DELETE api/users/{user_id}</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-users--user_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost/api/users/1" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/users/1"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-users--user_id-">
+</span>
+<span id="execution-results-DELETEapi-users--user_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-users--user_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-users--user_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-users--user_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-users--user_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-users--user_id-" data-method="DELETE"
+      data-path="api/users/{user_id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-users--user_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-users--user_id-"
+                    onclick="tryItOut('DELETEapi-users--user_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-users--user_id-"
+                    onclick="cancelTryOut('DELETEapi-users--user_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-users--user_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/users/{user_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-users--user_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-users--user_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="user_id"                data-endpoint="DELETEapi-users--user_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the user. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-GETapi-ping">GET api/ping</h2>
 
 <p>
 </p>
@@ -562,7 +1312,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-register">Register new user.</h2>
+                    <h2 id="endpoints-POSTapi-register">Register a new user</h2>
 
 <p>
 </p>
@@ -584,7 +1334,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"email\": \"ashly64@example.com\",
     \"cell_no1\": \"vdljnikhwaykcmyu\",
     \"cell_no2\": \"wpwlvqwrsitcpscq\",
-    \"password\": \"x&amp;S$hSn7L\'ff2\"
+    \"img_path\": \"l\",
+    \"role_id\": \"architecto\",
+    \"password\": \"]|{+-0pBNvYg\",
+    \"status\": \"active\"
 }"
 </code></pre></div>
 
@@ -605,7 +1358,10 @@ let body = {
     "email": "ashly64@example.com",
     "cell_no1": "vdljnikhwaykcmyu",
     "cell_no2": "wpwlvqwrsitcpscq",
-    "password": "x&amp;S$hSn7L'ff2"
+    "img_path": "l",
+    "role_id": "architecto",
+    "password": "]|{+-0pBNvYg",
+    "status": "active"
 };
 
 fetch(url, {
@@ -697,7 +1453,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="b"
                data-component="body">
     <br>
-<p>Must not be greater than 100 characters. Example: <code>b</code></p>
+<p>Must not be greater than 255 characters. Example: <code>b</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
@@ -708,7 +1464,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="n"
                data-component="body">
     <br>
-<p>Must not be greater than 100 characters. Example: <code>n</code></p>
+<p>Must not be greater than 255 characters. Example: <code>n</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -719,7 +1475,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="ashly64@example.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Example: <code>ashly64@example.com</code></p>
+<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>ashly64@example.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cell_no1</code></b>&nbsp;&nbsp;
@@ -744,15 +1500,50 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Must not be greater than 20 characters. Example: <code>wpwlvqwrsitcpscq</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>img_path</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="img_path"                data-endpoint="POSTapi-register"
+               value="l"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>l</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="role_id"                data-endpoint="POSTapi-register"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the roles table. Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-register"
-               value="x&S$hSn7L'ff2"
+               value="]|{+-0pBNvYg"
                data-component="body">
     <br>
-<p>Must be at least 6 characters. Example: <code>x&amp;S$hSn7L'ff2</code></p>
+<p>Must be at least 6 characters. Example: <code>]|{+-0pBNvYg</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="POSTapi-register"
+               value="active"
+               data-component="body">
+    <br>
+<p>Example: <code>active</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
         </form>
 
@@ -771,12 +1562,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://localhost/api/login" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"email\": \"gbailey@example.net\",
-    \"password\": \"architecto\"
-}"
-</code></pre></div>
+    --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
@@ -789,15 +1575,9 @@ const headers = {
     "Accept": "application/json",
 };
 
-let body = {
-    "email": "gbailey@example.net",
-    "password": "architecto"
-};
-
 fetch(url, {
     method: "POST",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
@@ -873,32 +1653,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-login"
-               value="gbailey@example.net"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Example: <code>gbailey@example.net</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="password"                data-endpoint="POSTapi-login"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-        </form>
+                        </form>
 
-                    <h2 id="endpoints-POSTapi-logout">POST api/logout</h2>
+                    <h2 id="endpoints-POSTapi-logout">Logout user (Revoke current token)</h2>
 
 <p>
 </p>
@@ -1006,27 +1763,34 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-GETapi-me">GET api/me</h2>
+                    <h2 id="endpoints-PUTapi-users--user_id-">PUT api/users/{user_id}</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-GETapi-me">
+<span id="example-requests-PUTapi-users--user_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/me" \
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost/api/users/1" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
+    --header "Accept: application/json" \
+    --data "{
+    \"first_name\": \"architecto\",
+    \"last_name\": \"architecto\",
+    \"role_id\": \"architecto\",
+    \"password\": \"]|{+-0pBNvYg\"
+}"
+</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/me"
+    "http://localhost/api/users/1"
 );
 
 const headers = {
@@ -1034,76 +1798,68 @@ const headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "first_name": "architecto",
+    "last_name": "architecto",
+    "role_id": "architecto",
+    "password": "]|{+-0pBNvYg"
+};
+
 fetch(url, {
-    method: "GET",
+    method: "PUT",
     headers,
+    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
 
-<span id="example-responses-GETapi-me">
-            <blockquote>
-            <p>Example response (401):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-access-control-allow-origin: *
- </code></pre></details>         <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-me" hidden>
+<span id="example-responses-PUTapi-users--user_id-">
+</span>
+<span id="execution-results-PUTapi-users--user_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-me"></span>:
+                id="execution-response-status-PUTapi-users--user_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-me"
+    <pre class="json"><code id="execution-response-content-PUTapi-users--user_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-me" hidden>
+<span id="execution-error-PUTapi-users--user_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-me">
+    <pre><code id="execution-error-message-PUTapi-users--user_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-me" data-method="GET"
-      data-path="api/me"
+<form id="form-PUTapi-users--user_id-" data-method="PUT"
+      data-path="api/users/{user_id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-me', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-users--user_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-me"
-                    onclick="tryItOut('GETapi-me');">Try it out ⚡
+                    id="btn-tryout-PUTapi-users--user_id-"
+                    onclick="tryItOut('PUTapi-users--user_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-me"
-                    onclick="cancelTryOut('GETapi-me');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PUTapi-users--user_id-"
+                    onclick="cancelTryOut('PUTapi-users--user_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-me"
+                    id="btn-executetryout-PUTapi-users--user_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
             </button>
             </h3>
             <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/me</code></b>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/users/{user_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -1111,7 +1867,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-me"
+                              name="Content-Type"                data-endpoint="PUTapi-users--user_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -1122,13 +1878,81 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-me"
+                              name="Accept"                data-endpoint="PUTapi-users--user_id-"
                value="application/json"
                data-component="header">
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                        </form>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="user_id"                data-endpoint="PUTapi-users--user_id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the user. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>first_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="first_name"                data-endpoint="PUTapi-users--user_id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="last_name"                data-endpoint="PUTapi-users--user_id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="PUTapi-users--user_id-"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="role_id"                data-endpoint="PUTapi-users--user_id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the roles table. Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="PUTapi-users--user_id-"
+               value="]|{+-0pBNvYg"
+               data-component="body">
+    <br>
+<p>Must be at least 6 characters. Example: <code>]|{+-0pBNvYg</code></p>
+        </div>
+        </form>
 
                     <h2 id="endpoints-GETapi-roles">GET api/roles</h2>
 
@@ -1772,489 +2596,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-GETapi-users">GET api/users</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-users">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/users" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-users">
-            <blockquote>
-            <p>Example response (401):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-access-control-allow-origin: *
- </code></pre></details>         <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-users" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-users"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-users"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-users" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-users">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-users" data-method="GET"
-      data-path="api/users"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-users', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-users"
-                    onclick="tryItOut('GETapi-users');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-users"
-                    onclick="cancelTryOut('GETapi-users');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-users"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/users</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-users"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-users"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
-
-                    <h2 id="endpoints-POSTapi-users">POST api/users</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-users">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/users" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"first_name\": \"architecto\",
-    \"last_name\": \"architecto\",
-    \"email\": \"zbailey@example.net\",
-    \"password\": \"-0pBNvYgxw\",
-    \"role_id\": \"architecto\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "first_name": "architecto",
-    "last_name": "architecto",
-    "email": "zbailey@example.net",
-    "password": "-0pBNvYgxw",
-    "role_id": "architecto"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-users">
-</span>
-<span id="execution-results-POSTapi-users" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-users"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-users"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-users" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-users">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-users" data-method="POST"
-      data-path="api/users"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-users', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-users"
-                    onclick="tryItOut('POSTapi-users');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-users"
-                    onclick="cancelTryOut('POSTapi-users');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-users"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/users</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-users"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-users"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>first_name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="first_name"                data-endpoint="POSTapi-users"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="last_name"                data-endpoint="POSTapi-users"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-users"
-               value="zbailey@example.net"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Example: <code>zbailey@example.net</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="password"                data-endpoint="POSTapi-users"
-               value="-0pBNvYgxw"
-               data-component="body">
-    <br>
-<p>Must be at least 6 characters. Example: <code>-0pBNvYgxw</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="role_id"                data-endpoint="POSTapi-users"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>The <code>id</code> of an existing record in the roles table. Example: <code>architecto</code></p>
-        </div>
-        </form>
-
-                    <h2 id="endpoints-PUTapi-users--user_id-">PUT api/users/{user_id}</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-PUTapi-users--user_id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/users/1" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"first_name\": \"architecto\",
-    \"last_name\": \"architecto\",
-    \"role_id\": \"architecto\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/1"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "first_name": "architecto",
-    "last_name": "architecto",
-    "role_id": "architecto"
-};
-
-fetch(url, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-PUTapi-users--user_id-">
-</span>
-<span id="execution-results-PUTapi-users--user_id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-PUTapi-users--user_id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-users--user_id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-PUTapi-users--user_id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-users--user_id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-PUTapi-users--user_id-" data-method="PUT"
-      data-path="api/users/{user_id}"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-users--user_id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-users--user_id-"
-                    onclick="tryItOut('PUTapi-users--user_id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-users--user_id-"
-                    onclick="cancelTryOut('PUTapi-users--user_id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-users--user_id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/users/{user_id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-users--user_id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-users--user_id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="user_id"                data-endpoint="PUTapi-users--user_id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the user. Example: <code>1</code></p>
-            </div>
-                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>first_name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="first_name"                data-endpoint="PUTapi-users--user_id-"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="last_name"                data-endpoint="PUTapi-users--user_id-"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="text" style="display: none"
-                              name="email"                data-endpoint="PUTapi-users--user_id-"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>role_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="role_id"                data-endpoint="PUTapi-users--user_id-"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>The <code>id</code> of an existing record in the roles table. Example: <code>architecto</code></p>
-        </div>
-        </form>
-
                     <h2 id="endpoints-GETapi-countries">Display a paginated listing of countries.</h2>
 
 <p>
@@ -2308,93 +2649,93 @@ access-control-allow-origin: *
     &quot;data&quot;: [
         {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-            &quot;code&quot;: &quot;XI&quot;,
-            &quot;currency&quot;: &quot;PAB&quot;,
+            &quot;title&quot;: &quot;Belgium&quot;,
+            &quot;code&quot;: &quot;ET&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Chad&quot;,
-            &quot;code&quot;: &quot;PS&quot;,
-            &quot;currency&quot;: &quot;UYU&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Lebanon&quot;,
+            &quot;code&quot;: &quot;BC&quot;,
+            &quot;currency&quot;: &quot;BBD&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Malawi&quot;,
-            &quot;code&quot;: &quot;VR&quot;,
-            &quot;currency&quot;: &quot;BTN&quot;,
+            &quot;title&quot;: &quot;Samoa&quot;,
+            &quot;code&quot;: &quot;PR&quot;,
+            &quot;currency&quot;: &quot;NPR&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Luxembourg&quot;,
-            &quot;code&quot;: &quot;CV&quot;,
-            &quot;currency&quot;: &quot;MMK&quot;,
+            &quot;title&quot;: &quot;Argentina&quot;,
+            &quot;code&quot;: &quot;MA&quot;,
+            &quot;currency&quot;: &quot;AWG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Seychelles&quot;,
-            &quot;code&quot;: &quot;IU&quot;,
-            &quot;currency&quot;: &quot;LSL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;American Samoa&quot;,
+            &quot;code&quot;: &quot;ZU&quot;,
+            &quot;currency&quot;: &quot;IDR&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Bangladesh&quot;,
-            &quot;code&quot;: &quot;OG&quot;,
-            &quot;currency&quot;: &quot;AMD&quot;,
+            &quot;title&quot;: &quot;Ethiopia&quot;,
+            &quot;code&quot;: &quot;NM&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;El Salvador&quot;,
-            &quot;code&quot;: &quot;YB&quot;,
-            &quot;currency&quot;: &quot;BMD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Bouvet Island (Bouvetoya)&quot;,
+            &quot;code&quot;: &quot;OO&quot;,
+            &quot;currency&quot;: &quot;NIO&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Northern Mariana Islands&quot;,
-            &quot;code&quot;: &quot;QG&quot;,
-            &quot;currency&quot;: &quot;MDL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Egypt&quot;,
+            &quot;code&quot;: &quot;GF&quot;,
+            &quot;currency&quot;: &quot;TOP&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;British Indian Ocean Territory (Chagos Archipelago)&quot;,
-            &quot;code&quot;: &quot;WT&quot;,
-            &quot;currency&quot;: &quot;GYD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Liechtenstein&quot;,
+            &quot;code&quot;: &quot;OA&quot;,
+            &quot;currency&quot;: &quot;ETB&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         },
         {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Guernsey&quot;,
-            &quot;code&quot;: &quot;UZ&quot;,
-            &quot;currency&quot;: &quot;SDG&quot;,
+            &quot;title&quot;: &quot;New Caledonia&quot;,
+            &quot;code&quot;: &quot;LX&quot;,
+            &quot;currency&quot;: &quot;ANG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     ],
     &quot;pagination&quot;: {
@@ -2699,12 +3040,12 @@ access-control-allow-origin: *
     &quot;success&quot;: true,
     &quot;data&quot;: {
         &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-        &quot;code&quot;: &quot;XI&quot;,
-        &quot;currency&quot;: &quot;PAB&quot;,
+        &quot;title&quot;: &quot;Belgium&quot;,
+        &quot;code&quot;: &quot;ET&quot;,
+        &quot;currency&quot;: &quot;KRW&quot;,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
     }
 }</code>
  </pre>
@@ -2811,7 +3152,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"b\",
     \"currency\": \"ngzmiy\",
-    \"status\": \"active\"
+    \"status\": \"inactive\"
 }"
 </code></pre></div>
 
@@ -2829,7 +3170,7 @@ const headers = {
 let body = {
     "title": "b",
     "currency": "ngzmiy",
-    "status": "active"
+    "status": "inactive"
 };
 
 fetch(url, {
@@ -2967,10 +3308,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-countries--id-"
-               value="active"
+               value="inactive"
                data-component="body">
     <br>
-<p>Example: <code>active</code></p>
+<p>Example: <code>inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -3147,121 +3488,121 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Pennsylvania&quot;,
+        &quot;title&quot;: &quot;Arizona&quot;,
         &quot;country_id&quot;: 1,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-            &quot;code&quot;: &quot;XI&quot;,
-            &quot;currency&quot;: &quot;PAB&quot;,
+            &quot;title&quot;: &quot;Belgium&quot;,
+            &quot;code&quot;: &quot;ET&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;title&quot;: &quot;Alabama&quot;,
+        &quot;title&quot;: &quot;Maine&quot;,
         &quot;country_id&quot;: 1,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-            &quot;code&quot;: &quot;XI&quot;,
-            &quot;currency&quot;: &quot;PAB&quot;,
+            &quot;title&quot;: &quot;Belgium&quot;,
+            &quot;code&quot;: &quot;ET&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;title&quot;: &quot;Tennessee&quot;,
+        &quot;title&quot;: &quot;Montana&quot;,
         &quot;country_id&quot;: 1,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-            &quot;code&quot;: &quot;XI&quot;,
-            &quot;currency&quot;: &quot;PAB&quot;,
+            &quot;title&quot;: &quot;Belgium&quot;,
+            &quot;code&quot;: &quot;ET&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;title&quot;: &quot;Texas&quot;,
+        &quot;title&quot;: &quot;Kentucky&quot;,
         &quot;country_id&quot;: 1,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-            &quot;code&quot;: &quot;XI&quot;,
-            &quot;currency&quot;: &quot;PAB&quot;,
+            &quot;title&quot;: &quot;Belgium&quot;,
+            &quot;code&quot;: &quot;ET&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;title&quot;: &quot;Maryland&quot;,
+        &quot;title&quot;: &quot;Colorado&quot;,
         &quot;country_id&quot;: 1,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-            &quot;code&quot;: &quot;XI&quot;,
-            &quot;currency&quot;: &quot;PAB&quot;,
+            &quot;title&quot;: &quot;Belgium&quot;,
+            &quot;code&quot;: &quot;ET&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;title&quot;: &quot;Texas&quot;,
+        &quot;title&quot;: &quot;Kentucky&quot;,
         &quot;country_id&quot;: 2,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Chad&quot;,
-            &quot;code&quot;: &quot;PS&quot;,
-            &quot;currency&quot;: &quot;UYU&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Lebanon&quot;,
+            &quot;code&quot;: &quot;BC&quot;,
+            &quot;currency&quot;: &quot;BBD&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;title&quot;: &quot;Delaware&quot;,
+        &quot;title&quot;: &quot;Virginia&quot;,
         &quot;country_id&quot;: 2,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Chad&quot;,
-            &quot;code&quot;: &quot;PS&quot;,
-            &quot;currency&quot;: &quot;UYU&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Lebanon&quot;,
+            &quot;code&quot;: &quot;BC&quot;,
+            &quot;currency&quot;: &quot;BBD&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
@@ -3269,16 +3610,16 @@ access-control-allow-origin: *
         &quot;title&quot;: &quot;District of Columbia&quot;,
         &quot;country_id&quot;: 2,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Chad&quot;,
-            &quot;code&quot;: &quot;PS&quot;,
-            &quot;currency&quot;: &quot;UYU&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Lebanon&quot;,
+            &quot;code&quot;: &quot;BC&quot;,
+            &quot;currency&quot;: &quot;BBD&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
@@ -3286,662 +3627,662 @@ access-control-allow-origin: *
         &quot;title&quot;: &quot;California&quot;,
         &quot;country_id&quot;: 2,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Chad&quot;,
-            &quot;code&quot;: &quot;PS&quot;,
-            &quot;currency&quot;: &quot;UYU&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Lebanon&quot;,
+            &quot;code&quot;: &quot;BC&quot;,
+            &quot;currency&quot;: &quot;BBD&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
-        &quot;title&quot;: &quot;Kentucky&quot;,
+        &quot;title&quot;: &quot;New Hampshire&quot;,
         &quot;country_id&quot;: 2,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Chad&quot;,
-            &quot;code&quot;: &quot;PS&quot;,
-            &quot;currency&quot;: &quot;UYU&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Lebanon&quot;,
+            &quot;code&quot;: &quot;BC&quot;,
+            &quot;currency&quot;: &quot;BBD&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 11,
-        &quot;title&quot;: &quot;Mississippi&quot;,
+        &quot;title&quot;: &quot;Wyoming&quot;,
         &quot;country_id&quot;: 3,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Malawi&quot;,
-            &quot;code&quot;: &quot;VR&quot;,
-            &quot;currency&quot;: &quot;BTN&quot;,
+            &quot;title&quot;: &quot;Samoa&quot;,
+            &quot;code&quot;: &quot;PR&quot;,
+            &quot;currency&quot;: &quot;NPR&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 12,
-        &quot;title&quot;: &quot;New York&quot;,
+        &quot;title&quot;: &quot;Alabama&quot;,
         &quot;country_id&quot;: 3,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Malawi&quot;,
-            &quot;code&quot;: &quot;VR&quot;,
-            &quot;currency&quot;: &quot;BTN&quot;,
+            &quot;title&quot;: &quot;Samoa&quot;,
+            &quot;code&quot;: &quot;PR&quot;,
+            &quot;currency&quot;: &quot;NPR&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 13,
-        &quot;title&quot;: &quot;Hawaii&quot;,
+        &quot;title&quot;: &quot;North Carolina&quot;,
         &quot;country_id&quot;: 3,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Malawi&quot;,
-            &quot;code&quot;: &quot;VR&quot;,
-            &quot;currency&quot;: &quot;BTN&quot;,
+            &quot;title&quot;: &quot;Samoa&quot;,
+            &quot;code&quot;: &quot;PR&quot;,
+            &quot;currency&quot;: &quot;NPR&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
-        &quot;title&quot;: &quot;Alabama&quot;,
+        &quot;title&quot;: &quot;Illinois&quot;,
         &quot;country_id&quot;: 3,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Malawi&quot;,
-            &quot;code&quot;: &quot;VR&quot;,
-            &quot;currency&quot;: &quot;BTN&quot;,
+            &quot;title&quot;: &quot;Samoa&quot;,
+            &quot;code&quot;: &quot;PR&quot;,
+            &quot;currency&quot;: &quot;NPR&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
-        &quot;title&quot;: &quot;New Jersey&quot;,
+        &quot;title&quot;: &quot;Montana&quot;,
         &quot;country_id&quot;: 3,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Malawi&quot;,
-            &quot;code&quot;: &quot;VR&quot;,
-            &quot;currency&quot;: &quot;BTN&quot;,
+            &quot;title&quot;: &quot;Samoa&quot;,
+            &quot;code&quot;: &quot;PR&quot;,
+            &quot;currency&quot;: &quot;NPR&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
-        &quot;title&quot;: &quot;Mississippi&quot;,
+        &quot;title&quot;: &quot;Massachusetts&quot;,
         &quot;country_id&quot;: 4,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Luxembourg&quot;,
-            &quot;code&quot;: &quot;CV&quot;,
-            &quot;currency&quot;: &quot;MMK&quot;,
+            &quot;title&quot;: &quot;Argentina&quot;,
+            &quot;code&quot;: &quot;MA&quot;,
+            &quot;currency&quot;: &quot;AWG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
-        &quot;title&quot;: &quot;California&quot;,
+        &quot;title&quot;: &quot;New Hampshire&quot;,
         &quot;country_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Luxembourg&quot;,
-            &quot;code&quot;: &quot;CV&quot;,
-            &quot;currency&quot;: &quot;MMK&quot;,
+            &quot;title&quot;: &quot;Argentina&quot;,
+            &quot;code&quot;: &quot;MA&quot;,
+            &quot;currency&quot;: &quot;AWG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
-        &quot;title&quot;: &quot;Connecticut&quot;,
+        &quot;title&quot;: &quot;Montana&quot;,
         &quot;country_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Luxembourg&quot;,
-            &quot;code&quot;: &quot;CV&quot;,
-            &quot;currency&quot;: &quot;MMK&quot;,
+            &quot;title&quot;: &quot;Argentina&quot;,
+            &quot;code&quot;: &quot;MA&quot;,
+            &quot;currency&quot;: &quot;AWG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
-        &quot;title&quot;: &quot;New Jersey&quot;,
+        &quot;title&quot;: &quot;Iowa&quot;,
         &quot;country_id&quot;: 4,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Luxembourg&quot;,
-            &quot;code&quot;: &quot;CV&quot;,
-            &quot;currency&quot;: &quot;MMK&quot;,
+            &quot;title&quot;: &quot;Argentina&quot;,
+            &quot;code&quot;: &quot;MA&quot;,
+            &quot;currency&quot;: &quot;AWG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 20,
-        &quot;title&quot;: &quot;Kentucky&quot;,
+        &quot;title&quot;: &quot;Nebraska&quot;,
         &quot;country_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Luxembourg&quot;,
-            &quot;code&quot;: &quot;CV&quot;,
-            &quot;currency&quot;: &quot;MMK&quot;,
+            &quot;title&quot;: &quot;Argentina&quot;,
+            &quot;code&quot;: &quot;MA&quot;,
+            &quot;currency&quot;: &quot;AWG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 21,
-        &quot;title&quot;: &quot;Connecticut&quot;,
+        &quot;title&quot;: &quot;Maine&quot;,
         &quot;country_id&quot;: 5,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Seychelles&quot;,
-            &quot;code&quot;: &quot;IU&quot;,
-            &quot;currency&quot;: &quot;LSL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;American Samoa&quot;,
+            &quot;code&quot;: &quot;ZU&quot;,
+            &quot;currency&quot;: &quot;IDR&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 22,
-        &quot;title&quot;: &quot;Washington&quot;,
+        &quot;title&quot;: &quot;Ohio&quot;,
         &quot;country_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Seychelles&quot;,
-            &quot;code&quot;: &quot;IU&quot;,
-            &quot;currency&quot;: &quot;LSL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;American Samoa&quot;,
+            &quot;code&quot;: &quot;ZU&quot;,
+            &quot;currency&quot;: &quot;IDR&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 23,
-        &quot;title&quot;: &quot;Montana&quot;,
+        &quot;title&quot;: &quot;Vermont&quot;,
         &quot;country_id&quot;: 5,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Seychelles&quot;,
-            &quot;code&quot;: &quot;IU&quot;,
-            &quot;currency&quot;: &quot;LSL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;American Samoa&quot;,
+            &quot;code&quot;: &quot;ZU&quot;,
+            &quot;currency&quot;: &quot;IDR&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 24,
-        &quot;title&quot;: &quot;South Carolina&quot;,
+        &quot;title&quot;: &quot;District of Columbia&quot;,
         &quot;country_id&quot;: 5,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Seychelles&quot;,
-            &quot;code&quot;: &quot;IU&quot;,
-            &quot;currency&quot;: &quot;LSL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;American Samoa&quot;,
+            &quot;code&quot;: &quot;ZU&quot;,
+            &quot;currency&quot;: &quot;IDR&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 25,
-        &quot;title&quot;: &quot;West Virginia&quot;,
+        &quot;title&quot;: &quot;Kentucky&quot;,
         &quot;country_id&quot;: 5,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Seychelles&quot;,
-            &quot;code&quot;: &quot;IU&quot;,
-            &quot;currency&quot;: &quot;LSL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;American Samoa&quot;,
+            &quot;code&quot;: &quot;ZU&quot;,
+            &quot;currency&quot;: &quot;IDR&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 26,
-        &quot;title&quot;: &quot;Iowa&quot;,
+        &quot;title&quot;: &quot;Wisconsin&quot;,
         &quot;country_id&quot;: 6,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Bangladesh&quot;,
-            &quot;code&quot;: &quot;OG&quot;,
-            &quot;currency&quot;: &quot;AMD&quot;,
+            &quot;title&quot;: &quot;Ethiopia&quot;,
+            &quot;code&quot;: &quot;NM&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 27,
-        &quot;title&quot;: &quot;Iowa&quot;,
+        &quot;title&quot;: &quot;Louisiana&quot;,
         &quot;country_id&quot;: 6,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Bangladesh&quot;,
-            &quot;code&quot;: &quot;OG&quot;,
-            &quot;currency&quot;: &quot;AMD&quot;,
+            &quot;title&quot;: &quot;Ethiopia&quot;,
+            &quot;code&quot;: &quot;NM&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 28,
-        &quot;title&quot;: &quot;Delaware&quot;,
+        &quot;title&quot;: &quot;Tennessee&quot;,
         &quot;country_id&quot;: 6,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Bangladesh&quot;,
-            &quot;code&quot;: &quot;OG&quot;,
-            &quot;currency&quot;: &quot;AMD&quot;,
+            &quot;title&quot;: &quot;Ethiopia&quot;,
+            &quot;code&quot;: &quot;NM&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 29,
-        &quot;title&quot;: &quot;Alaska&quot;,
+        &quot;title&quot;: &quot;Pennsylvania&quot;,
         &quot;country_id&quot;: 6,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Bangladesh&quot;,
-            &quot;code&quot;: &quot;OG&quot;,
-            &quot;currency&quot;: &quot;AMD&quot;,
+            &quot;title&quot;: &quot;Ethiopia&quot;,
+            &quot;code&quot;: &quot;NM&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 30,
-        &quot;title&quot;: &quot;Illinois&quot;,
+        &quot;title&quot;: &quot;California&quot;,
         &quot;country_id&quot;: 6,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:30.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Bangladesh&quot;,
-            &quot;code&quot;: &quot;OG&quot;,
-            &quot;currency&quot;: &quot;AMD&quot;,
+            &quot;title&quot;: &quot;Ethiopia&quot;,
+            &quot;code&quot;: &quot;NM&quot;,
+            &quot;currency&quot;: &quot;KRW&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 31,
-        &quot;title&quot;: &quot;Minnesota&quot;,
+        &quot;title&quot;: &quot;Pennsylvania&quot;,
         &quot;country_id&quot;: 7,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;El Salvador&quot;,
-            &quot;code&quot;: &quot;YB&quot;,
-            &quot;currency&quot;: &quot;BMD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Bouvet Island (Bouvetoya)&quot;,
+            &quot;code&quot;: &quot;OO&quot;,
+            &quot;currency&quot;: &quot;NIO&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 32,
-        &quot;title&quot;: &quot;Ohio&quot;,
+        &quot;title&quot;: &quot;New York&quot;,
         &quot;country_id&quot;: 7,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;El Salvador&quot;,
-            &quot;code&quot;: &quot;YB&quot;,
-            &quot;currency&quot;: &quot;BMD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Bouvet Island (Bouvetoya)&quot;,
+            &quot;code&quot;: &quot;OO&quot;,
+            &quot;currency&quot;: &quot;NIO&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 33,
-        &quot;title&quot;: &quot;District of Columbia&quot;,
+        &quot;title&quot;: &quot;Georgia&quot;,
         &quot;country_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;El Salvador&quot;,
-            &quot;code&quot;: &quot;YB&quot;,
-            &quot;currency&quot;: &quot;BMD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Bouvet Island (Bouvetoya)&quot;,
+            &quot;code&quot;: &quot;OO&quot;,
+            &quot;currency&quot;: &quot;NIO&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 34,
-        &quot;title&quot;: &quot;Montana&quot;,
+        &quot;title&quot;: &quot;Delaware&quot;,
         &quot;country_id&quot;: 7,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;El Salvador&quot;,
-            &quot;code&quot;: &quot;YB&quot;,
-            &quot;currency&quot;: &quot;BMD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Bouvet Island (Bouvetoya)&quot;,
+            &quot;code&quot;: &quot;OO&quot;,
+            &quot;currency&quot;: &quot;NIO&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 35,
-        &quot;title&quot;: &quot;Iowa&quot;,
+        &quot;title&quot;: &quot;Nevada&quot;,
         &quot;country_id&quot;: 7,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;El Salvador&quot;,
-            &quot;code&quot;: &quot;YB&quot;,
-            &quot;currency&quot;: &quot;BMD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Bouvet Island (Bouvetoya)&quot;,
+            &quot;code&quot;: &quot;OO&quot;,
+            &quot;currency&quot;: &quot;NIO&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 36,
-        &quot;title&quot;: &quot;Alabama&quot;,
+        &quot;title&quot;: &quot;Arkansas&quot;,
         &quot;country_id&quot;: 8,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Northern Mariana Islands&quot;,
-            &quot;code&quot;: &quot;QG&quot;,
-            &quot;currency&quot;: &quot;MDL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Egypt&quot;,
+            &quot;code&quot;: &quot;GF&quot;,
+            &quot;currency&quot;: &quot;TOP&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 37,
-        &quot;title&quot;: &quot;Minnesota&quot;,
+        &quot;title&quot;: &quot;North Dakota&quot;,
         &quot;country_id&quot;: 8,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Northern Mariana Islands&quot;,
-            &quot;code&quot;: &quot;QG&quot;,
-            &quot;currency&quot;: &quot;MDL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Egypt&quot;,
+            &quot;code&quot;: &quot;GF&quot;,
+            &quot;currency&quot;: &quot;TOP&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 38,
-        &quot;title&quot;: &quot;Oklahoma&quot;,
+        &quot;title&quot;: &quot;New York&quot;,
         &quot;country_id&quot;: 8,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Northern Mariana Islands&quot;,
-            &quot;code&quot;: &quot;QG&quot;,
-            &quot;currency&quot;: &quot;MDL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Egypt&quot;,
+            &quot;code&quot;: &quot;GF&quot;,
+            &quot;currency&quot;: &quot;TOP&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 39,
-        &quot;title&quot;: &quot;Hawaii&quot;,
+        &quot;title&quot;: &quot;Connecticut&quot;,
         &quot;country_id&quot;: 8,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Northern Mariana Islands&quot;,
-            &quot;code&quot;: &quot;QG&quot;,
-            &quot;currency&quot;: &quot;MDL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Egypt&quot;,
+            &quot;code&quot;: &quot;GF&quot;,
+            &quot;currency&quot;: &quot;TOP&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 40,
-        &quot;title&quot;: &quot;North Dakota&quot;,
+        &quot;title&quot;: &quot;Pennsylvania&quot;,
         &quot;country_id&quot;: 8,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Northern Mariana Islands&quot;,
-            &quot;code&quot;: &quot;QG&quot;,
-            &quot;currency&quot;: &quot;MDL&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Egypt&quot;,
+            &quot;code&quot;: &quot;GF&quot;,
+            &quot;currency&quot;: &quot;TOP&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 41,
-        &quot;title&quot;: &quot;Nevada&quot;,
+        &quot;title&quot;: &quot;Wyoming&quot;,
         &quot;country_id&quot;: 9,
-        &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
+        &quot;status&quot;: &quot;active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;British Indian Ocean Territory (Chagos Archipelago)&quot;,
-            &quot;code&quot;: &quot;WT&quot;,
-            &quot;currency&quot;: &quot;GYD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Liechtenstein&quot;,
+            &quot;code&quot;: &quot;OA&quot;,
+            &quot;currency&quot;: &quot;ETB&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 42,
-        &quot;title&quot;: &quot;Arkansas&quot;,
+        &quot;title&quot;: &quot;Wisconsin&quot;,
         &quot;country_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;British Indian Ocean Territory (Chagos Archipelago)&quot;,
-            &quot;code&quot;: &quot;WT&quot;,
-            &quot;currency&quot;: &quot;GYD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Liechtenstein&quot;,
+            &quot;code&quot;: &quot;OA&quot;,
+            &quot;currency&quot;: &quot;ETB&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 43,
-        &quot;title&quot;: &quot;North Dakota&quot;,
+        &quot;title&quot;: &quot;Rhode Island&quot;,
         &quot;country_id&quot;: 9,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;British Indian Ocean Territory (Chagos Archipelago)&quot;,
-            &quot;code&quot;: &quot;WT&quot;,
-            &quot;currency&quot;: &quot;GYD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Liechtenstein&quot;,
+            &quot;code&quot;: &quot;OA&quot;,
+            &quot;currency&quot;: &quot;ETB&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 44,
-        &quot;title&quot;: &quot;Montana&quot;,
+        &quot;title&quot;: &quot;North Carolina&quot;,
         &quot;country_id&quot;: 9,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;British Indian Ocean Territory (Chagos Archipelago)&quot;,
-            &quot;code&quot;: &quot;WT&quot;,
-            &quot;currency&quot;: &quot;GYD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Liechtenstein&quot;,
+            &quot;code&quot;: &quot;OA&quot;,
+            &quot;currency&quot;: &quot;ETB&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 45,
-        &quot;title&quot;: &quot;Tennessee&quot;,
+        &quot;title&quot;: &quot;Pennsylvania&quot;,
         &quot;country_id&quot;: 9,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;British Indian Ocean Territory (Chagos Archipelago)&quot;,
-            &quot;code&quot;: &quot;WT&quot;,
-            &quot;currency&quot;: &quot;GYD&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;title&quot;: &quot;Liechtenstein&quot;,
+            &quot;code&quot;: &quot;OA&quot;,
+            &quot;currency&quot;: &quot;ETB&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 46,
-        &quot;title&quot;: &quot;Texas&quot;,
+        &quot;title&quot;: &quot;Nebraska&quot;,
         &quot;country_id&quot;: 10,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Guernsey&quot;,
-            &quot;code&quot;: &quot;UZ&quot;,
-            &quot;currency&quot;: &quot;SDG&quot;,
+            &quot;title&quot;: &quot;New Caledonia&quot;,
+            &quot;code&quot;: &quot;LX&quot;,
+            &quot;currency&quot;: &quot;ANG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 47,
-        &quot;title&quot;: &quot;Pennsylvania&quot;,
+        &quot;title&quot;: &quot;Oregon&quot;,
         &quot;country_id&quot;: 10,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Guernsey&quot;,
-            &quot;code&quot;: &quot;UZ&quot;,
-            &quot;currency&quot;: &quot;SDG&quot;,
+            &quot;title&quot;: &quot;New Caledonia&quot;,
+            &quot;code&quot;: &quot;LX&quot;,
+            &quot;currency&quot;: &quot;ANG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
@@ -3949,50 +4290,50 @@ access-control-allow-origin: *
         &quot;title&quot;: &quot;California&quot;,
         &quot;country_id&quot;: 10,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Guernsey&quot;,
-            &quot;code&quot;: &quot;UZ&quot;,
-            &quot;currency&quot;: &quot;SDG&quot;,
+            &quot;title&quot;: &quot;New Caledonia&quot;,
+            &quot;code&quot;: &quot;LX&quot;,
+            &quot;currency&quot;: &quot;ANG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 49,
-        &quot;title&quot;: &quot;Mississippi&quot;,
+        &quot;title&quot;: &quot;Ohio&quot;,
         &quot;country_id&quot;: 10,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Guernsey&quot;,
-            &quot;code&quot;: &quot;UZ&quot;,
-            &quot;currency&quot;: &quot;SDG&quot;,
+            &quot;title&quot;: &quot;New Caledonia&quot;,
+            &quot;code&quot;: &quot;LX&quot;,
+            &quot;currency&quot;: &quot;ANG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 50,
-        &quot;title&quot;: &quot;Minnesota&quot;,
+        &quot;title&quot;: &quot;District of Columbia&quot;,
         &quot;country_id&quot;: 10,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
         &quot;country&quot;: {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Guernsey&quot;,
-            &quot;code&quot;: &quot;UZ&quot;,
-            &quot;currency&quot;: &quot;SDG&quot;,
+            &quot;title&quot;: &quot;New Caledonia&quot;,
+            &quot;code&quot;: &quot;LX&quot;,
+            &quot;currency&quot;: &quot;ANG&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
         }
     }
 ]</code>
@@ -4088,7 +4429,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"b\",
     \"country_id\": \"architecto\",
-    \"status\": \"inactive\"
+    \"status\": \"active\"
 }"
 </code></pre></div>
 
@@ -4106,7 +4447,7 @@ const headers = {
 let body = {
     "title": "b",
     "country_id": "architecto",
-    "status": "inactive"
+    "status": "active"
 };
 
 fetch(url, {
@@ -4217,10 +4558,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-states"
-               value="inactive"
+               value="active"
                data-component="body">
     <br>
-<p>Example: <code>inactive</code></p>
+<p>Example: <code>active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -4276,19 +4617,19 @@ access-control-allow-origin: *
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;id&quot;: 1,
-    &quot;title&quot;: &quot;Pennsylvania&quot;,
+    &quot;title&quot;: &quot;Arizona&quot;,
     &quot;country_id&quot;: 1,
-    &quot;status&quot;: &quot;inactive&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+    &quot;status&quot;: &quot;active&quot;,
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
     &quot;country&quot;: {
         &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-        &quot;code&quot;: &quot;XI&quot;,
-        &quot;currency&quot;: &quot;PAB&quot;,
+        &quot;title&quot;: &quot;Belgium&quot;,
+        &quot;code&quot;: &quot;ET&quot;,
+        &quot;currency&quot;: &quot;KRW&quot;,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
     }
 }</code>
  </pre>
@@ -4395,7 +4736,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"b\",
     \"country_id\": \"architecto\",
-    \"status\": \"active\"
+    \"status\": \"inactive\"
 }"
 </code></pre></div>
 
@@ -4413,7 +4754,7 @@ const headers = {
 let body = {
     "title": "b",
     "country_id": "architecto",
-    "status": "active"
+    "status": "inactive"
 };
 
 fetch(url, {
@@ -4540,10 +4881,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-states--id-"
-               value="active"
+               value="inactive"
                data-component="body">
     <br>
-<p>Example: <code>active</code></p>
+<p>Example: <code>inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -4722,251 +5063,251 @@ access-control-allow-origin: *
     &quot;data&quot;: [
         {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Johannburgh&quot;,
+            &quot;title&quot;: &quot;Port Moniquehaven&quot;,
             &quot;state_id&quot;: 1,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Jefferyburgh&quot;,
+            &quot;title&quot;: &quot;New Stevie&quot;,
             &quot;state_id&quot;: 1,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;South Dale&quot;,
+            &quot;title&quot;: &quot;Wilfredohaven&quot;,
             &quot;state_id&quot;: 1,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Webershire&quot;,
+            &quot;title&quot;: &quot;West Hannafurt&quot;,
             &quot;state_id&quot;: 1,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Schambergerview&quot;,
+            &quot;title&quot;: &quot;New Kadin&quot;,
             &quot;state_id&quot;: 1,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Pouroshaven&quot;,
+            &quot;title&quot;: &quot;Eribertoport&quot;,
             &quot;state_id&quot;: 1,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Millsborough&quot;,
+            &quot;title&quot;: &quot;Ornview&quot;,
             &quot;state_id&quot;: 1,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;East Nolan&quot;,
+            &quot;title&quot;: &quot;New Garretfurt&quot;,
             &quot;state_id&quot;: 1,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Maryjanemouth&quot;,
+            &quot;title&quot;: &quot;East Erikborough&quot;,
             &quot;state_id&quot;: 1,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         },
         {
             &quot;id&quot;: 10,
-            &quot;title&quot;: &quot;Port Elaina&quot;,
+            &quot;title&quot;: &quot;Port Scarlettbury&quot;,
             &quot;state_id&quot;: 1,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;state&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Pennsylvania&quot;,
+                &quot;title&quot;: &quot;Arizona&quot;,
                 &quot;country_id&quot;: 1,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
                 &quot;country&quot;: {
                     &quot;id&quot;: 1,
-                    &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                    &quot;code&quot;: &quot;XI&quot;,
-                    &quot;currency&quot;: &quot;PAB&quot;,
+                    &quot;title&quot;: &quot;Belgium&quot;,
+                    &quot;code&quot;: &quot;ET&quot;,
+                    &quot;currency&quot;: &quot;KRW&quot;,
                     &quot;status&quot;: &quot;inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
                 }
             }
         }
@@ -5211,26 +5552,26 @@ access-control-allow-origin: *
     &quot;success&quot;: true,
     &quot;data&quot;: {
         &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Johannburgh&quot;,
+        &quot;title&quot;: &quot;Port Moniquehaven&quot;,
         &quot;state_id&quot;: 1,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
         &quot;state&quot;: {
             &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Pennsylvania&quot;,
+            &quot;title&quot;: &quot;Arizona&quot;,
             &quot;country_id&quot;: 1,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
             &quot;country&quot;: {
                 &quot;id&quot;: 1,
-                &quot;title&quot;: &quot;Sao Tome and Principe&quot;,
-                &quot;code&quot;: &quot;XI&quot;,
-                &quot;currency&quot;: &quot;PAB&quot;,
+                &quot;title&quot;: &quot;Belgium&quot;,
+                &quot;code&quot;: &quot;ET&quot;,
+                &quot;currency&quot;: &quot;KRW&quot;,
                 &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
             }
         }
     }
@@ -5617,222 +5958,222 @@ access-control-allow-origin: *
     &quot;data&quot;: [
         {
             &quot;id&quot;: 1,
-            &quot;cnic&quot;: &quot;28503-7603552-6&quot;,
-            &quot;name&quot;: &quot;Furman Metz&quot;,
-            &quot;email&quot;: &quot;smith.kristian@example.com&quot;,
-            &quot;address&quot;: &quot;32024 Vada View Apt. 944\nWest Torrey, MD 86847&quot;,
-            &quot;city_id&quot;: 5,
-            &quot;cell_no1&quot;: &quot;03592797345&quot;,
-            &quot;cell_no2&quot;: &quot;03137349781&quot;,
+            &quot;cnic&quot;: &quot;12761-3000776-8&quot;,
+            &quot;name&quot;: &quot;Trisha Kreiger&quot;,
+            &quot;email&quot;: &quot;botsford.emilia@example.org&quot;,
+            &quot;address&quot;: &quot;88210 Elroy Loop\nNew Rosalynmouth, NJ 30434-5406&quot;,
+            &quot;city_id&quot;: 50,
+            &quot;cell_no1&quot;: &quot;03949586304&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 5,
-                &quot;title&quot;: &quot;Schambergerview&quot;,
-                &quot;state_id&quot;: 1,
+                &quot;id&quot;: 50,
+                &quot;title&quot;: &quot;Lake Haroldfort&quot;,
+                &quot;state_id&quot;: 5,
                 &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 2,
-            &quot;cnic&quot;: &quot;98678-5650776-7&quot;,
-            &quot;name&quot;: &quot;Mr. Brendon Steuber Jr.&quot;,
-            &quot;email&quot;: &quot;era.kohler@example.org&quot;,
-            &quot;address&quot;: &quot;7913 Mabelle Rapid Suite 384\nEdwardland, PA 95929&quot;,
-            &quot;city_id&quot;: 13,
-            &quot;cell_no1&quot;: &quot;03569155320&quot;,
-            &quot;cell_no2&quot;: &quot;03833597571&quot;,
+            &quot;cnic&quot;: &quot;08137-5041950-7&quot;,
+            &quot;name&quot;: &quot;Prof. German Jenkins&quot;,
+            &quot;email&quot;: &quot;brakus.kirk@example.net&quot;,
+            &quot;address&quot;: &quot;339 Padberg Shores Suite 786\nJenniferview, MI 31443&quot;,
+            &quot;city_id&quot;: 50,
+            &quot;cell_no1&quot;: &quot;03771289135&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 13,
-                &quot;title&quot;: &quot;South Doylefort&quot;,
-                &quot;state_id&quot;: 2,
+                &quot;id&quot;: 50,
+                &quot;title&quot;: &quot;Lake Haroldfort&quot;,
+                &quot;state_id&quot;: 5,
                 &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 3,
-            &quot;cnic&quot;: &quot;88271-7145546-0&quot;,
-            &quot;name&quot;: &quot;Noel Lindgren&quot;,
-            &quot;email&quot;: &quot;asenger@example.net&quot;,
-            &quot;address&quot;: &quot;594 Deon Harbor Apt. 763\nPort Linwood, ND 26768-7826&quot;,
-            &quot;city_id&quot;: 10,
-            &quot;cell_no1&quot;: &quot;03467211601&quot;,
-            &quot;cell_no2&quot;: &quot;03825060603&quot;,
+            &quot;cnic&quot;: &quot;22172-5278205-4&quot;,
+            &quot;name&quot;: &quot;Amparo Eichmann&quot;,
+            &quot;email&quot;: &quot;gianni34@example.net&quot;,
+            &quot;address&quot;: &quot;634 Hyatt Gardens Suite 301\nBetteton, KY 24104-0676&quot;,
+            &quot;city_id&quot;: 8,
+            &quot;cell_no1&quot;: &quot;03670871762&quot;,
+            &quot;cell_no2&quot;: &quot;03921128036&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 10,
-                &quot;title&quot;: &quot;Port Elaina&quot;,
+                &quot;id&quot;: 8,
+                &quot;title&quot;: &quot;New Garretfurt&quot;,
                 &quot;state_id&quot;: 1,
                 &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 4,
-            &quot;cnic&quot;: &quot;11162-9222072-7&quot;,
-            &quot;name&quot;: &quot;Prof. Jorge Klein IV&quot;,
-            &quot;email&quot;: &quot;casper.stefan@example.com&quot;,
-            &quot;address&quot;: &quot;9949 Omer Mountain\nWardberg, MA 44735-5159&quot;,
-            &quot;city_id&quot;: 49,
-            &quot;cell_no1&quot;: &quot;03231295559&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;55313-6824337-2&quot;,
+            &quot;name&quot;: &quot;Devonte Macejkovic&quot;,
+            &quot;email&quot;: &quot;leilani53@example.net&quot;,
+            &quot;address&quot;: &quot;88703 Marcellus Knolls Suite 661\nBergnaumton, OK 38594-5812&quot;,
+            &quot;city_id&quot;: 40,
+            &quot;cell_no1&quot;: &quot;03829283333&quot;,
+            &quot;cell_no2&quot;: &quot;03368251764&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 49,
-                &quot;title&quot;: &quot;Annettabury&quot;,
-                &quot;state_id&quot;: 5,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;
+                &quot;id&quot;: 40,
+                &quot;title&quot;: &quot;Kathlynmouth&quot;,
+                &quot;state_id&quot;: 4,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 5,
-            &quot;cnic&quot;: &quot;20070-8628796-2&quot;,
-            &quot;name&quot;: &quot;Wilton Stanton&quot;,
-            &quot;email&quot;: &quot;fwillms@example.com&quot;,
-            &quot;address&quot;: &quot;280 Angel Underpass\nMarvinhaven, DE 68752&quot;,
-            &quot;city_id&quot;: 44,
-            &quot;cell_no1&quot;: &quot;03136971273&quot;,
+            &quot;cnic&quot;: &quot;60140-4179540-0&quot;,
+            &quot;name&quot;: &quot;Magdalena Ryan&quot;,
+            &quot;email&quot;: &quot;vpowlowski@example.com&quot;,
+            &quot;address&quot;: &quot;719 Alessandro Lake Suite 243\nPort Candelario, ME 60757-3571&quot;,
+            &quot;city_id&quot;: 45,
+            &quot;cell_no1&quot;: &quot;03596017033&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 44,
-                &quot;title&quot;: &quot;Juliaport&quot;,
+                &quot;id&quot;: 45,
+                &quot;title&quot;: &quot;Lake Olinchester&quot;,
                 &quot;state_id&quot;: 5,
                 &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 6,
-            &quot;cnic&quot;: &quot;52355-4256040-4&quot;,
-            &quot;name&quot;: &quot;Mara Russel&quot;,
-            &quot;email&quot;: &quot;anderson.soledad@example.com&quot;,
-            &quot;address&quot;: &quot;33455 Eldon Land\nVivaton, WA 78829&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03544342552&quot;,
+            &quot;cnic&quot;: &quot;22782-2131276-3&quot;,
+            &quot;name&quot;: &quot;Dr. Diego Schumm&quot;,
+            &quot;email&quot;: &quot;beaulah87@example.com&quot;,
+            &quot;address&quot;: &quot;95809 Myrl Flat Apt. 005\nWest Coltenshire, UT 76527-7432&quot;,
+            &quot;city_id&quot;: 14,
+            &quot;cell_no1&quot;: &quot;03474785145&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 18,
-                &quot;title&quot;: &quot;East Greyson&quot;,
+                &quot;id&quot;: 14,
+                &quot;title&quot;: &quot;South Maximillia&quot;,
                 &quot;state_id&quot;: 2,
                 &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;46036-8307161-3&quot;,
+            &quot;name&quot;: &quot;Jovani Schneider&quot;,
+            &quot;email&quot;: &quot;xmertz@example.net&quot;,
+            &quot;address&quot;: &quot;1274 Trantow Isle\nAndersonfort, IN 74213&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03232388738&quot;,
+            &quot;cell_no2&quot;: &quot;03156885533&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 15,
-                &quot;title&quot;: &quot;South Halie&quot;,
-                &quot;state_id&quot;: 2,
+                &quot;id&quot;: 26,
+                &quot;title&quot;: &quot;Jalynhaven&quot;,
+                &quot;state_id&quot;: 3,
                 &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;87152-8044368-2&quot;,
-            &quot;name&quot;: &quot;Clarissa Kub Jr.&quot;,
-            &quot;email&quot;: &quot;swalter@example.org&quot;,
-            &quot;address&quot;: &quot;8527 Leatha Walks Apt. 154\nLynchville, AL 55073&quot;,
-            &quot;city_id&quot;: 4,
-            &quot;cell_no1&quot;: &quot;03069947838&quot;,
-            &quot;cell_no2&quot;: &quot;03785407833&quot;,
+            &quot;cnic&quot;: &quot;41488-5438603-5&quot;,
+            &quot;name&quot;: &quot;Prof. Houston Klein&quot;,
+            &quot;email&quot;: &quot;jdibbert@example.org&quot;,
+            &quot;address&quot;: &quot;9579 Crist Squares Suite 406\nMcClureberg, MA 86197-3387&quot;,
+            &quot;city_id&quot;: 11,
+            &quot;cell_no1&quot;: &quot;03052859680&quot;,
+            &quot;cell_no2&quot;: &quot;03316526585&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 4,
-                &quot;title&quot;: &quot;Webershire&quot;,
-                &quot;state_id&quot;: 1,
-                &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;id&quot;: 11,
+                &quot;title&quot;: &quot;Toneyburgh&quot;,
+                &quot;state_id&quot;: 2,
+                &quot;status&quot;: &quot;inactive&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 9,
-            &quot;cnic&quot;: &quot;75198-8013400-6&quot;,
-            &quot;name&quot;: &quot;Alessandro Doyle DVM&quot;,
-            &quot;email&quot;: &quot;mona24@example.org&quot;,
-            &quot;address&quot;: &quot;3894 Keebler Streets Apt. 797\nLake Torey, NE 20406&quot;,
-            &quot;city_id&quot;: 22,
-            &quot;cell_no1&quot;: &quot;03348477218&quot;,
-            &quot;cell_no2&quot;: &quot;03360044089&quot;,
+            &quot;cnic&quot;: &quot;67693-9636844-7&quot;,
+            &quot;name&quot;: &quot;Gilda Hagenes DVM&quot;,
+            &quot;email&quot;: &quot;conn.genoveva@example.net&quot;,
+            &quot;address&quot;: &quot;3562 Becker Radial Apt. 425\nEast Maryjanehaven, CT 79075-5497&quot;,
+            &quot;city_id&quot;: 3,
+            &quot;cell_no1&quot;: &quot;03921795209&quot;,
+            &quot;cell_no2&quot;: &quot;03368042088&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 22,
-                &quot;title&quot;: &quot;Kingbury&quot;,
-                &quot;state_id&quot;: 3,
+                &quot;id&quot;: 3,
+                &quot;title&quot;: &quot;Wilfredohaven&quot;,
+                &quot;state_id&quot;: 1,
                 &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:26.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 10,
-            &quot;cnic&quot;: &quot;61389-1912211-5&quot;,
-            &quot;name&quot;: &quot;Prof. Chris Cruickshank&quot;,
-            &quot;email&quot;: &quot;king81@example.net&quot;,
-            &quot;address&quot;: &quot;9827 Jast Shore\nBergstromfort, ID 22291-7014&quot;,
-            &quot;city_id&quot;: 28,
-            &quot;cell_no1&quot;: &quot;03386127705&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;38974-7731763-9&quot;,
+            &quot;name&quot;: &quot;Mr. Jamel Dooley&quot;,
+            &quot;email&quot;: &quot;ccorkery@example.com&quot;,
+            &quot;address&quot;: &quot;55593 Berry Avenue Apt. 703\nDurganville, WY 38977-0542&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03943412357&quot;,
+            &quot;cell_no2&quot;: &quot;03610041201&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 28,
-                &quot;title&quot;: &quot;Sharonberg&quot;,
+                &quot;id&quot;: 26,
+                &quot;title&quot;: &quot;Jalynhaven&quot;,
                 &quot;state_id&quot;: 3,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         }
     ],
@@ -6203,24 +6544,24 @@ access-control-allow-origin: *
     &quot;success&quot;: true,
     &quot;data&quot;: {
         &quot;id&quot;: 1,
-        &quot;cnic&quot;: &quot;28503-7603552-6&quot;,
-        &quot;name&quot;: &quot;Furman Metz&quot;,
-        &quot;email&quot;: &quot;smith.kristian@example.com&quot;,
-        &quot;address&quot;: &quot;32024 Vada View Apt. 944\nWest Torrey, MD 86847&quot;,
-        &quot;city_id&quot;: 5,
-        &quot;cell_no1&quot;: &quot;03592797345&quot;,
-        &quot;cell_no2&quot;: &quot;03137349781&quot;,
+        &quot;cnic&quot;: &quot;12761-3000776-8&quot;,
+        &quot;name&quot;: &quot;Trisha Kreiger&quot;,
+        &quot;email&quot;: &quot;botsford.emilia@example.org&quot;,
+        &quot;address&quot;: &quot;88210 Elroy Loop\nNew Rosalynmouth, NJ 30434-5406&quot;,
+        &quot;city_id&quot;: 50,
+        &quot;cell_no1&quot;: &quot;03949586304&quot;,
+        &quot;cell_no2&quot;: null,
         &quot;image_path&quot;: &quot;default.png&quot;,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Schambergerview&quot;,
-            &quot;state_id&quot;: 1,
+            &quot;id&quot;: 50,
+            &quot;title&quot;: &quot;Lake Haroldfort&quot;,
+            &quot;state_id&quot;: 5,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
         }
     }
 }</code>
@@ -6332,7 +6673,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"cell_no1\": \"n\",
     \"cell_no2\": \"g\",
     \"image_path\": \"z\",
-    \"status\": \"active\"
+    \"status\": \"inactive\"
 }"
 </code></pre></div>
 
@@ -6354,7 +6695,7 @@ let body = {
     "cell_no1": "n",
     "cell_no2": "g",
     "image_path": "z",
-    "status": "active"
+    "status": "inactive"
 };
 
 fetch(url, {
@@ -6547,10 +6888,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-customers--id-"
-               value="active"
+               value="inactive"
                data-component="body">
     <br>
-<p>Example: <code>active</code></p>
+<p>Example: <code>inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -6729,232 +7070,232 @@ access-control-allow-origin: *
     &quot;data&quot;: [
         {
             &quot;id&quot;: 1,
-            &quot;cnic&quot;: &quot;73250313409&quot;,
-            &quot;first_name&quot;: &quot;Kaycee&quot;,
-            &quot;last_name&quot;: &quot;Langosh&quot;,
-            &quot;email&quot;: &quot;linnie04@example.com&quot;,
-            &quot;address&quot;: &quot;111 Halvorson Summit Suite 079\nNew Sydnee, AR 51189-8267&quot;,
-            &quot;city_id&quot;: 235,
-            &quot;cell_no1&quot;: &quot;952-888-7272&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;63596380980&quot;,
+            &quot;first_name&quot;: &quot;Margaret&quot;,
+            &quot;last_name&quot;: &quot;Gislason&quot;,
+            &quot;email&quot;: &quot;hchristiansen@example.net&quot;,
+            &quot;address&quot;: &quot;631 Francisca Highway\nLake Merleborough, IL 50570-9945&quot;,
+            &quot;city_id&quot;: 168,
+            &quot;cell_no1&quot;: &quot;+1-337-485-2008&quot;,
+            &quot;cell_no2&quot;: &quot;+1-541-955-0371&quot;,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:41.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:41.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 235,
-                &quot;title&quot;: &quot;Thielview&quot;,
-                &quot;state_id&quot;: 24,
+                &quot;id&quot;: 168,
+                &quot;title&quot;: &quot;Pfeffermouth&quot;,
+                &quot;state_id&quot;: 17,
                 &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 2,
-            &quot;cnic&quot;: &quot;23538202291&quot;,
-            &quot;first_name&quot;: &quot;Arnold&quot;,
-            &quot;last_name&quot;: &quot;Rowe&quot;,
-            &quot;email&quot;: &quot;weissnat.donavon@example.com&quot;,
-            &quot;address&quot;: &quot;79653 Samanta Turnpike\nVirgieberg, PA 43888-4462&quot;,
-            &quot;city_id&quot;: 149,
-            &quot;cell_no1&quot;: &quot;1-231-325-4934&quot;,
-            &quot;cell_no2&quot;: &quot;1-586-532-3875&quot;,
+            &quot;cnic&quot;: &quot;57422531111&quot;,
+            &quot;first_name&quot;: &quot;Terence&quot;,
+            &quot;last_name&quot;: &quot;Bradtke&quot;,
+            &quot;email&quot;: &quot;kklocko@example.org&quot;,
+            &quot;address&quot;: &quot;997 Dashawn Way Suite 830\nOkunevaton, GA 72719-1165&quot;,
+            &quot;city_id&quot;: 80,
+            &quot;cell_no1&quot;: &quot;1-847-413-7144&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:41.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:41.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 149,
-                &quot;title&quot;: &quot;Alethastad&quot;,
-                &quot;state_id&quot;: 15,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;
+                &quot;id&quot;: 80,
+                &quot;title&quot;: &quot;Estrellafort&quot;,
+                &quot;state_id&quot;: 8,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 3,
-            &quot;cnic&quot;: &quot;16332081748&quot;,
-            &quot;first_name&quot;: &quot;Gabriel&quot;,
-            &quot;last_name&quot;: &quot;Hoppe&quot;,
-            &quot;email&quot;: &quot;jlarkin@example.net&quot;,
-            &quot;address&quot;: &quot;87903 Leanne Crossroad\nLake Nolan, SD 64353&quot;,
-            &quot;city_id&quot;: 233,
-            &quot;cell_no1&quot;: &quot;445.340.2820&quot;,
+            &quot;cnic&quot;: &quot;55882533225&quot;,
+            &quot;first_name&quot;: &quot;Kory&quot;,
+            &quot;last_name&quot;: &quot;Heaney&quot;,
+            &quot;email&quot;: &quot;sbeier@example.com&quot;,
+            &quot;address&quot;: &quot;6876 Gorczany Harbors\nWest Garrettport, NV 91111&quot;,
+            &quot;city_id&quot;: 284,
+            &quot;cell_no1&quot;: &quot;+1.628.637.8325&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 233,
-                &quot;title&quot;: &quot;Flatleyberg&quot;,
-                &quot;state_id&quot;: 24,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;
+                &quot;id&quot;: 284,
+                &quot;title&quot;: &quot;Dantestad&quot;,
+                &quot;state_id&quot;: 29,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 4,
-            &quot;cnic&quot;: &quot;39617382686&quot;,
-            &quot;first_name&quot;: &quot;Jocelyn&quot;,
-            &quot;last_name&quot;: &quot;Feil&quot;,
-            &quot;email&quot;: &quot;hintz.efrain@example.net&quot;,
-            &quot;address&quot;: &quot;3006 Bogisich Knoll Suite 360\nWittingbury, DE 64865-0734&quot;,
-            &quot;city_id&quot;: 465,
-            &quot;cell_no1&quot;: &quot;+1-940-786-6247&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;28281777096&quot;,
+            &quot;first_name&quot;: &quot;Jazlyn&quot;,
+            &quot;last_name&quot;: &quot;Hilpert&quot;,
+            &quot;email&quot;: &quot;qmorissette@example.net&quot;,
+            &quot;address&quot;: &quot;28459 Lebsack Centers Suite 916\nRogahnberg, AL 63509-0121&quot;,
+            &quot;city_id&quot;: 141,
+            &quot;cell_no1&quot;: &quot;(361) 574-5175&quot;,
+            &quot;cell_no2&quot;: &quot;678-852-5655&quot;,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 465,
-                &quot;title&quot;: &quot;East Pansy&quot;,
-                &quot;state_id&quot;: 47,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;
+                &quot;id&quot;: 141,
+                &quot;title&quot;: &quot;East Toby&quot;,
+                &quot;state_id&quot;: 15,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 5,
-            &quot;cnic&quot;: &quot;82329510494&quot;,
-            &quot;first_name&quot;: &quot;Javonte&quot;,
-            &quot;last_name&quot;: &quot;Abernathy&quot;,
-            &quot;email&quot;: &quot;mraz.arlo@example.net&quot;,
-            &quot;address&quot;: &quot;497 Jaquelin Isle\nBoyerland, TN 57603-7380&quot;,
-            &quot;city_id&quot;: 85,
-            &quot;cell_no1&quot;: &quot;858.971.5030&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;55253428342&quot;,
+            &quot;first_name&quot;: &quot;Alfreda&quot;,
+            &quot;last_name&quot;: &quot;Gleason&quot;,
+            &quot;email&quot;: &quot;samanta47@example.net&quot;,
+            &quot;address&quot;: &quot;870 Bode Trail\nEast Talon, SC 71327-6241&quot;,
+            &quot;city_id&quot;: 324,
+            &quot;cell_no1&quot;: &quot;+1-510-620-5244&quot;,
+            &quot;cell_no2&quot;: &quot;+12285282364&quot;,
             &quot;image_path&quot;: null,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 85,
-                &quot;title&quot;: &quot;Port Abelardoburgh&quot;,
-                &quot;state_id&quot;: 9,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:30.000000Z&quot;
+                &quot;id&quot;: 324,
+                &quot;title&quot;: &quot;Adamsside&quot;,
+                &quot;state_id&quot;: 33,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 6,
-            &quot;cnic&quot;: &quot;48920574386&quot;,
-            &quot;first_name&quot;: &quot;Catharine&quot;,
-            &quot;last_name&quot;: &quot;West&quot;,
-            &quot;email&quot;: &quot;mikayla.schuppe@example.net&quot;,
-            &quot;address&quot;: &quot;38317 Cooper Hollow Suite 196\nLubowitzview, NJ 60640-1116&quot;,
-            &quot;city_id&quot;: 2,
-            &quot;cell_no1&quot;: &quot;(215) 345-3793&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;cnic&quot;: &quot;84216165643&quot;,
+            &quot;first_name&quot;: &quot;Tabitha&quot;,
+            &quot;last_name&quot;: &quot;Koelpin&quot;,
+            &quot;email&quot;: &quot;ljast@example.net&quot;,
+            &quot;address&quot;: &quot;21730 Lowe Streets Suite 685\nZiemannburgh, DE 04602&quot;,
+            &quot;city_id&quot;: 381,
+            &quot;cell_no1&quot;: &quot;+1 (320) 823-6550&quot;,
+            &quot;cell_no2&quot;: &quot;1-283-954-9174&quot;,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 2,
-                &quot;title&quot;: &quot;Jefferyburgh&quot;,
-                &quot;state_id&quot;: 1,
+                &quot;id&quot;: 381,
+                &quot;title&quot;: &quot;Lake Gailchester&quot;,
+                &quot;state_id&quot;: 39,
                 &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;20548364945&quot;,
-            &quot;first_name&quot;: &quot;Blaise&quot;,
-            &quot;last_name&quot;: &quot;Crona&quot;,
-            &quot;email&quot;: &quot;gaylord53@example.com&quot;,
-            &quot;address&quot;: &quot;56420 Dibbert Club\nEmmerichshire, TX 57020-8836&quot;,
-            &quot;city_id&quot;: 330,
-            &quot;cell_no1&quot;: &quot;+1 (938) 358-7180&quot;,
+            &quot;cnic&quot;: &quot;01962251060&quot;,
+            &quot;first_name&quot;: &quot;Blaze&quot;,
+            &quot;last_name&quot;: &quot;Stracke&quot;,
+            &quot;email&quot;: &quot;mayer.cooper@example.net&quot;,
+            &quot;address&quot;: &quot;3789 Cummerata Manor Apt. 339\nFramiberg, MO 99968-2441&quot;,
+            &quot;city_id&quot;: 49,
+            &quot;cell_no1&quot;: &quot;330-416-4875&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: null,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 330,
-                &quot;title&quot;: &quot;South Anibal&quot;,
-                &quot;state_id&quot;: 33,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;
+                &quot;id&quot;: 49,
+                &quot;title&quot;: &quot;Alvinatown&quot;,
+                &quot;state_id&quot;: 5,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;16461010950&quot;,
-            &quot;first_name&quot;: &quot;Coleman&quot;,
-            &quot;last_name&quot;: &quot;Morar&quot;,
-            &quot;email&quot;: &quot;tlittle@example.net&quot;,
-            &quot;address&quot;: &quot;95057 Senger Prairie\nNorth Carmeloport, AR 62558-4167&quot;,
-            &quot;city_id&quot;: 123,
-            &quot;cell_no1&quot;: &quot;979-824-6036&quot;,
+            &quot;cnic&quot;: &quot;25127398737&quot;,
+            &quot;first_name&quot;: &quot;Marilyne&quot;,
+            &quot;last_name&quot;: &quot;Goodwin&quot;,
+            &quot;email&quot;: &quot;wyman.kayden@example.org&quot;,
+            &quot;address&quot;: &quot;5844 Mireya Green Suite 295\nLake Lianaland, SC 45739-4909&quot;,
+            &quot;city_id&quot;: 365,
+            &quot;cell_no1&quot;: &quot;(561) 484-8303&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: null,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 123,
-                &quot;title&quot;: &quot;South Sophiaview&quot;,
-                &quot;state_id&quot;: 13,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:31.000000Z&quot;
+                &quot;id&quot;: 365,
+                &quot;title&quot;: &quot;Eunicemouth&quot;,
+                &quot;state_id&quot;: 37,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:32.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 9,
-            &quot;cnic&quot;: &quot;40269480418&quot;,
-            &quot;first_name&quot;: &quot;Maia&quot;,
-            &quot;last_name&quot;: &quot;Rath&quot;,
-            &quot;email&quot;: &quot;novella.crist@example.com&quot;,
-            &quot;address&quot;: &quot;166 Cordie Row Suite 568\nWest Dejuan, MO 32616&quot;,
-            &quot;city_id&quot;: 183,
-            &quot;cell_no1&quot;: &quot;+19499605330&quot;,
-            &quot;cell_no2&quot;: &quot;631.489.9959&quot;,
+            &quot;cnic&quot;: &quot;57198746331&quot;,
+            &quot;first_name&quot;: &quot;Ruby&quot;,
+            &quot;last_name&quot;: &quot;Bernier&quot;,
+            &quot;email&quot;: &quot;irussel@example.net&quot;,
+            &quot;address&quot;: &quot;82568 Schmidt Lakes\nZitaburgh, PA 83177-2169&quot;,
+            &quot;city_id&quot;: 60,
+            &quot;cell_no1&quot;: &quot;(234) 809-6828&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 183,
-                &quot;title&quot;: &quot;Port Aisha&quot;,
-                &quot;state_id&quot;: 19,
-                &quot;status&quot;: &quot;inactive&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:32.000000Z&quot;
+                &quot;id&quot;: 60,
+                &quot;title&quot;: &quot;South Linwoodfurt&quot;,
+                &quot;state_id&quot;: 6,
+                &quot;status&quot;: &quot;active&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         },
         {
             &quot;id&quot;: 10,
-            &quot;cnic&quot;: &quot;86774323391&quot;,
-            &quot;first_name&quot;: &quot;Crystal&quot;,
-            &quot;last_name&quot;: &quot;O&#039;Conner&quot;,
-            &quot;email&quot;: &quot;rita.predovic@example.com&quot;,
-            &quot;address&quot;: &quot;3386 Leuschke Row Apt. 350\nO&#039;Connerview, NE 78082-0464&quot;,
-            &quot;city_id&quot;: 14,
-            &quot;cell_no1&quot;: &quot;281-383-3348&quot;,
-            &quot;cell_no2&quot;: &quot;+1.909.614.9525&quot;,
+            &quot;cnic&quot;: &quot;12209673805&quot;,
+            &quot;first_name&quot;: &quot;Retha&quot;,
+            &quot;last_name&quot;: &quot;Schulist&quot;,
+            &quot;email&quot;: &quot;brandyn24@example.net&quot;,
+            &quot;address&quot;: &quot;1316 Beahan Summit\nPort Virgilview, SD 90154-7200&quot;,
+            &quot;city_id&quot;: 64,
+            &quot;cell_no1&quot;: &quot;469-599-8357&quot;,
+            &quot;cell_no2&quot;: &quot;347.529.4738&quot;,
             &quot;image_path&quot;: null,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
             &quot;city&quot;: {
-                &quot;id&quot;: 14,
-                &quot;title&quot;: &quot;Jenkinsview&quot;,
-                &quot;state_id&quot;: 2,
-                &quot;status&quot;: &quot;active&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+                &quot;id&quot;: 64,
+                &quot;title&quot;: &quot;Llewellynport&quot;,
+                &quot;state_id&quot;: 7,
+                &quot;status&quot;: &quot;inactive&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
             }
         }
     ],
@@ -7198,25 +7539,25 @@ access-control-allow-origin: *
     &quot;success&quot;: true,
     &quot;data&quot;: {
         &quot;id&quot;: 1,
-        &quot;cnic&quot;: &quot;73250313409&quot;,
-        &quot;first_name&quot;: &quot;Kaycee&quot;,
-        &quot;last_name&quot;: &quot;Langosh&quot;,
-        &quot;email&quot;: &quot;linnie04@example.com&quot;,
-        &quot;address&quot;: &quot;111 Halvorson Summit Suite 079\nNew Sydnee, AR 51189-8267&quot;,
-        &quot;city_id&quot;: 235,
-        &quot;cell_no1&quot;: &quot;952-888-7272&quot;,
-        &quot;cell_no2&quot;: null,
+        &quot;cnic&quot;: &quot;63596380980&quot;,
+        &quot;first_name&quot;: &quot;Margaret&quot;,
+        &quot;last_name&quot;: &quot;Gislason&quot;,
+        &quot;email&quot;: &quot;hchristiansen@example.net&quot;,
+        &quot;address&quot;: &quot;631 Francisca Highway\nLake Merleborough, IL 50570-9945&quot;,
+        &quot;city_id&quot;: 168,
+        &quot;cell_no1&quot;: &quot;+1-337-485-2008&quot;,
+        &quot;cell_no2&quot;: &quot;+1-541-955-0371&quot;,
         &quot;image_path&quot;: null,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
+        &quot;status&quot;: &quot;inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:41.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:41.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 235,
-            &quot;title&quot;: &quot;Thielview&quot;,
-            &quot;state_id&quot;: 24,
+            &quot;id&quot;: 168,
+            &quot;title&quot;: &quot;Pfeffermouth&quot;,
+            &quot;state_id&quot;: 17,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;
         }
     }
 }</code>
@@ -7600,192 +7941,192 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;first_name&quot;: &quot;Austyn&quot;,
-        &quot;last_name&quot;: &quot;Haley&quot;,
-        &quot;cnic&quot;: &quot;67292-5970102-8&quot;,
-        &quot;address&quot;: &quot;759 Rylee Creek Apt. 607\nNew Kellieburgh, DE 10217&quot;,
-        &quot;city_id&quot;: 362,
+        &quot;first_name&quot;: &quot;Bella&quot;,
+        &quot;last_name&quot;: &quot;Champlin&quot;,
+        &quot;cnic&quot;: &quot;06566-3042346-5&quot;,
+        &quot;address&quot;: &quot;3614 Gloria Plains\nNorth Raegan, IA 41069-9042&quot;,
+        &quot;city_id&quot;: 111,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 362,
-            &quot;title&quot;: &quot;Katlynberg&quot;,
-            &quot;state_id&quot;: 37,
+            &quot;id&quot;: 111,
+            &quot;title&quot;: &quot;Bauchborough&quot;,
+            &quot;state_id&quot;: 12,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;first_name&quot;: &quot;Deja&quot;,
-        &quot;last_name&quot;: &quot;Glover&quot;,
-        &quot;cnic&quot;: &quot;46119-0459785-4&quot;,
-        &quot;address&quot;: &quot;1355 Dach Canyon Suite 427\nWeberburgh, MA 94315&quot;,
-        &quot;city_id&quot;: 376,
+        &quot;first_name&quot;: &quot;Jeffery&quot;,
+        &quot;last_name&quot;: &quot;Connelly&quot;,
+        &quot;cnic&quot;: &quot;54710-8923110-8&quot;,
+        &quot;address&quot;: &quot;8716 Keebler Circles\nBechtelarborough, UT 70976&quot;,
+        &quot;city_id&quot;: 445,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 376,
-            &quot;title&quot;: &quot;West Karolann&quot;,
-            &quot;state_id&quot;: 38,
+            &quot;id&quot;: 445,
+            &quot;title&quot;: &quot;Braunberg&quot;,
+            &quot;state_id&quot;: 45,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;first_name&quot;: &quot;Virginia&quot;,
-        &quot;last_name&quot;: &quot;Rice&quot;,
-        &quot;cnic&quot;: &quot;34082-7362456-8&quot;,
-        &quot;address&quot;: &quot;80622 Orpha Turnpike\nWest Rosaport, TN 62759&quot;,
-        &quot;city_id&quot;: 17,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;first_name&quot;: &quot;Elenora&quot;,
+        &quot;last_name&quot;: &quot;Little&quot;,
+        &quot;cnic&quot;: &quot;29493-2919611-4&quot;,
+        &quot;address&quot;: &quot;14580 Sonia Points\nPort Joannie, MS 69204-2671&quot;,
+        &quot;city_id&quot;: 473,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 17,
-            &quot;title&quot;: &quot;North Janellemouth&quot;,
-            &quot;state_id&quot;: 2,
+            &quot;id&quot;: 473,
+            &quot;title&quot;: &quot;Bogisichburgh&quot;,
+            &quot;state_id&quot;: 48,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:29.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;first_name&quot;: &quot;Ariel&quot;,
-        &quot;last_name&quot;: &quot;Glover&quot;,
-        &quot;cnic&quot;: &quot;95217-1960061-8&quot;,
-        &quot;address&quot;: &quot;90892 Tom Estate Suite 525\nLake Andrewberg, HI 80993&quot;,
-        &quot;city_id&quot;: 393,
+        &quot;first_name&quot;: &quot;Russel&quot;,
+        &quot;last_name&quot;: &quot;Lind&quot;,
+        &quot;cnic&quot;: &quot;70853-8463742-5&quot;,
+        &quot;address&quot;: &quot;195 Keeling Brook\nSchmelerstad, MD 22782&quot;,
+        &quot;city_id&quot;: 44,
         &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 393,
-            &quot;title&quot;: &quot;Abshiremouth&quot;,
-            &quot;state_id&quot;: 40,
+            &quot;id&quot;: 44,
+            &quot;title&quot;: &quot;Rowanchester&quot;,
+            &quot;state_id&quot;: 5,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:27.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;first_name&quot;: &quot;Roscoe&quot;,
-        &quot;last_name&quot;: &quot;Hudson&quot;,
-        &quot;cnic&quot;: &quot;39290-1810136-8&quot;,
-        &quot;address&quot;: &quot;4237 Bernhard Knoll Suite 250\nWest Cecilville, MT 62151-7859&quot;,
-        &quot;city_id&quot;: 256,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;first_name&quot;: &quot;Queen&quot;,
+        &quot;last_name&quot;: &quot;Oberbrunner&quot;,
+        &quot;cnic&quot;: &quot;92801-3908294-0&quot;,
+        &quot;address&quot;: &quot;325 Moore Circle\nEast Ulicesview, KS 24342&quot;,
+        &quot;city_id&quot;: 192,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 256,
-            &quot;title&quot;: &quot;Lueilwitzview&quot;,
-            &quot;state_id&quot;: 26,
+            &quot;id&quot;: 192,
+            &quot;title&quot;: &quot;Emilianoshire&quot;,
+            &quot;state_id&quot;: 20,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:33.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:29.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;first_name&quot;: &quot;Rickie&quot;,
-        &quot;last_name&quot;: &quot;Harvey&quot;,
-        &quot;cnic&quot;: &quot;21782-2112291-1&quot;,
-        &quot;address&quot;: &quot;7599 Reyes Garden Suite 003\nNew Ernest, NH 10361-4850&quot;,
-        &quot;city_id&quot;: 384,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;first_name&quot;: &quot;Marina&quot;,
+        &quot;last_name&quot;: &quot;Morissette&quot;,
+        &quot;cnic&quot;: &quot;13204-3990013-3&quot;,
+        &quot;address&quot;: &quot;77919 D&#039;Amore Junction Apt. 172\nRogersville, MS 63293-9085&quot;,
+        &quot;city_id&quot;: 477,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 384,
-            &quot;title&quot;: &quot;Yostside&quot;,
-            &quot;state_id&quot;: 39,
+            &quot;id&quot;: 477,
+            &quot;title&quot;: &quot;South Emeliefort&quot;,
+            &quot;state_id&quot;: 48,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;first_name&quot;: &quot;Silas&quot;,
-        &quot;last_name&quot;: &quot;Bechtelar&quot;,
-        &quot;cnic&quot;: &quot;49754-4969029-4&quot;,
-        &quot;address&quot;: &quot;329 Grant Wells\nSidmouth, OK 61753&quot;,
-        &quot;city_id&quot;: 384,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;first_name&quot;: &quot;Deron&quot;,
+        &quot;last_name&quot;: &quot;Dach&quot;,
+        &quot;cnic&quot;: &quot;06667-9360598-2&quot;,
+        &quot;address&quot;: &quot;9229 Weber Avenue\nShanahanberg, KS 37412&quot;,
+        &quot;city_id&quot;: 119,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 384,
-            &quot;title&quot;: &quot;Yostside&quot;,
-            &quot;state_id&quot;: 39,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;
+            &quot;id&quot;: 119,
+            &quot;title&quot;: &quot;Alliefort&quot;,
+            &quot;state_id&quot;: 12,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 8,
-        &quot;first_name&quot;: &quot;Mario&quot;,
-        &quot;last_name&quot;: &quot;Conroy&quot;,
-        &quot;cnic&quot;: &quot;13103-6744901-9&quot;,
-        &quot;address&quot;: &quot;23728 Bruen Club Suite 384\nNew Martina, OH 59760&quot;,
-        &quot;city_id&quot;: 487,
+        &quot;first_name&quot;: &quot;Arch&quot;,
+        &quot;last_name&quot;: &quot;Metz&quot;,
+        &quot;cnic&quot;: &quot;45879-8396540-6&quot;,
+        &quot;address&quot;: &quot;34325 Cloyd Station\nHyattmouth, IN 50603-4248&quot;,
+        &quot;city_id&quot;: 347,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 487,
-            &quot;title&quot;: &quot;O&#039;Reillymouth&quot;,
-            &quot;state_id&quot;: 49,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:38.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:38.000000Z&quot;
+            &quot;id&quot;: 347,
+            &quot;title&quot;: &quot;Zoeyside&quot;,
+            &quot;state_id&quot;: 35,
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 9,
-        &quot;first_name&quot;: &quot;Russel&quot;,
-        &quot;last_name&quot;: &quot;Lakin&quot;,
-        &quot;cnic&quot;: &quot;10040-2997713-0&quot;,
-        &quot;address&quot;: &quot;9390 Borer Springs Suite 692\nSouth Yvette, SC 61951&quot;,
-        &quot;city_id&quot;: 323,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;first_name&quot;: &quot;Benedict&quot;,
+        &quot;last_name&quot;: &quot;Runte&quot;,
+        &quot;cnic&quot;: &quot;03564-7238125-7&quot;,
+        &quot;address&quot;: &quot;89806 Trevor Track\nPort Henderson, LA 97521&quot;,
+        &quot;city_id&quot;: 306,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 323,
-            &quot;title&quot;: &quot;New Aylabury&quot;,
-            &quot;state_id&quot;: 33,
+            &quot;id&quot;: 306,
+            &quot;title&quot;: &quot;Tadfort&quot;,
+            &quot;state_id&quot;: 31,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:34.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:31.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
-        &quot;first_name&quot;: &quot;Lily&quot;,
-        &quot;last_name&quot;: &quot;Wisoky&quot;,
-        &quot;cnic&quot;: &quot;53630-6251043-9&quot;,
-        &quot;address&quot;: &quot;174 Russ Manors\nMadelineview, MT 09367-6853&quot;,
-        &quot;city_id&quot;: 460,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;first_name&quot;: &quot;Cecelia&quot;,
+        &quot;last_name&quot;: &quot;Dooley&quot;,
+        &quot;cnic&quot;: &quot;88846-5257145-8&quot;,
+        &quot;address&quot;: &quot;8504 Tillman Fords Suite 117\nNorth Johannburgh, NV 22767&quot;,
+        &quot;city_id&quot;: 461,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;city&quot;: {
-            &quot;id&quot;: 460,
-            &quot;title&quot;: &quot;Lednerfurt&quot;,
-            &quot;state_id&quot;: 46,
+            &quot;id&quot;: 461,
+            &quot;title&quot;: &quot;West Rowland&quot;,
+            &quot;state_id&quot;: 47,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:37.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:33.000000Z&quot;
         }
     }
 ]</code>
@@ -7883,7 +8224,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"last_name\": \"architecto\",
     \"cnic\": \"architecto\",
     \"city_id\": \"architecto\",
-    \"status\": \"Active\"
+    \"status\": \"Inactive\"
 }"
 </code></pre></div>
 
@@ -7903,7 +8244,7 @@ let body = {
     "last_name": "architecto",
     "cnic": "architecto",
     "city_id": "architecto",
-    "status": "Active"
+    "status": "Inactive"
 };
 
 fetch(url, {
@@ -8036,10 +8377,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-vendors"
-               value="Active"
+               value="Inactive"
                data-component="body">
     <br>
-<p>Example: <code>Active</code></p>
+<p>Example: <code>Inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -8095,21 +8436,21 @@ access-control-allow-origin: *
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;id&quot;: 1,
-    &quot;first_name&quot;: &quot;Austyn&quot;,
-    &quot;last_name&quot;: &quot;Haley&quot;,
-    &quot;cnic&quot;: &quot;67292-5970102-8&quot;,
-    &quot;address&quot;: &quot;759 Rylee Creek Apt. 607\nNew Kellieburgh, DE 10217&quot;,
-    &quot;city_id&quot;: 362,
+    &quot;first_name&quot;: &quot;Bella&quot;,
+    &quot;last_name&quot;: &quot;Champlin&quot;,
+    &quot;cnic&quot;: &quot;06566-3042346-5&quot;,
+    &quot;address&quot;: &quot;3614 Gloria Plains\nNorth Raegan, IA 41069-9042&quot;,
+    &quot;city_id&quot;: 111,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
     &quot;city&quot;: {
-        &quot;id&quot;: 362,
-        &quot;title&quot;: &quot;Katlynberg&quot;,
-        &quot;state_id&quot;: 37,
+        &quot;id&quot;: 111,
+        &quot;title&quot;: &quot;Bauchborough&quot;,
+        &quot;state_id&quot;: 12,
         &quot;status&quot;: &quot;inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:35.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:28.000000Z&quot;
     }
 }</code>
  </pre>
@@ -8568,24 +8909,24 @@ access-control-allow-origin: *
         &quot;title&quot;: &quot;Bridal&quot;,
         &quot;img_path&quot;: null,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 2,
         &quot;title&quot;: &quot;Fancy&quot;,
         &quot;img_path&quot;: null,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 3,
         &quot;title&quot;: &quot;Casual&quot;,
         &quot;img_path&quot;: null,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     }
 ]</code>
  </pre>
@@ -8680,7 +9021,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"architecto\",
     \"img_path\": \"architecto\",
-    \"status\": \"Active\"
+    \"status\": \"Inactive\"
 }"
 </code></pre></div>
 
@@ -8698,7 +9039,7 @@ const headers = {
 let body = {
     "title": "architecto",
     "img_path": "architecto",
-    "status": "Active"
+    "status": "Inactive"
 };
 
 fetch(url, {
@@ -8809,10 +9150,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-categories"
-               value="Active"
+               value="Inactive"
                data-component="body">
     <br>
-<p>Example: <code>Active</code></p>
+<p>Example: <code>Inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -8871,8 +9212,8 @@ access-control-allow-origin: *
     &quot;title&quot;: &quot;Bridal&quot;,
     &quot;img_path&quot;: null,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -8977,7 +9318,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"img_path\": \"architecto\",
-    \"status\": \"Inactive\"
+    \"status\": \"Active\"
 }"
 </code></pre></div>
 
@@ -8994,7 +9335,7 @@ const headers = {
 
 let body = {
     "img_path": "architecto",
-    "status": "Inactive"
+    "status": "Active"
 };
 
 fetch(url, {
@@ -9121,10 +9462,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-categories--id-"
-               value="Inactive"
+               value="Active"
                data-component="body">
     <br>
-<p>Example: <code>Inactive</code></p>
+<p>Example: <code>Active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -9305,15 +9646,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 1,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 1,
             &quot;title&quot;: &quot;Bridal&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9322,15 +9663,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 1,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 1,
             &quot;title&quot;: &quot;Bridal&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9339,15 +9680,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 1,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 1,
             &quot;title&quot;: &quot;Bridal&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9356,15 +9697,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 2,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 2,
             &quot;title&quot;: &quot;Fancy&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9373,15 +9714,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 2,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 2,
             &quot;title&quot;: &quot;Fancy&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9390,15 +9731,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 2,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 2,
             &quot;title&quot;: &quot;Fancy&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9407,15 +9748,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 2,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 2,
             &quot;title&quot;: &quot;Fancy&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9424,15 +9765,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 3,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 3,
             &quot;title&quot;: &quot;Casual&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
@@ -9441,15 +9782,15 @@ access-control-allow-origin: *
         &quot;img_path&quot;: null,
         &quot;category_id&quot;: 3,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
         &quot;category&quot;: {
             &quot;id&quot;: 3,
             &quot;title&quot;: &quot;Casual&quot;,
             &quot;img_path&quot;: null,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     }
 ]</code>
@@ -9546,7 +9887,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"architecto\",
     \"img_path\": \"architecto\",
     \"category_id\": \"architecto\",
-    \"status\": \"Inactive\"
+    \"status\": \"Active\"
 }"
 </code></pre></div>
 
@@ -9565,7 +9906,7 @@ let body = {
     "title": "architecto",
     "img_path": "architecto",
     "category_id": "architecto",
-    "status": "Inactive"
+    "status": "Active"
 };
 
 fetch(url, {
@@ -9687,10 +10028,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-subcategories"
-               value="Inactive"
+               value="Active"
                data-component="body">
     <br>
-<p>Example: <code>Inactive</code></p>
+<p>Example: <code>Active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -9750,15 +10091,15 @@ access-control-allow-origin: *
     &quot;img_path&quot;: null,
     &quot;category_id&quot;: 1,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
     &quot;category&quot;: {
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;Bridal&quot;,
         &quot;img_path&quot;: null,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     }
 }</code>
  </pre>
@@ -9866,7 +10207,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"architecto\",
     \"img_path\": \"architecto\",
     \"category_id\": \"architecto\",
-    \"status\": \"Active\"
+    \"status\": \"Inactive\"
 }"
 </code></pre></div>
 
@@ -9885,7 +10226,7 @@ let body = {
     "title": "architecto",
     "img_path": "architecto",
     "category_id": "architecto",
-    "status": "Active"
+    "status": "Inactive"
 };
 
 fetch(url, {
@@ -10023,10 +10364,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-subcategories--id-"
-               value="Active"
+               value="Inactive"
                data-component="body">
     <br>
-<p>Example: <code>Active</code></p>
+<p>Example: <code>Inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -10205,29 +10546,29 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;Small&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 2,
         &quot;title&quot;: &quot;Medium&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 3,
         &quot;title&quot;: &quot;Large&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 4,
         &quot;title&quot;: &quot;Extra Large&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     }
 ]</code>
  </pre>
@@ -10499,8 +10840,8 @@ access-control-allow-origin: *
     &quot;id&quot;: 1,
     &quot;title&quot;: &quot;Small&quot;,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -10604,7 +10945,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"Inactive\"
+    \"status\": \"Active\"
 }"
 </code></pre></div>
 
@@ -10620,7 +10961,7 @@ const headers = {
 };
 
 let body = {
-    "status": "Inactive"
+    "status": "Active"
 };
 
 fetch(url, {
@@ -10736,10 +11077,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-sizes--id-"
-               value="Inactive"
+               value="Active"
                data-component="body">
     <br>
-<p>Example: <code>Inactive</code></p>
+<p>Example: <code>Active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -10918,43 +11259,43 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;Red&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 2,
         &quot;title&quot;: &quot;Blue&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 3,
         &quot;title&quot;: &quot;Green&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 4,
         &quot;title&quot;: &quot;Yellow&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 5,
         &quot;title&quot;: &quot;Black&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 6,
         &quot;title&quot;: &quot;White&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     }
 ]</code>
  </pre>
@@ -11048,7 +11389,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"title\": \"architecto\",
-    \"status\": \"Active\"
+    \"status\": \"Inactive\"
 }"
 </code></pre></div>
 
@@ -11065,7 +11406,7 @@ const headers = {
 
 let body = {
     "title": "architecto",
-    "status": "Active"
+    "status": "Inactive"
 };
 
 fetch(url, {
@@ -11165,10 +11506,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-colors"
-               value="Active"
+               value="Inactive"
                data-component="body">
     <br>
-<p>Example: <code>Active</code></p>
+<p>Example: <code>Inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -11226,8 +11567,8 @@ access-control-allow-origin: *
     &quot;id&quot;: 1,
     &quot;title&quot;: &quot;Red&quot;,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -11331,7 +11672,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"Active\"
+    \"status\": \"Inactive\"
 }"
 </code></pre></div>
 
@@ -11347,7 +11688,7 @@ const headers = {
 };
 
 let body = {
-    "status": "Active"
+    "status": "Inactive"
 };
 
 fetch(url, {
@@ -11463,10 +11804,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-colors--id-"
-               value="Active"
+               value="Inactive"
                data-component="body">
     <br>
-<p>Example: <code>Active</code></p>
+<p>Example: <code>Inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -11645,22 +11986,22 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;Winter&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 2,
         &quot;title&quot;: &quot;Summer&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 3,
         &quot;title&quot;: &quot;Mid-Season&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     }
 ]</code>
  </pre>
@@ -11754,7 +12095,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"title\": \"architecto\",
-    \"status\": \"Active\"
+    \"status\": \"Inactive\"
 }"
 </code></pre></div>
 
@@ -11771,7 +12112,7 @@ const headers = {
 
 let body = {
     "title": "architecto",
-    "status": "Active"
+    "status": "Inactive"
 };
 
 fetch(url, {
@@ -11871,10 +12212,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-seasons"
-               value="Active"
+               value="Inactive"
                data-component="body">
     <br>
-<p>Example: <code>Active</code></p>
+<p>Example: <code>Inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -11932,8 +12273,8 @@ access-control-allow-origin: *
     &quot;id&quot;: 1,
     &quot;title&quot;: &quot;Winter&quot;,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -12037,7 +12378,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"Inactive\"
+    \"status\": \"Active\"
 }"
 </code></pre></div>
 
@@ -12053,7 +12394,7 @@ const headers = {
 };
 
 let body = {
-    "status": "Inactive"
+    "status": "Active"
 };
 
 fetch(url, {
@@ -12169,10 +12510,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-seasons--id-"
-               value="Inactive"
+               value="Active"
                data-component="body">
     <br>
-<p>Example: <code>Inactive</code></p>
+<p>Example: <code>Active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -12351,50 +12692,50 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;Cotton&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 2,
         &quot;title&quot;: &quot;Silk&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 3,
         &quot;title&quot;: &quot;Linen&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 4,
         &quot;title&quot;: &quot;Wool&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 5,
         &quot;title&quot;: &quot;Denim&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 6,
         &quot;title&quot;: &quot;Polyester&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     },
     {
         &quot;id&quot;: 7,
         &quot;title&quot;: &quot;Fabric&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
     }
 ]</code>
  </pre>
@@ -12488,7 +12829,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"title\": \"architecto\",
-    \"status\": \"Inactive\"
+    \"status\": \"Active\"
 }"
 </code></pre></div>
 
@@ -12505,7 +12846,7 @@ const headers = {
 
 let body = {
     "title": "architecto",
-    "status": "Inactive"
+    "status": "Active"
 };
 
 fetch(url, {
@@ -12605,10 +12946,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-materials"
-               value="Inactive"
+               value="Active"
                data-component="body">
     <br>
-<p>Example: <code>Inactive</code></p>
+<p>Example: <code>Active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Active</code></li> <li><code>Inactive</code></li></ul>
         </div>
@@ -12666,8 +13007,8 @@ access-control-allow-origin: *
     &quot;id&quot;: 1,
     &quot;title&quot;: &quot;Cotton&quot;,
     &quot;status&quot;: &quot;Active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -13083,922 +13424,922 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC632&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+aut&quot;,
-        &quot;sub_category_id&quot;: 8,
-        &quot;sale_price&quot;: &quot;1874.72&quot;,
-        &quot;opening_stock_quantity&quot;: 17,
-        &quot;user_id&quot;: 10,
-        &quot;barcode&quot;: &quot;5124109198491&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;title&quot;: &quot;Maxi&quot;,
+        &quot;design_code&quot;: &quot;DC253&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+soluta&quot;,
+        &quot;sub_category_id&quot;: 5,
+        &quot;sale_price&quot;: &quot;2485.88&quot;,
+        &quot;opening_stock_quantity&quot;: 42,
+        &quot;user_id&quot;: 7,
+        &quot;barcode&quot;: &quot;4672764781165&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Readymade&quot;,
+            &quot;id&quot;: 5,
+            &quot;title&quot;: &quot;Garara&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 3,
+            &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC838&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000055?text=fashion+quidem&quot;,
-        &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;3362.56&quot;,
-        &quot;opening_stock_quantity&quot;: 39,
-        &quot;user_id&quot;: 2,
-        &quot;barcode&quot;: &quot;7932057961313&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC910&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007788?text=fashion+eius&quot;,
+        &quot;sub_category_id&quot;: 2,
+        &quot;sale_price&quot;: &quot;3738.02&quot;,
+        &quot;opening_stock_quantity&quot;: 8,
+        &quot;user_id&quot;: 5,
+        &quot;barcode&quot;: &quot;2053571025949&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Maxi&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
+            &quot;category_id&quot;: 1,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC754&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0088ff?text=fashion+sit&quot;,
-        &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;4987.75&quot;,
-        &quot;opening_stock_quantity&quot;: 22,
-        &quot;user_id&quot;: 1,
-        &quot;barcode&quot;: &quot;3203020582120&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Garara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 4,
         &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC291&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bbbb?text=fashion+ea&quot;,
-        &quot;sub_category_id&quot;: 1,
-        &quot;sale_price&quot;: &quot;1235.08&quot;,
-        &quot;opening_stock_quantity&quot;: 40,
-        &quot;user_id&quot;: 2,
-        &quot;barcode&quot;: &quot;2481259121728&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Lahnga&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 5,
-        &quot;title&quot;: &quot;Maxi&quot;,
-        &quot;design_code&quot;: &quot;DC113&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-        &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;4488.74&quot;,
-        &quot;opening_stock_quantity&quot;: 9,
-        &quot;user_id&quot;: 3,
-        &quot;barcode&quot;: &quot;7740891708809&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 6,
-        &quot;title&quot;: &quot;Maxi&quot;,
-        &quot;design_code&quot;: &quot;DC475&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-        &quot;sub_category_id&quot;: 7,
-        &quot;sale_price&quot;: &quot;4064.25&quot;,
-        &quot;opening_stock_quantity&quot;: 50,
-        &quot;user_id&quot;: 6,
-        &quot;barcode&quot;: &quot;4249762233653&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Lahga Choli&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 7,
-        &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC807&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-        &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;3569.43&quot;,
-        &quot;opening_stock_quantity&quot;: 11,
-        &quot;user_id&quot;: 6,
-        &quot;barcode&quot;: &quot;5277470339830&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 8,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC129&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000066?text=fashion+voluptatibus&quot;,
-        &quot;sub_category_id&quot;: 1,
-        &quot;sale_price&quot;: &quot;4118.57&quot;,
-        &quot;opening_stock_quantity&quot;: 17,
-        &quot;user_id&quot;: 4,
-        &quot;barcode&quot;: &quot;1361364078173&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Lahnga&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 9,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC314&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa22?text=fashion+deleniti&quot;,
-        &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;2082.67&quot;,
-        &quot;opening_stock_quantity&quot;: 50,
-        &quot;user_id&quot;: 2,
-        &quot;barcode&quot;: &quot;1852287048379&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Garara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 10,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC097&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011cc?text=fashion+ex&quot;,
+        &quot;design_code&quot;: &quot;DC090&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ffdd?text=fashion+minima&quot;,
         &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;3119.77&quot;,
-        &quot;opening_stock_quantity&quot;: 11,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;1262368207630&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;3528.74&quot;,
+        &quot;opening_stock_quantity&quot;: 37,
+        &quot;user_id&quot;: 1,
+        &quot;barcode&quot;: &quot;3985944361226&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 4,
             &quot;title&quot;: &quot;Sharara&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 4,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC710&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008822?text=fashion+est&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;1674.73&quot;,
+        &quot;opening_stock_quantity&quot;: 23,
+        &quot;user_id&quot;: 1,
+        &quot;barcode&quot;: &quot;1191943436878&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 5,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC371&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+laborum&quot;,
+        &quot;sub_category_id&quot;: 7,
+        &quot;sale_price&quot;: &quot;1312.58&quot;,
+        &quot;opening_stock_quantity&quot;: 43,
+        &quot;user_id&quot;: 6,
+        &quot;barcode&quot;: &quot;0727022858913&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 7,
+            &quot;title&quot;: &quot;Lahga Choli&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 2,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 6,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC803&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eedd?text=fashion+cupiditate&quot;,
+        &quot;sub_category_id&quot;: 7,
+        &quot;sale_price&quot;: &quot;1009.31&quot;,
+        &quot;opening_stock_quantity&quot;: 42,
+        &quot;user_id&quot;: 10,
+        &quot;barcode&quot;: &quot;6534638685024&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 7,
+            &quot;title&quot;: &quot;Lahga Choli&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 2,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 7,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC753&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004499?text=fashion+sit&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;2520.09&quot;,
+        &quot;opening_stock_quantity&quot;: 24,
+        &quot;user_id&quot;: 7,
+        &quot;barcode&quot;: &quot;2485838489162&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;LongShirt&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 8,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC321&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+neque&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;2270.77&quot;,
+        &quot;opening_stock_quantity&quot;: 7,
+        &quot;user_id&quot;: 8,
+        &quot;barcode&quot;: &quot;0792413436766&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 9,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC352&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;3418.89&quot;,
+        &quot;opening_stock_quantity&quot;: 32,
+        &quot;user_id&quot;: 10,
+        &quot;barcode&quot;: &quot;3439172304468&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;LongShirt&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 10,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC128&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005522?text=fashion+et&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;3590.53&quot;,
+        &quot;opening_stock_quantity&quot;: 21,
+        &quot;user_id&quot;: 6,
+        &quot;barcode&quot;: &quot;6325101202080&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;LongShirt&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 11,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC949&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003366?text=fashion+labore&quot;,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC429&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000077?text=fashion+fugiat&quot;,
         &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;2307.70&quot;,
-        &quot;opening_stock_quantity&quot;: 40,
-        &quot;user_id&quot;: 7,
-        &quot;barcode&quot;: &quot;3189993944816&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;2231.10&quot;,
+        &quot;opening_stock_quantity&quot;: 19,
+        &quot;user_id&quot;: 3,
+        &quot;barcode&quot;: &quot;7488251693944&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 6,
             &quot;title&quot;: &quot;Shalwar Kameez&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 12,
         &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC996&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ff00?text=fashion+dolore&quot;,
-        &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;4608.89&quot;,
-        &quot;opening_stock_quantity&quot;: 27,
-        &quot;user_id&quot;: 1,
-        &quot;barcode&quot;: &quot;0640151710863&quot;,
+        &quot;design_code&quot;: &quot;DC267&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008811?text=fashion+veniam&quot;,
+        &quot;sub_category_id&quot;: 7,
+        &quot;sale_price&quot;: &quot;1931.64&quot;,
+        &quot;opening_stock_quantity&quot;: 32,
+        &quot;user_id&quot;: 11,
+        &quot;barcode&quot;: &quot;6802828819772&quot;,
         &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Sharara&quot;,
+            &quot;id&quot;: 7,
+            &quot;title&quot;: &quot;Lahga Choli&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 13,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC938&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003311?text=fashion+maiores&quot;,
-        &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;4501.73&quot;,
-        &quot;opening_stock_quantity&quot;: 11,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;4504553999973&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC890&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;1408.92&quot;,
+        &quot;opening_stock_quantity&quot;: 40,
+        &quot;user_id&quot;: 3,
+        &quot;barcode&quot;: &quot;8407216399140&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;LongShirt&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
+            &quot;category_id&quot;: 1,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
         &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC916&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00dddd?text=fashion+maxime&quot;,
-        &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;1242.36&quot;,
-        &quot;opening_stock_quantity&quot;: 28,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;1699569057021&quot;,
+        &quot;design_code&quot;: &quot;DC827&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;3520.93&quot;,
+        &quot;opening_stock_quantity&quot;: 38,
+        &quot;user_id&quot;: 3,
+        &quot;barcode&quot;: &quot;6757008708424&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Sharara&quot;,
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;LongShirt&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
+            &quot;category_id&quot;: 1,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC920&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0033cc?text=fashion+distinctio&quot;,
-        &quot;sub_category_id&quot;: 2,
-        &quot;sale_price&quot;: &quot;2022.97&quot;,
-        &quot;opening_stock_quantity&quot;: 27,
-        &quot;user_id&quot;: 9,
-        &quot;barcode&quot;: &quot;2719155306643&quot;,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC121&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
+        &quot;sub_category_id&quot;: 5,
+        &quot;sale_price&quot;: &quot;3373.87&quot;,
+        &quot;opening_stock_quantity&quot;: 34,
+        &quot;user_id&quot;: 6,
+        &quot;barcode&quot;: &quot;6862870771022&quot;,
         &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;id&quot;: 5,
+            &quot;title&quot;: &quot;Garara&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
+            &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
         &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC909&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/002277?text=fashion+provident&quot;,
-        &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;3704.74&quot;,
-        &quot;opening_stock_quantity&quot;: 13,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;8366658157124&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;design_code&quot;: &quot;DC679&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099cc?text=fashion+reprehenderit&quot;,
+        &quot;sub_category_id&quot;: 6,
+        &quot;sale_price&quot;: &quot;2060.12&quot;,
+        &quot;opening_stock_quantity&quot;: 23,
+        &quot;user_id&quot;: 2,
+        &quot;barcode&quot;: &quot;1271315082404&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Garara&quot;,
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC855&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddee?text=fashion+sit&quot;,
-        &quot;sub_category_id&quot;: 7,
-        &quot;sale_price&quot;: &quot;1418.19&quot;,
-        &quot;opening_stock_quantity&quot;: 32,
-        &quot;user_id&quot;: 4,
-        &quot;barcode&quot;: &quot;1459805789242&quot;,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC010&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006699?text=fashion+eum&quot;,
+        &quot;sub_category_id&quot;: 5,
+        &quot;sale_price&quot;: &quot;2289.24&quot;,
+        &quot;opening_stock_quantity&quot;: 26,
+        &quot;user_id&quot;: 9,
+        &quot;barcode&quot;: &quot;9198863119449&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Lahga Choli&quot;,
+            &quot;id&quot;: 5,
+            &quot;title&quot;: &quot;Garara&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
-        &quot;title&quot;: &quot;Maxi&quot;,
-        &quot;design_code&quot;: &quot;DC427&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
-        &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;1048.90&quot;,
-        &quot;opening_stock_quantity&quot;: 35,
-        &quot;user_id&quot;: 10,
-        &quot;barcode&quot;: &quot;5563224224416&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC646&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+        &quot;sub_category_id&quot;: 2,
+        &quot;sale_price&quot;: &quot;3061.41&quot;,
+        &quot;opening_stock_quantity&quot;: 27,
+        &quot;user_id&quot;: 1,
+        &quot;barcode&quot;: &quot;0233899013435&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Garara&quot;,
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Maxi&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
+            &quot;category_id&quot;: 1,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC057&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001111?text=fashion+impedit&quot;,
-        &quot;sub_category_id&quot;: 8,
-        &quot;sale_price&quot;: &quot;3236.25&quot;,
-        &quot;opening_stock_quantity&quot;: 17,
-        &quot;user_id&quot;: 9,
-        &quot;barcode&quot;: &quot;2473289161256&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Readymade&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 3,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 20,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC840&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ccdd?text=fashion+sit&quot;,
-        &quot;sub_category_id&quot;: 8,
-        &quot;sale_price&quot;: &quot;2207.68&quot;,
-        &quot;opening_stock_quantity&quot;: 9,
-        &quot;user_id&quot;: 8,
-        &quot;barcode&quot;: &quot;8549482551843&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Readymade&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 3,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 21,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC844&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ffee?text=fashion+eius&quot;,
+        &quot;title&quot;: &quot;Maxi&quot;,
+        &quot;design_code&quot;: &quot;DC969&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000099?text=fashion+est&quot;,
         &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;1389.88&quot;,
-        &quot;opening_stock_quantity&quot;: 25,
-        &quot;user_id&quot;: 9,
-        &quot;barcode&quot;: &quot;3549834607834&quot;,
+        &quot;sale_price&quot;: &quot;2168.95&quot;,
+        &quot;opening_stock_quantity&quot;: 31,
+        &quot;user_id&quot;: 8,
+        &quot;barcode&quot;: &quot;0327696229066&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 5,
             &quot;title&quot;: &quot;Garara&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 20,
+        &quot;title&quot;: &quot;Maxi&quot;,
+        &quot;design_code&quot;: &quot;DC015&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eeee?text=fashion+beatae&quot;,
+        &quot;sub_category_id&quot;: 4,
+        &quot;sale_price&quot;: &quot;1418.21&quot;,
+        &quot;opening_stock_quantity&quot;: 31,
+        &quot;user_id&quot;: 5,
+        &quot;barcode&quot;: &quot;6730978038456&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 4,
+            &quot;title&quot;: &quot;Sharara&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 2,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 21,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC864&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008855?text=fashion+fugit&quot;,
+        &quot;sub_category_id&quot;: 5,
+        &quot;sale_price&quot;: &quot;1507.42&quot;,
+        &quot;opening_stock_quantity&quot;: 44,
+        &quot;user_id&quot;: 12,
+        &quot;barcode&quot;: &quot;3807646000268&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 5,
+            &quot;title&quot;: &quot;Garara&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 2,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 22,
         &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC680&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008811?text=fashion+sit&quot;,
-        &quot;sub_category_id&quot;: 7,
-        &quot;sale_price&quot;: &quot;4030.05&quot;,
-        &quot;opening_stock_quantity&quot;: 35,
-        &quot;user_id&quot;: 8,
-        &quot;barcode&quot;: &quot;3355214709254&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;design_code&quot;: &quot;DC061&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ccff?text=fashion+velit&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;2170.58&quot;,
+        &quot;opening_stock_quantity&quot;: 29,
+        &quot;user_id&quot;: 10,
+        &quot;barcode&quot;: &quot;6135398040940&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Lahga Choli&quot;,
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
             &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
+            &quot;category_id&quot;: 3,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 23,
         &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC910&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001199?text=fashion+eos&quot;,
-        &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;1377.15&quot;,
-        &quot;opening_stock_quantity&quot;: 13,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;1028355076425&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Sharara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 24,
-        &quot;title&quot;: &quot;Maxi&quot;,
-        &quot;design_code&quot;: &quot;DC561&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa22?text=fashion+et&quot;,
-        &quot;sub_category_id&quot;: 2,
-        &quot;sale_price&quot;: &quot;4762.48&quot;,
-        &quot;opening_stock_quantity&quot;: 9,
-        &quot;user_id&quot;: 2,
-        &quot;barcode&quot;: &quot;7156062082850&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 25,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC340&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099bb?text=fashion+qui&quot;,
-        &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;1521.97&quot;,
-        &quot;opening_stock_quantity&quot;: 43,
-        &quot;user_id&quot;: 1,
-        &quot;barcode&quot;: &quot;5456746852055&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 26,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC546&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009999?text=fashion+in&quot;,
-        &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;4049.22&quot;,
-        &quot;opening_stock_quantity&quot;: 20,
-        &quot;user_id&quot;: 10,
-        &quot;barcode&quot;: &quot;7550626218073&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Sharara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 27,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC269&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00cc55?text=fashion+odit&quot;,
+        &quot;design_code&quot;: &quot;DC086&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0055aa?text=fashion+unde&quot;,
         &quot;sub_category_id&quot;: 8,
-        &quot;sale_price&quot;: &quot;2209.85&quot;,
-        &quot;opening_stock_quantity&quot;: 40,
-        &quot;user_id&quot;: 5,
-        &quot;barcode&quot;: &quot;0599229261441&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;4974.18&quot;,
+        &quot;opening_stock_quantity&quot;: 25,
+        &quot;user_id&quot;: 11,
+        &quot;barcode&quot;: &quot;9311032824177&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 8,
             &quot;title&quot;: &quot;Readymade&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 3,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 24,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC355&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005544?text=fashion+eum&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;4975.03&quot;,
+        &quot;opening_stock_quantity&quot;: 6,
+        &quot;user_id&quot;: 12,
+        &quot;barcode&quot;: &quot;2048132273693&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 25,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC403&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044cc?text=fashion+nihil&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;3488.32&quot;,
+        &quot;opening_stock_quantity&quot;: 32,
+        &quot;user_id&quot;: 12,
+        &quot;barcode&quot;: &quot;0631107636870&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;LongShirt&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 26,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC871&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003355?text=fashion+aut&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;2539.78&quot;,
+        &quot;opening_stock_quantity&quot;: 32,
+        &quot;user_id&quot;: 10,
+        &quot;barcode&quot;: &quot;2379400345027&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 27,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC978&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001100?text=fashion+sit&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;2519.34&quot;,
+        &quot;opening_stock_quantity&quot;: 26,
+        &quot;user_id&quot;: 7,
+        &quot;barcode&quot;: &quot;9494080678227&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 28,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC123&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa33?text=fashion+ut&quot;,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC545&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddff?text=fashion+quaerat&quot;,
         &quot;sub_category_id&quot;: 1,
-        &quot;sale_price&quot;: &quot;3842.13&quot;,
-        &quot;opening_stock_quantity&quot;: 49,
-        &quot;user_id&quot;: 4,
-        &quot;barcode&quot;: &quot;0476655131459&quot;,
+        &quot;sale_price&quot;: &quot;1126.24&quot;,
+        &quot;opening_stock_quantity&quot;: 22,
+        &quot;user_id&quot;: 10,
+        &quot;barcode&quot;: &quot;0681458323943&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 1,
             &quot;title&quot;: &quot;Lahnga&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 1,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 29,
-        &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC934&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ee22?text=fashion+odit&quot;,
-        &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;3136.74&quot;,
-        &quot;opening_stock_quantity&quot;: 44,
-        &quot;user_id&quot;: 1,
-        &quot;barcode&quot;: &quot;6160772872084&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Sharara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 30,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC453&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004477?text=fashion+facere&quot;,
-        &quot;sub_category_id&quot;: 7,
-        &quot;sale_price&quot;: &quot;2705.87&quot;,
-        &quot;opening_stock_quantity&quot;: 28,
-        &quot;user_id&quot;: 7,
-        &quot;barcode&quot;: &quot;3896007756661&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Lahga Choli&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 31,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC453&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0000cc?text=fashion+et&quot;,
-        &quot;sub_category_id&quot;: 7,
-        &quot;sale_price&quot;: &quot;3429.66&quot;,
-        &quot;opening_stock_quantity&quot;: 47,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;5254840705990&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Lahga Choli&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 32,
         &quot;title&quot;: &quot;Maxi&quot;,
-        &quot;design_code&quot;: &quot;DC847&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ee55?text=fashion+eius&quot;,
-        &quot;sub_category_id&quot;: 1,
-        &quot;sale_price&quot;: &quot;2535.75&quot;,
-        &quot;opening_stock_quantity&quot;: 16,
-        &quot;user_id&quot;: 6,
-        &quot;barcode&quot;: &quot;6323534572848&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Lahnga&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 33,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC626&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044ff?text=fashion+reprehenderit&quot;,
-        &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;4742.66&quot;,
-        &quot;opening_stock_quantity&quot;: 37,
-        &quot;user_id&quot;: 11,
-        &quot;barcode&quot;: &quot;9274523877765&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Garara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 34,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC558&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007733?text=fashion+consectetur&quot;,
-        &quot;sub_category_id&quot;: 4,
-        &quot;sale_price&quot;: &quot;3661.36&quot;,
-        &quot;opening_stock_quantity&quot;: 43,
-        &quot;user_id&quot;: 10,
-        &quot;barcode&quot;: &quot;6051836010620&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Sharara&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 2,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 35,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC396&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004444?text=fashion+eveniet&quot;,
+        &quot;design_code&quot;: &quot;DC770&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0000aa?text=fashion+et&quot;,
         &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;4389.53&quot;,
-        &quot;opening_stock_quantity&quot;: 45,
-        &quot;user_id&quot;: 1,
-        &quot;barcode&quot;: &quot;4260559150687&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;1041.29&quot;,
+        &quot;opening_stock_quantity&quot;: 18,
+        &quot;user_id&quot;: 7,
+        &quot;barcode&quot;: &quot;9020659275391&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 6,
             &quot;title&quot;: &quot;Shalwar Kameez&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
-        &quot;id&quot;: 36,
+        &quot;id&quot;: 30,
         &quot;title&quot;: &quot;Maxi&quot;,
-        &quot;design_code&quot;: &quot;DC848&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00dd44?text=fashion+non&quot;,
-        &quot;sub_category_id&quot;: 1,
-        &quot;sale_price&quot;: &quot;3270.26&quot;,
-        &quot;opening_stock_quantity&quot;: 34,
-        &quot;user_id&quot;: 8,
-        &quot;barcode&quot;: &quot;8127530119742&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Lahnga&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 37,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC525&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009922?text=fashion+temporibus&quot;,
-        &quot;sub_category_id&quot;: 1,
-        &quot;sale_price&quot;: &quot;1257.88&quot;,
-        &quot;opening_stock_quantity&quot;: 10,
-        &quot;user_id&quot;: 8,
-        &quot;barcode&quot;: &quot;5776928264705&quot;,
+        &quot;design_code&quot;: &quot;DC571&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003366?text=fashion+vero&quot;,
+        &quot;sub_category_id&quot;: 6,
+        &quot;sale_price&quot;: &quot;1372.82&quot;,
+        &quot;opening_stock_quantity&quot;: 5,
+        &quot;user_id&quot;: 3,
+        &quot;barcode&quot;: &quot;9513919127726&quot;,
         &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;sub_category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Lahnga&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 38,
-        &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC432&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001122?text=fashion+ratione&quot;,
-        &quot;sub_category_id&quot;: 7,
-        &quot;sale_price&quot;: &quot;3193.04&quot;,
-        &quot;opening_stock_quantity&quot;: 43,
-        &quot;user_id&quot;: 5,
-        &quot;barcode&quot;: &quot;3017159351744&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Lahga Choli&quot;,
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     },
     {
-        &quot;id&quot;: 39,
-        &quot;title&quot;: &quot;Anarkali&quot;,
-        &quot;design_code&quot;: &quot;DC971&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa66?text=fashion+ut&quot;,
-        &quot;sub_category_id&quot;: 2,
-        &quot;sale_price&quot;: &quot;2525.53&quot;,
-        &quot;opening_stock_quantity&quot;: 19,
-        &quot;user_id&quot;: 6,
-        &quot;barcode&quot;: &quot;4794241326871&quot;,
-        &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;sub_category&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;img_path&quot;: null,
-            &quot;category_id&quot;: 1,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 40,
-        &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC787&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddff?text=fashion+eligendi&quot;,
+        &quot;id&quot;: 31,
+        &quot;title&quot;: &quot;Maxi&quot;,
+        &quot;design_code&quot;: &quot;DC219&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099ee?text=fashion+enim&quot;,
         &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;4146.78&quot;,
-        &quot;opening_stock_quantity&quot;: 43,
-        &quot;user_id&quot;: 3,
-        &quot;barcode&quot;: &quot;3120852845585&quot;,
-        &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;1922.41&quot;,
+        &quot;opening_stock_quantity&quot;: 25,
+        &quot;user_id&quot;: 1,
+        &quot;barcode&quot;: &quot;6506478682617&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;sub_category&quot;: {
             &quot;id&quot;: 5,
             &quot;title&quot;: &quot;Garara&quot;,
             &quot;img_path&quot;: null,
             &quot;category_id&quot;: 2,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 32,
+        &quot;title&quot;: &quot;Maxi&quot;,
+        &quot;design_code&quot;: &quot;DC159&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007711?text=fashion+nostrum&quot;,
+        &quot;sub_category_id&quot;: 1,
+        &quot;sale_price&quot;: &quot;3349.71&quot;,
+        &quot;opening_stock_quantity&quot;: 50,
+        &quot;user_id&quot;: 1,
+        &quot;barcode&quot;: &quot;6039573742042&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Lahnga&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 33,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC130&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006677?text=fashion+incidunt&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;4724.09&quot;,
+        &quot;opening_stock_quantity&quot;: 21,
+        &quot;user_id&quot;: 2,
+        &quot;barcode&quot;: &quot;4873199027846&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 34,
+        &quot;title&quot;: &quot;Banarci&quot;,
+        &quot;design_code&quot;: &quot;DC869&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003344?text=fashion+atque&quot;,
+        &quot;sub_category_id&quot;: 2,
+        &quot;sale_price&quot;: &quot;4763.44&quot;,
+        &quot;opening_stock_quantity&quot;: 14,
+        &quot;user_id&quot;: 7,
+        &quot;barcode&quot;: &quot;3422992069105&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 35,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC499&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aaaa?text=fashion+autem&quot;,
+        &quot;sub_category_id&quot;: 2,
+        &quot;sale_price&quot;: &quot;1728.84&quot;,
+        &quot;opening_stock_quantity&quot;: 11,
+        &quot;user_id&quot;: 4,
+        &quot;barcode&quot;: &quot;7950893361357&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 36,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC974&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00cc77?text=fashion+veritatis&quot;,
+        &quot;sub_category_id&quot;: 6,
+        &quot;sale_price&quot;: &quot;1399.96&quot;,
+        &quot;opening_stock_quantity&quot;: 18,
+        &quot;user_id&quot;: 10,
+        &quot;barcode&quot;: &quot;9420839624030&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Shalwar Kameez&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 2,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 37,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC834&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa33?text=fashion+delectus&quot;,
+        &quot;sub_category_id&quot;: 8,
+        &quot;sale_price&quot;: &quot;1449.32&quot;,
+        &quot;opening_stock_quantity&quot;: 42,
+        &quot;user_id&quot;: 2,
+        &quot;barcode&quot;: &quot;3332153858892&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 8,
+            &quot;title&quot;: &quot;Readymade&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 38,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC175&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddee?text=fashion+non&quot;,
+        &quot;sub_category_id&quot;: 2,
+        &quot;sale_price&quot;: &quot;4298.01&quot;,
+        &quot;opening_stock_quantity&quot;: 13,
+        &quot;user_id&quot;: 4,
+        &quot;barcode&quot;: &quot;2695807664999&quot;,
+        &quot;status&quot;: &quot;Active&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 1,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 39,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC172&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00cc33?text=fashion+quibusdam&quot;,
+        &quot;sub_category_id&quot;: 9,
+        &quot;sale_price&quot;: &quot;4084.61&quot;,
+        &quot;opening_stock_quantity&quot;: 13,
+        &quot;user_id&quot;: 3,
+        &quot;barcode&quot;: &quot;6242820483661&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Unstitched&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 40,
+        &quot;title&quot;: &quot;Maxi&quot;,
+        &quot;design_code&quot;: &quot;DC218&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0022ff?text=fashion+nisi&quot;,
+        &quot;sub_category_id&quot;: 8,
+        &quot;sale_price&quot;: &quot;3987.45&quot;,
+        &quot;opening_stock_quantity&quot;: 27,
+        &quot;user_id&quot;: 8,
+        &quot;barcode&quot;: &quot;5666788484828&quot;,
+        &quot;status&quot;: &quot;Inactive&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;sub_category&quot;: {
+            &quot;id&quot;: 8,
+            &quot;title&quot;: &quot;Readymade&quot;,
+            &quot;img_path&quot;: null,
+            &quot;category_id&quot;: 3,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         }
     }
 ]</code>
@@ -14099,7 +14440,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "user_id=architecto"\
     --form "barcode=architecto"\
     --form "status=Active"\
-    --form "image=@C:\Users\Zafar Iqbal\AppData\Local\Temp\php7CBC.tmp" </code></pre></div>
+    --form "image=@C:\Users\Zafar Iqbal\AppData\Local\Temp\phpFF06.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -14234,7 +14575,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>C:\Users\Zafar Iqbal\AppData\Local\Temp\php7CBC.tmp</code></p>
+<p>Must be an image. Must not be greater than 2048 kilobytes. Example: <code>C:\Users\Zafar Iqbal\AppData\Local\Temp\phpFF06.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>sub_category_id</code></b>&nbsp;&nbsp;
@@ -14357,425 +14698,425 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;date&quot;: &quot;2023-03-18&quot;,
-        &quot;ven_inv_no&quot;: &quot;INV521&quot;,
-        &quot;ven_inv_date&quot;: &quot;1979-07-26&quot;,
-        &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-        &quot;description&quot;: &quot;Dolor eos explicabo quas maiores.&quot;,
-        &quot;product_id&quot;: 8,
-        &quot;discount_percent&quot;: &quot;17.00&quot;,
-        &quot;discount_amt&quot;: &quot;87.63&quot;,
-        &quot;inv_amount&quot;: &quot;2864.48&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
+        &quot;date&quot;: &quot;1976-03-04&quot;,
+        &quot;ven_inv_no&quot;: &quot;INV383&quot;,
+        &quot;ven_inv_date&quot;: &quot;1973-11-05&quot;,
+        &quot;ven_inv_ref&quot;: &quot;accusantium&quot;,
+        &quot;description&quot;: &quot;Iusto ea et ipsum sunt ex.&quot;,
+        &quot;product_id&quot;: 2,
+        &quot;discount_percent&quot;: &quot;4.00&quot;,
+        &quot;discount_amt&quot;: &quot;370.22&quot;,
+        &quot;inv_amount&quot;: &quot;1289.22&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
         &quot;details&quot;: [
             {
                 &quot;id&quot;: 1,
                 &quot;purchase_id&quot;: 1,
-                &quot;product_id&quot;: 2,
-                &quot;qty&quot;: 2,
-                &quot;unit_price&quot;: &quot;216.54&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 7,
+                &quot;qty&quot;: 3,
+                &quot;unit_price&quot;: &quot;465.64&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 2,
-                    &quot;title&quot;: &quot;Long Shirt&quot;,
-                    &quot;design_code&quot;: &quot;DC838&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000055?text=fashion+quidem&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;3362.56&quot;,
-                    &quot;opening_stock_quantity&quot;: 39,
-                    &quot;user_id&quot;: 2,
-                    &quot;barcode&quot;: &quot;7932057961313&quot;,
+                    &quot;id&quot;: 7,
+                    &quot;title&quot;: &quot;Anarkali&quot;,
+                    &quot;design_code&quot;: &quot;DC753&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004499?text=fashion+sit&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;2520.09&quot;,
+                    &quot;opening_stock_quantity&quot;: 24,
+                    &quot;user_id&quot;: 7,
+                    &quot;barcode&quot;: &quot;2485838489162&quot;,
                     &quot;status&quot;: &quot;Inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 2,
                 &quot;purchase_id&quot;: 1,
-                &quot;product_id&quot;: 5,
-                &quot;qty&quot;: 6,
-                &quot;unit_price&quot;: &quot;241.74&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 10,
+                &quot;qty&quot;: 10,
+                &quot;unit_price&quot;: &quot;232.55&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 5,
-                    &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC113&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;4488.74&quot;,
-                    &quot;opening_stock_quantity&quot;: 9,
-                    &quot;user_id&quot;: 3,
-                    &quot;barcode&quot;: &quot;7740891708809&quot;,
-                    &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;id&quot;: 10,
+                    &quot;title&quot;: &quot;Anarkali&quot;,
+                    &quot;design_code&quot;: &quot;DC128&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005522?text=fashion+et&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;3590.53&quot;,
+                    &quot;opening_stock_quantity&quot;: 21,
+                    &quot;user_id&quot;: 6,
+                    &quot;barcode&quot;: &quot;6325101202080&quot;,
+                    &quot;status&quot;: &quot;Inactive&quot;,
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 3,
                 &quot;purchase_id&quot;: 1,
-                &quot;product_id&quot;: 14,
-                &quot;qty&quot;: 3,
-                &quot;unit_price&quot;: &quot;445.99&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 19,
+                &quot;qty&quot;: 7,
+                &quot;unit_price&quot;: &quot;204.20&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 14,
-                    &quot;title&quot;: &quot;Long Shirt&quot;,
-                    &quot;design_code&quot;: &quot;DC916&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00dddd?text=fashion+maxime&quot;,
-                    &quot;sub_category_id&quot;: 4,
-                    &quot;sale_price&quot;: &quot;1242.36&quot;,
-                    &quot;opening_stock_quantity&quot;: 28,
-                    &quot;user_id&quot;: 11,
-                    &quot;barcode&quot;: &quot;1699569057021&quot;,
+                    &quot;id&quot;: 19,
+                    &quot;title&quot;: &quot;Maxi&quot;,
+                    &quot;design_code&quot;: &quot;DC969&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000099?text=fashion+est&quot;,
+                    &quot;sub_category_id&quot;: 5,
+                    &quot;sale_price&quot;: &quot;2168.95&quot;,
+                    &quot;opening_stock_quantity&quot;: 31,
+                    &quot;user_id&quot;: 8,
+                    &quot;barcode&quot;: &quot;0327696229066&quot;,
                     &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             }
         ]
     },
     {
         &quot;id&quot;: 2,
-        &quot;date&quot;: &quot;1983-03-01&quot;,
-        &quot;ven_inv_no&quot;: &quot;INV663&quot;,
-        &quot;ven_inv_date&quot;: &quot;1970-09-22&quot;,
-        &quot;ven_inv_ref&quot;: &quot;et&quot;,
-        &quot;description&quot;: &quot;Voluptas quia recusandae voluptatibus qui animi amet.&quot;,
-        &quot;product_id&quot;: 20,
-        &quot;discount_percent&quot;: &quot;10.00&quot;,
-        &quot;discount_amt&quot;: &quot;293.67&quot;,
-        &quot;inv_amount&quot;: &quot;1129.27&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;2023-06-02&quot;,
+        &quot;ven_inv_no&quot;: &quot;INV364&quot;,
+        &quot;ven_inv_date&quot;: &quot;1994-08-08&quot;,
+        &quot;ven_inv_ref&quot;: &quot;quo&quot;,
+        &quot;description&quot;: &quot;Mollitia aliquam temporibus ut non dignissimos.&quot;,
+        &quot;product_id&quot;: 5,
+        &quot;discount_percent&quot;: &quot;6.00&quot;,
+        &quot;discount_amt&quot;: &quot;447.92&quot;,
+        &quot;inv_amount&quot;: &quot;2137.56&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
         &quot;details&quot;: [
             {
                 &quot;id&quot;: 4,
                 &quot;purchase_id&quot;: 2,
-                &quot;product_id&quot;: 5,
-                &quot;qty&quot;: 3,
-                &quot;unit_price&quot;: &quot;124.82&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 10,
+                &quot;qty&quot;: 4,
+                &quot;unit_price&quot;: &quot;214.74&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 5,
-                    &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC113&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;4488.74&quot;,
-                    &quot;opening_stock_quantity&quot;: 9,
-                    &quot;user_id&quot;: 3,
-                    &quot;barcode&quot;: &quot;7740891708809&quot;,
-                    &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;id&quot;: 10,
+                    &quot;title&quot;: &quot;Anarkali&quot;,
+                    &quot;design_code&quot;: &quot;DC128&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005522?text=fashion+et&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;3590.53&quot;,
+                    &quot;opening_stock_quantity&quot;: 21,
+                    &quot;user_id&quot;: 6,
+                    &quot;barcode&quot;: &quot;6325101202080&quot;,
+                    &quot;status&quot;: &quot;Inactive&quot;,
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 5,
                 &quot;purchase_id&quot;: 2,
-                &quot;product_id&quot;: 18,
-                &quot;qty&quot;: 7,
-                &quot;unit_price&quot;: &quot;154.09&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 12,
+                &quot;qty&quot;: 3,
+                &quot;unit_price&quot;: &quot;130.50&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 18,
-                    &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC427&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
-                    &quot;sub_category_id&quot;: 5,
-                    &quot;sale_price&quot;: &quot;1048.90&quot;,
-                    &quot;opening_stock_quantity&quot;: 35,
-                    &quot;user_id&quot;: 10,
-                    &quot;barcode&quot;: &quot;5563224224416&quot;,
+                    &quot;id&quot;: 12,
+                    &quot;title&quot;: &quot;Anarkali&quot;,
+                    &quot;design_code&quot;: &quot;DC267&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008811?text=fashion+veniam&quot;,
+                    &quot;sub_category_id&quot;: 7,
+                    &quot;sale_price&quot;: &quot;1931.64&quot;,
+                    &quot;opening_stock_quantity&quot;: 32,
+                    &quot;user_id&quot;: 11,
+                    &quot;barcode&quot;: &quot;6802828819772&quot;,
                     &quot;status&quot;: &quot;Inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 6,
                 &quot;purchase_id&quot;: 2,
-                &quot;product_id&quot;: 13,
-                &quot;qty&quot;: 2,
-                &quot;unit_price&quot;: &quot;266.05&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 14,
+                &quot;qty&quot;: 3,
+                &quot;unit_price&quot;: &quot;240.11&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 13,
-                    &quot;title&quot;: &quot;Anarkali&quot;,
-                    &quot;design_code&quot;: &quot;DC938&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003311?text=fashion+maiores&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;4501.73&quot;,
-                    &quot;opening_stock_quantity&quot;: 11,
-                    &quot;user_id&quot;: 11,
-                    &quot;barcode&quot;: &quot;4504553999973&quot;,
+                    &quot;id&quot;: 14,
+                    &quot;title&quot;: &quot;Long Shirt&quot;,
+                    &quot;design_code&quot;: &quot;DC827&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;3520.93&quot;,
+                    &quot;opening_stock_quantity&quot;: 38,
+                    &quot;user_id&quot;: 3,
+                    &quot;barcode&quot;: &quot;6757008708424&quot;,
                     &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             }
         ]
     },
     {
         &quot;id&quot;: 3,
-        &quot;date&quot;: &quot;1990-03-27&quot;,
-        &quot;ven_inv_no&quot;: &quot;INV084&quot;,
-        &quot;ven_inv_date&quot;: &quot;1986-10-23&quot;,
-        &quot;ven_inv_ref&quot;: &quot;autem&quot;,
-        &quot;description&quot;: &quot;Eum magnam non repellendus itaque veritatis.&quot;,
-        &quot;product_id&quot;: 3,
-        &quot;discount_percent&quot;: &quot;15.00&quot;,
-        &quot;discount_amt&quot;: &quot;127.86&quot;,
-        &quot;inv_amount&quot;: &quot;2840.93&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;1977-04-07&quot;,
+        &quot;ven_inv_no&quot;: &quot;INV023&quot;,
+        &quot;ven_inv_date&quot;: &quot;2000-11-01&quot;,
+        &quot;ven_inv_ref&quot;: &quot;reiciendis&quot;,
+        &quot;description&quot;: &quot;Repudiandae omnis quo enim cupiditate.&quot;,
+        &quot;product_id&quot;: 7,
+        &quot;discount_percent&quot;: &quot;20.00&quot;,
+        &quot;discount_amt&quot;: &quot;221.67&quot;,
+        &quot;inv_amount&quot;: &quot;4942.51&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
         &quot;details&quot;: [
             {
                 &quot;id&quot;: 7,
                 &quot;purchase_id&quot;: 3,
-                &quot;product_id&quot;: 5,
-                &quot;qty&quot;: 7,
-                &quot;unit_price&quot;: &quot;433.34&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 4,
+                &quot;qty&quot;: 5,
+                &quot;unit_price&quot;: &quot;432.00&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 5,
-                    &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC113&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;4488.74&quot;,
-                    &quot;opening_stock_quantity&quot;: 9,
-                    &quot;user_id&quot;: 3,
-                    &quot;barcode&quot;: &quot;7740891708809&quot;,
+                    &quot;id&quot;: 4,
+                    &quot;title&quot;: &quot;Banarci&quot;,
+                    &quot;design_code&quot;: &quot;DC710&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008822?text=fashion+est&quot;,
+                    &quot;sub_category_id&quot;: 9,
+                    &quot;sale_price&quot;: &quot;1674.73&quot;,
+                    &quot;opening_stock_quantity&quot;: 23,
+                    &quot;user_id&quot;: 1,
+                    &quot;barcode&quot;: &quot;1191943436878&quot;,
                     &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 8,
                 &quot;purchase_id&quot;: 3,
-                &quot;product_id&quot;: 14,
-                &quot;qty&quot;: 8,
-                &quot;unit_price&quot;: &quot;135.87&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 7,
+                &quot;qty&quot;: 3,
+                &quot;unit_price&quot;: &quot;244.22&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 14,
-                    &quot;title&quot;: &quot;Long Shirt&quot;,
-                    &quot;design_code&quot;: &quot;DC916&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00dddd?text=fashion+maxime&quot;,
-                    &quot;sub_category_id&quot;: 4,
-                    &quot;sale_price&quot;: &quot;1242.36&quot;,
-                    &quot;opening_stock_quantity&quot;: 28,
-                    &quot;user_id&quot;: 11,
-                    &quot;barcode&quot;: &quot;1699569057021&quot;,
-                    &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;id&quot;: 7,
+                    &quot;title&quot;: &quot;Anarkali&quot;,
+                    &quot;design_code&quot;: &quot;DC753&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004499?text=fashion+sit&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;2520.09&quot;,
+                    &quot;opening_stock_quantity&quot;: 24,
+                    &quot;user_id&quot;: 7,
+                    &quot;barcode&quot;: &quot;2485838489162&quot;,
+                    &quot;status&quot;: &quot;Inactive&quot;,
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 9,
                 &quot;purchase_id&quot;: 3,
-                &quot;product_id&quot;: 10,
-                &quot;qty&quot;: 4,
-                &quot;unit_price&quot;: &quot;224.87&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 18,
+                &quot;qty&quot;: 9,
+                &quot;unit_price&quot;: &quot;317.90&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 10,
+                    &quot;id&quot;: 18,
                     &quot;title&quot;: &quot;Long Shirt&quot;,
-                    &quot;design_code&quot;: &quot;DC097&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011cc?text=fashion+ex&quot;,
-                    &quot;sub_category_id&quot;: 4,
-                    &quot;sale_price&quot;: &quot;3119.77&quot;,
-                    &quot;opening_stock_quantity&quot;: 11,
-                    &quot;user_id&quot;: 11,
-                    &quot;barcode&quot;: &quot;1262368207630&quot;,
+                    &quot;design_code&quot;: &quot;DC646&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+                    &quot;sub_category_id&quot;: 2,
+                    &quot;sale_price&quot;: &quot;3061.41&quot;,
+                    &quot;opening_stock_quantity&quot;: 27,
+                    &quot;user_id&quot;: 1,
+                    &quot;barcode&quot;: &quot;0233899013435&quot;,
                     &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             }
         ]
     },
     {
         &quot;id&quot;: 4,
-        &quot;date&quot;: &quot;2014-09-12&quot;,
-        &quot;ven_inv_no&quot;: &quot;INV999&quot;,
-        &quot;ven_inv_date&quot;: &quot;2012-12-22&quot;,
-        &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-        &quot;description&quot;: &quot;Suscipit quo et voluptas fugiat.&quot;,
-        &quot;product_id&quot;: 17,
-        &quot;discount_percent&quot;: &quot;13.00&quot;,
-        &quot;discount_amt&quot;: &quot;468.34&quot;,
-        &quot;inv_amount&quot;: &quot;1301.45&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;1999-07-01&quot;,
+        &quot;ven_inv_no&quot;: &quot;INV723&quot;,
+        &quot;ven_inv_date&quot;: &quot;1977-08-22&quot;,
+        &quot;ven_inv_ref&quot;: &quot;deleniti&quot;,
+        &quot;description&quot;: &quot;Provident natus deserunt aspernatur dolores eos corrupti voluptate.&quot;,
+        &quot;product_id&quot;: 7,
+        &quot;discount_percent&quot;: &quot;7.00&quot;,
+        &quot;discount_amt&quot;: &quot;338.12&quot;,
+        &quot;inv_amount&quot;: &quot;3012.08&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
         &quot;details&quot;: [
             {
                 &quot;id&quot;: 10,
                 &quot;purchase_id&quot;: 4,
-                &quot;product_id&quot;: 6,
+                &quot;product_id&quot;: 4,
                 &quot;qty&quot;: 6,
-                &quot;unit_price&quot;: &quot;280.14&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;unit_price&quot;: &quot;401.26&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 6,
-                    &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC475&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-                    &quot;sub_category_id&quot;: 7,
-                    &quot;sale_price&quot;: &quot;4064.25&quot;,
-                    &quot;opening_stock_quantity&quot;: 50,
-                    &quot;user_id&quot;: 6,
-                    &quot;barcode&quot;: &quot;4249762233653&quot;,
-                    &quot;status&quot;: &quot;Inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;id&quot;: 4,
+                    &quot;title&quot;: &quot;Banarci&quot;,
+                    &quot;design_code&quot;: &quot;DC710&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008822?text=fashion+est&quot;,
+                    &quot;sub_category_id&quot;: 9,
+                    &quot;sale_price&quot;: &quot;1674.73&quot;,
+                    &quot;opening_stock_quantity&quot;: 23,
+                    &quot;user_id&quot;: 1,
+                    &quot;barcode&quot;: &quot;1191943436878&quot;,
+                    &quot;status&quot;: &quot;Active&quot;,
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 11,
                 &quot;purchase_id&quot;: 4,
-                &quot;product_id&quot;: 7,
-                &quot;qty&quot;: 10,
-                &quot;unit_price&quot;: &quot;141.84&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 14,
+                &quot;qty&quot;: 3,
+                &quot;unit_price&quot;: &quot;219.12&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 7,
-                    &quot;title&quot;: &quot;Banarci&quot;,
-                    &quot;design_code&quot;: &quot;DC807&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;3569.43&quot;,
-                    &quot;opening_stock_quantity&quot;: 11,
-                    &quot;user_id&quot;: 6,
-                    &quot;barcode&quot;: &quot;5277470339830&quot;,
-                    &quot;status&quot;: &quot;Inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;id&quot;: 14,
+                    &quot;title&quot;: &quot;Long Shirt&quot;,
+                    &quot;design_code&quot;: &quot;DC827&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;3520.93&quot;,
+                    &quot;opening_stock_quantity&quot;: 38,
+                    &quot;user_id&quot;: 3,
+                    &quot;barcode&quot;: &quot;6757008708424&quot;,
+                    &quot;status&quot;: &quot;Active&quot;,
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 12,
                 &quot;purchase_id&quot;: 4,
-                &quot;product_id&quot;: 8,
-                &quot;qty&quot;: 3,
-                &quot;unit_price&quot;: &quot;456.94&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 15,
+                &quot;qty&quot;: 2,
+                &quot;unit_price&quot;: &quot;253.64&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 8,
-                    &quot;title&quot;: &quot;Long Shirt&quot;,
-                    &quot;design_code&quot;: &quot;DC129&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000066?text=fashion+voluptatibus&quot;,
-                    &quot;sub_category_id&quot;: 1,
-                    &quot;sale_price&quot;: &quot;4118.57&quot;,
-                    &quot;opening_stock_quantity&quot;: 17,
-                    &quot;user_id&quot;: 4,
-                    &quot;barcode&quot;: &quot;1361364078173&quot;,
+                    &quot;id&quot;: 15,
+                    &quot;title&quot;: &quot;Banarci&quot;,
+                    &quot;design_code&quot;: &quot;DC121&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
+                    &quot;sub_category_id&quot;: 5,
+                    &quot;sale_price&quot;: &quot;3373.87&quot;,
+                    &quot;opening_stock_quantity&quot;: 34,
+                    &quot;user_id&quot;: 6,
+                    &quot;barcode&quot;: &quot;6862870771022&quot;,
                     &quot;status&quot;: &quot;Inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             }
         ]
     },
     {
         &quot;id&quot;: 5,
-        &quot;date&quot;: &quot;2014-01-30&quot;,
-        &quot;ven_inv_no&quot;: &quot;INV875&quot;,
-        &quot;ven_inv_date&quot;: &quot;2024-11-29&quot;,
-        &quot;ven_inv_ref&quot;: &quot;sit&quot;,
-        &quot;description&quot;: &quot;Debitis dolorem tenetur maxime architecto itaque facilis aliquam sequi.&quot;,
-        &quot;product_id&quot;: 15,
-        &quot;discount_percent&quot;: &quot;4.00&quot;,
-        &quot;discount_amt&quot;: &quot;460.92&quot;,
-        &quot;inv_amount&quot;: &quot;1004.93&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;1977-09-23&quot;,
+        &quot;ven_inv_no&quot;: &quot;INV104&quot;,
+        &quot;ven_inv_date&quot;: &quot;2007-05-29&quot;,
+        &quot;ven_inv_ref&quot;: &quot;rerum&quot;,
+        &quot;description&quot;: &quot;Tempore quasi sequi nihil repudiandae autem excepturi error.&quot;,
+        &quot;product_id&quot;: 11,
+        &quot;discount_percent&quot;: &quot;11.00&quot;,
+        &quot;discount_amt&quot;: &quot;381.21&quot;,
+        &quot;inv_amount&quot;: &quot;3181.71&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
         &quot;details&quot;: [
             {
                 &quot;id&quot;: 13,
                 &quot;purchase_id&quot;: 5,
-                &quot;product_id&quot;: 19,
-                &quot;qty&quot;: 8,
-                &quot;unit_price&quot;: &quot;482.10&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 9,
+                &quot;qty&quot;: 5,
+                &quot;unit_price&quot;: &quot;476.69&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 19,
-                    &quot;title&quot;: &quot;Long Shirt&quot;,
-                    &quot;design_code&quot;: &quot;DC057&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001111?text=fashion+impedit&quot;,
-                    &quot;sub_category_id&quot;: 8,
-                    &quot;sale_price&quot;: &quot;3236.25&quot;,
-                    &quot;opening_stock_quantity&quot;: 17,
-                    &quot;user_id&quot;: 9,
-                    &quot;barcode&quot;: &quot;2473289161256&quot;,
+                    &quot;id&quot;: 9,
+                    &quot;title&quot;: &quot;Banarci&quot;,
+                    &quot;design_code&quot;: &quot;DC352&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+                    &quot;sub_category_id&quot;: 3,
+                    &quot;sale_price&quot;: &quot;3418.89&quot;,
+                    &quot;opening_stock_quantity&quot;: 32,
+                    &quot;user_id&quot;: 10,
+                    &quot;barcode&quot;: &quot;3439172304468&quot;,
                     &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 14,
                 &quot;purchase_id&quot;: 5,
-                &quot;product_id&quot;: 5,
-                &quot;qty&quot;: 10,
-                &quot;unit_price&quot;: &quot;389.27&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 18,
+                &quot;qty&quot;: 5,
+                &quot;unit_price&quot;: &quot;198.97&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 5,
-                    &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC113&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-                    &quot;sub_category_id&quot;: 6,
-                    &quot;sale_price&quot;: &quot;4488.74&quot;,
-                    &quot;opening_stock_quantity&quot;: 9,
-                    &quot;user_id&quot;: 3,
-                    &quot;barcode&quot;: &quot;7740891708809&quot;,
+                    &quot;id&quot;: 18,
+                    &quot;title&quot;: &quot;Long Shirt&quot;,
+                    &quot;design_code&quot;: &quot;DC646&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+                    &quot;sub_category_id&quot;: 2,
+                    &quot;sale_price&quot;: &quot;3061.41&quot;,
+                    &quot;opening_stock_quantity&quot;: 27,
+                    &quot;user_id&quot;: 1,
+                    &quot;barcode&quot;: &quot;0233899013435&quot;,
                     &quot;status&quot;: &quot;Active&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             },
             {
                 &quot;id&quot;: 15,
                 &quot;purchase_id&quot;: 5,
-                &quot;product_id&quot;: 6,
-                &quot;qty&quot;: 1,
-                &quot;unit_price&quot;: &quot;311.01&quot;,
-                &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+                &quot;product_id&quot;: 1,
+                &quot;qty&quot;: 9,
+                &quot;unit_price&quot;: &quot;223.89&quot;,
+                &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
                 &quot;product&quot;: {
-                    &quot;id&quot;: 6,
+                    &quot;id&quot;: 1,
                     &quot;title&quot;: &quot;Maxi&quot;,
-                    &quot;design_code&quot;: &quot;DC475&quot;,
-                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-                    &quot;sub_category_id&quot;: 7,
-                    &quot;sale_price&quot;: &quot;4064.25&quot;,
-                    &quot;opening_stock_quantity&quot;: 50,
-                    &quot;user_id&quot;: 6,
-                    &quot;barcode&quot;: &quot;4249762233653&quot;,
+                    &quot;design_code&quot;: &quot;DC253&quot;,
+                    &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+soluta&quot;,
+                    &quot;sub_category_id&quot;: 5,
+                    &quot;sale_price&quot;: &quot;2485.88&quot;,
+                    &quot;opening_stock_quantity&quot;: 42,
+                    &quot;user_id&quot;: 7,
+                    &quot;barcode&quot;: &quot;4672764781165&quot;,
                     &quot;status&quot;: &quot;Inactive&quot;,
-                    &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-                    &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+                    &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+                    &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
                 }
             }
         ]
@@ -14871,9 +15212,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date\": \"2025-09-30T09:35:34\",
+    \"date\": \"2025-09-30T21:10:47\",
     \"ven_inv_no\": \"architecto\",
-    \"ven_inv_date\": \"2025-09-30T09:35:34\",
+    \"ven_inv_date\": \"2025-09-30T21:10:47\",
     \"ven_inv_ref\": \"architecto\",
     \"description\": \"Eius et animi quos velit et.\",
     \"product_id\": \"architecto\",
@@ -14895,9 +15236,9 @@ const headers = {
 };
 
 let body = {
-    "date": "2025-09-30T09:35:34",
+    "date": "2025-09-30T21:10:47",
     "ven_inv_no": "architecto",
-    "ven_inv_date": "2025-09-30T09:35:34",
+    "ven_inv_date": "2025-09-30T21:10:47",
     "ven_inv_ref": "architecto",
     "description": "Eius et animi quos velit et.",
     "product_id": "architecto",
@@ -14992,10 +15333,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date"                data-endpoint="POSTapi-purchases"
-               value="2025-09-30T09:35:34"
+               value="2025-09-30T21:10:47"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:34</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:47</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>ven_inv_no</code></b>&nbsp;&nbsp;
@@ -15014,10 +15355,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="ven_inv_date"                data-endpoint="POSTapi-purchases"
-               value="2025-09-30T09:35:34"
+               value="2025-09-30T21:10:47"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:34</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:47</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>ven_inv_ref</code></b>&nbsp;&nbsp;
@@ -15138,502 +15479,502 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;date&quot;: &quot;2019-01-01&quot;,
-        &quot;vendor_id&quot;: 4,
-        &quot;description&quot;: &quot;Maxime qui est dolorum voluptates.&quot;,
-        &quot;product_id&quot;: 4,
-        &quot;return_inv_amount&quot;: &quot;730.98&quot;,
-        &quot;purchase_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;2014-08-08&quot;,
+        &quot;vendor_id&quot;: 10,
+        &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+        &quot;product_id&quot;: 13,
+        &quot;return_inv_amount&quot;: &quot;849.49&quot;,
+        &quot;purchase_id&quot;: 2,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 4,
-            &quot;first_name&quot;: &quot;Ariel&quot;,
-            &quot;last_name&quot;: &quot;Glover&quot;,
-            &quot;cnic&quot;: &quot;95217-1960061-8&quot;,
-            &quot;address&quot;: &quot;90892 Tom Estate Suite 525\nLake Andrewberg, HI 80993&quot;,
-            &quot;city_id&quot;: 393,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 10,
+            &quot;first_name&quot;: &quot;Cecelia&quot;,
+            &quot;last_name&quot;: &quot;Dooley&quot;,
+            &quot;cnic&quot;: &quot;88846-5257145-8&quot;,
+            &quot;address&quot;: &quot;8504 Tillman Fords Suite 117\nNorth Johannburgh, NV 22767&quot;,
+            &quot;city_id&quot;: 461,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 4,
+            &quot;id&quot;: 13,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC291&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bbbb?text=fashion+ea&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;1235.08&quot;,
+            &quot;design_code&quot;: &quot;DC890&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;1408.92&quot;,
             &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;2481259121728&quot;,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;8407216399140&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
-            &quot;id&quot;: 1,
-            &quot;date&quot;: &quot;2023-03-18&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV521&quot;,
-            &quot;ven_inv_date&quot;: &quot;1979-07-26&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Dolor eos explicabo quas maiores.&quot;,
-            &quot;product_id&quot;: 8,
-            &quot;discount_percent&quot;: &quot;17.00&quot;,
-            &quot;discount_amt&quot;: &quot;87.63&quot;,
-            &quot;inv_amount&quot;: &quot;2864.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 2,
+            &quot;date&quot;: &quot;2023-06-02&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV364&quot;,
+            &quot;ven_inv_date&quot;: &quot;1994-08-08&quot;,
+            &quot;ven_inv_ref&quot;: &quot;quo&quot;,
+            &quot;description&quot;: &quot;Mollitia aliquam temporibus ut non dignissimos.&quot;,
+            &quot;product_id&quot;: 5,
+            &quot;discount_percent&quot;: &quot;6.00&quot;,
+            &quot;discount_amt&quot;: &quot;447.92&quot;,
+            &quot;inv_amount&quot;: &quot;2137.56&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;date&quot;: &quot;1990-11-05&quot;,
-        &quot;vendor_id&quot;: 3,
-        &quot;description&quot;: &quot;Iusto voluptas reprehenderit iure pariatur voluptatum.&quot;,
-        &quot;product_id&quot;: 18,
-        &quot;return_inv_amount&quot;: &quot;1544.16&quot;,
+        &quot;date&quot;: &quot;1975-11-28&quot;,
+        &quot;vendor_id&quot;: 10,
+        &quot;description&quot;: &quot;Saepe sed consequatur eaque praesentium.&quot;,
+        &quot;product_id&quot;: 17,
+        &quot;return_inv_amount&quot;: &quot;1664.68&quot;,
         &quot;purchase_id&quot;: 3,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 3,
-            &quot;first_name&quot;: &quot;Virginia&quot;,
-            &quot;last_name&quot;: &quot;Rice&quot;,
-            &quot;cnic&quot;: &quot;34082-7362456-8&quot;,
-            &quot;address&quot;: &quot;80622 Orpha Turnpike\nWest Rosaport, TN 62759&quot;,
-            &quot;city_id&quot;: 17,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 10,
+            &quot;first_name&quot;: &quot;Cecelia&quot;,
+            &quot;last_name&quot;: &quot;Dooley&quot;,
+            &quot;cnic&quot;: &quot;88846-5257145-8&quot;,
+            &quot;address&quot;: &quot;8504 Tillman Fords Suite 117\nNorth Johannburgh, NV 22767&quot;,
+            &quot;city_id&quot;: 461,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 18,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC427&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
+            &quot;id&quot;: 17,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC010&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006699?text=fashion+eum&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1048.90&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5563224224416&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;sale_price&quot;: &quot;2289.24&quot;,
+            &quot;opening_stock_quantity&quot;: 26,
+            &quot;user_id&quot;: 9,
+            &quot;barcode&quot;: &quot;9198863119449&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
             &quot;id&quot;: 3,
-            &quot;date&quot;: &quot;1990-03-27&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV084&quot;,
-            &quot;ven_inv_date&quot;: &quot;1986-10-23&quot;,
-            &quot;ven_inv_ref&quot;: &quot;autem&quot;,
-            &quot;description&quot;: &quot;Eum magnam non repellendus itaque veritatis.&quot;,
-            &quot;product_id&quot;: 3,
-            &quot;discount_percent&quot;: &quot;15.00&quot;,
-            &quot;discount_amt&quot;: &quot;127.86&quot;,
-            &quot;inv_amount&quot;: &quot;2840.93&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;date&quot;: &quot;1977-04-07&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV023&quot;,
+            &quot;ven_inv_date&quot;: &quot;2000-11-01&quot;,
+            &quot;ven_inv_ref&quot;: &quot;reiciendis&quot;,
+            &quot;description&quot;: &quot;Repudiandae omnis quo enim cupiditate.&quot;,
+            &quot;product_id&quot;: 7,
+            &quot;discount_percent&quot;: &quot;20.00&quot;,
+            &quot;discount_amt&quot;: &quot;221.67&quot;,
+            &quot;inv_amount&quot;: &quot;4942.51&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;date&quot;: &quot;1978-04-30&quot;,
-        &quot;vendor_id&quot;: 6,
-        &quot;description&quot;: &quot;Architecto voluptas aperiam tempore soluta et ab suscipit.&quot;,
+        &quot;date&quot;: &quot;1986-08-30&quot;,
+        &quot;vendor_id&quot;: 9,
+        &quot;description&quot;: &quot;Libero ut similique officiis molestias quos deleniti iste et.&quot;,
         &quot;product_id&quot;: 4,
-        &quot;return_inv_amount&quot;: &quot;1293.14&quot;,
+        &quot;return_inv_amount&quot;: &quot;833.90&quot;,
         &quot;purchase_id&quot;: 4,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 6,
-            &quot;first_name&quot;: &quot;Rickie&quot;,
-            &quot;last_name&quot;: &quot;Harvey&quot;,
-            &quot;cnic&quot;: &quot;21782-2112291-1&quot;,
-            &quot;address&quot;: &quot;7599 Reyes Garden Suite 003\nNew Ernest, NH 10361-4850&quot;,
-            &quot;city_id&quot;: 384,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 9,
+            &quot;first_name&quot;: &quot;Benedict&quot;,
+            &quot;last_name&quot;: &quot;Runte&quot;,
+            &quot;cnic&quot;: &quot;03564-7238125-7&quot;,
+            &quot;address&quot;: &quot;89806 Trevor Track\nPort Henderson, LA 97521&quot;,
+            &quot;city_id&quot;: 306,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC291&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bbbb?text=fashion+ea&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;1235.08&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;2481259121728&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC710&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008822?text=fashion+est&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;1674.73&quot;,
+            &quot;opening_stock_quantity&quot;: 23,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;1191943436878&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
             &quot;id&quot;: 4,
-            &quot;date&quot;: &quot;2014-09-12&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV999&quot;,
-            &quot;ven_inv_date&quot;: &quot;2012-12-22&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Suscipit quo et voluptas fugiat.&quot;,
-            &quot;product_id&quot;: 17,
-            &quot;discount_percent&quot;: &quot;13.00&quot;,
-            &quot;discount_amt&quot;: &quot;468.34&quot;,
-            &quot;inv_amount&quot;: &quot;1301.45&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;date&quot;: &quot;1999-07-01&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV723&quot;,
+            &quot;ven_inv_date&quot;: &quot;1977-08-22&quot;,
+            &quot;ven_inv_ref&quot;: &quot;deleniti&quot;,
+            &quot;description&quot;: &quot;Provident natus deserunt aspernatur dolores eos corrupti voluptate.&quot;,
+            &quot;product_id&quot;: 7,
+            &quot;discount_percent&quot;: &quot;7.00&quot;,
+            &quot;discount_amt&quot;: &quot;338.12&quot;,
+            &quot;inv_amount&quot;: &quot;3012.08&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;date&quot;: &quot;2023-11-27&quot;,
-        &quot;vendor_id&quot;: 5,
-        &quot;description&quot;: &quot;Non dicta necessitatibus quasi veniam quaerat.&quot;,
-        &quot;product_id&quot;: 19,
-        &quot;return_inv_amount&quot;: &quot;1694.29&quot;,
-        &quot;purchase_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;2025-07-07&quot;,
+        &quot;vendor_id&quot;: 7,
+        &quot;description&quot;: &quot;Sunt rerum a ad repudiandae aperiam voluptas doloribus.&quot;,
+        &quot;product_id&quot;: 20,
+        &quot;return_inv_amount&quot;: &quot;1006.07&quot;,
+        &quot;purchase_id&quot;: 5,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 5,
-            &quot;first_name&quot;: &quot;Roscoe&quot;,
-            &quot;last_name&quot;: &quot;Hudson&quot;,
-            &quot;cnic&quot;: &quot;39290-1810136-8&quot;,
-            &quot;address&quot;: &quot;4237 Bernhard Knoll Suite 250\nWest Cecilville, MT 62151-7859&quot;,
-            &quot;city_id&quot;: 256,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 7,
+            &quot;first_name&quot;: &quot;Deron&quot;,
+            &quot;last_name&quot;: &quot;Dach&quot;,
+            &quot;cnic&quot;: &quot;06667-9360598-2&quot;,
+            &quot;address&quot;: &quot;9229 Weber Avenue\nShanahanberg, KS 37412&quot;,
+            &quot;city_id&quot;: 119,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 19,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC057&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001111?text=fashion+impedit&quot;,
-            &quot;sub_category_id&quot;: 8,
-            &quot;sale_price&quot;: &quot;3236.25&quot;,
-            &quot;opening_stock_quantity&quot;: 17,
-            &quot;user_id&quot;: 9,
-            &quot;barcode&quot;: &quot;2473289161256&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 20,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC015&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eeee?text=fashion+beatae&quot;,
+            &quot;sub_category_id&quot;: 4,
+            &quot;sale_price&quot;: &quot;1418.21&quot;,
+            &quot;opening_stock_quantity&quot;: 31,
+            &quot;user_id&quot;: 5,
+            &quot;barcode&quot;: &quot;6730978038456&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
-            &quot;id&quot;: 1,
-            &quot;date&quot;: &quot;2023-03-18&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV521&quot;,
-            &quot;ven_inv_date&quot;: &quot;1979-07-26&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Dolor eos explicabo quas maiores.&quot;,
-            &quot;product_id&quot;: 8,
-            &quot;discount_percent&quot;: &quot;17.00&quot;,
-            &quot;discount_amt&quot;: &quot;87.63&quot;,
-            &quot;inv_amount&quot;: &quot;2864.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 5,
+            &quot;date&quot;: &quot;1977-09-23&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV104&quot;,
+            &quot;ven_inv_date&quot;: &quot;2007-05-29&quot;,
+            &quot;ven_inv_ref&quot;: &quot;rerum&quot;,
+            &quot;description&quot;: &quot;Tempore quasi sequi nihil repudiandae autem excepturi error.&quot;,
+            &quot;product_id&quot;: 11,
+            &quot;discount_percent&quot;: &quot;11.00&quot;,
+            &quot;discount_amt&quot;: &quot;381.21&quot;,
+            &quot;inv_amount&quot;: &quot;3181.71&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;date&quot;: &quot;1993-11-17&quot;,
-        &quot;vendor_id&quot;: 7,
-        &quot;description&quot;: &quot;Est nobis est est tenetur.&quot;,
-        &quot;product_id&quot;: 6,
-        &quot;return_inv_amount&quot;: &quot;287.52&quot;,
-        &quot;purchase_id&quot;: 4,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;1972-04-11&quot;,
+        &quot;vendor_id&quot;: 4,
+        &quot;description&quot;: &quot;Sit est rerum non veritatis et in voluptas.&quot;,
+        &quot;product_id&quot;: 20,
+        &quot;return_inv_amount&quot;: &quot;1216.23&quot;,
+        &quot;purchase_id&quot;: 1,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 7,
-            &quot;first_name&quot;: &quot;Silas&quot;,
-            &quot;last_name&quot;: &quot;Bechtelar&quot;,
-            &quot;cnic&quot;: &quot;49754-4969029-4&quot;,
-            &quot;address&quot;: &quot;329 Grant Wells\nSidmouth, OK 61753&quot;,
-            &quot;city_id&quot;: 384,
+            &quot;id&quot;: 4,
+            &quot;first_name&quot;: &quot;Russel&quot;,
+            &quot;last_name&quot;: &quot;Lind&quot;,
+            &quot;cnic&quot;: &quot;70853-8463742-5&quot;,
+            &quot;address&quot;: &quot;195 Keeling Brook\nSchmelerstad, MD 22782&quot;,
+            &quot;city_id&quot;: 44,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 6,
+            &quot;id&quot;: 20,
             &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC475&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;4064.25&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;4249762233653&quot;,
+            &quot;design_code&quot;: &quot;DC015&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eeee?text=fashion+beatae&quot;,
+            &quot;sub_category_id&quot;: 4,
+            &quot;sale_price&quot;: &quot;1418.21&quot;,
+            &quot;opening_stock_quantity&quot;: 31,
+            &quot;user_id&quot;: 5,
+            &quot;barcode&quot;: &quot;6730978038456&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
-            &quot;id&quot;: 4,
-            &quot;date&quot;: &quot;2014-09-12&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV999&quot;,
-            &quot;ven_inv_date&quot;: &quot;2012-12-22&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Suscipit quo et voluptas fugiat.&quot;,
-            &quot;product_id&quot;: 17,
-            &quot;discount_percent&quot;: &quot;13.00&quot;,
-            &quot;discount_amt&quot;: &quot;468.34&quot;,
-            &quot;inv_amount&quot;: &quot;1301.45&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;1976-03-04&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV383&quot;,
+            &quot;ven_inv_date&quot;: &quot;1973-11-05&quot;,
+            &quot;ven_inv_ref&quot;: &quot;accusantium&quot;,
+            &quot;description&quot;: &quot;Iusto ea et ipsum sunt ex.&quot;,
+            &quot;product_id&quot;: 2,
+            &quot;discount_percent&quot;: &quot;4.00&quot;,
+            &quot;discount_amt&quot;: &quot;370.22&quot;,
+            &quot;inv_amount&quot;: &quot;1289.22&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;date&quot;: &quot;2011-05-16&quot;,
-        &quot;vendor_id&quot;: 4,
-        &quot;description&quot;: &quot;Sint recusandae est aliquam fuga impedit quia temporibus natus.&quot;,
-        &quot;product_id&quot;: 7,
-        &quot;return_inv_amount&quot;: &quot;1297.82&quot;,
-        &quot;purchase_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;1989-05-21&quot;,
+        &quot;vendor_id&quot;: 7,
+        &quot;description&quot;: &quot;Numquam aliquid ipsa temporibus voluptatibus.&quot;,
+        &quot;product_id&quot;: 8,
+        &quot;return_inv_amount&quot;: &quot;1475.63&quot;,
+        &quot;purchase_id&quot;: 3,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 4,
-            &quot;first_name&quot;: &quot;Ariel&quot;,
-            &quot;last_name&quot;: &quot;Glover&quot;,
-            &quot;cnic&quot;: &quot;95217-1960061-8&quot;,
-            &quot;address&quot;: &quot;90892 Tom Estate Suite 525\nLake Andrewberg, HI 80993&quot;,
-            &quot;city_id&quot;: 393,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 7,
+            &quot;first_name&quot;: &quot;Deron&quot;,
+            &quot;last_name&quot;: &quot;Dach&quot;,
+            &quot;cnic&quot;: &quot;06667-9360598-2&quot;,
+            &quot;address&quot;: &quot;9229 Weber Avenue\nShanahanberg, KS 37412&quot;,
+            &quot;city_id&quot;: 119,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
+            &quot;id&quot;: 8,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
+            &quot;design_code&quot;: &quot;DC321&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+neque&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;2270.77&quot;,
+            &quot;opening_stock_quantity&quot;: 7,
+            &quot;user_id&quot;: 8,
+            &quot;barcode&quot;: &quot;0792413436766&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
-            &quot;id&quot;: 1,
-            &quot;date&quot;: &quot;2023-03-18&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV521&quot;,
-            &quot;ven_inv_date&quot;: &quot;1979-07-26&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Dolor eos explicabo quas maiores.&quot;,
-            &quot;product_id&quot;: 8,
-            &quot;discount_percent&quot;: &quot;17.00&quot;,
-            &quot;discount_amt&quot;: &quot;87.63&quot;,
-            &quot;inv_amount&quot;: &quot;2864.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 3,
+            &quot;date&quot;: &quot;1977-04-07&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV023&quot;,
+            &quot;ven_inv_date&quot;: &quot;2000-11-01&quot;,
+            &quot;ven_inv_ref&quot;: &quot;reiciendis&quot;,
+            &quot;description&quot;: &quot;Repudiandae omnis quo enim cupiditate.&quot;,
+            &quot;product_id&quot;: 7,
+            &quot;discount_percent&quot;: &quot;20.00&quot;,
+            &quot;discount_amt&quot;: &quot;221.67&quot;,
+            &quot;inv_amount&quot;: &quot;4942.51&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;date&quot;: &quot;1988-04-13&quot;,
-        &quot;vendor_id&quot;: 9,
-        &quot;description&quot;: &quot;Maiores dicta nam doloribus qui eaque aut nostrum.&quot;,
-        &quot;product_id&quot;: 17,
-        &quot;return_inv_amount&quot;: &quot;1906.85&quot;,
-        &quot;purchase_id&quot;: 2,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;2004-10-11&quot;,
+        &quot;vendor_id&quot;: 10,
+        &quot;description&quot;: &quot;Veniam dolores dolores ducimus eligendi minus dolor.&quot;,
+        &quot;product_id&quot;: 15,
+        &quot;return_inv_amount&quot;: &quot;1082.55&quot;,
+        &quot;purchase_id&quot;: 5,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 9,
-            &quot;first_name&quot;: &quot;Russel&quot;,
-            &quot;last_name&quot;: &quot;Lakin&quot;,
-            &quot;cnic&quot;: &quot;10040-2997713-0&quot;,
-            &quot;address&quot;: &quot;9390 Borer Springs Suite 692\nSouth Yvette, SC 61951&quot;,
-            &quot;city_id&quot;: 323,
+            &quot;id&quot;: 10,
+            &quot;first_name&quot;: &quot;Cecelia&quot;,
+            &quot;last_name&quot;: &quot;Dooley&quot;,
+            &quot;cnic&quot;: &quot;88846-5257145-8&quot;,
+            &quot;address&quot;: &quot;8504 Tillman Fords Suite 117\nNorth Johannburgh, NV 22767&quot;,
+            &quot;city_id&quot;: 461,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:43.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 17,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC855&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddee?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;1418.19&quot;,
-            &quot;opening_stock_quantity&quot;: 32,
-            &quot;user_id&quot;: 4,
-            &quot;barcode&quot;: &quot;1459805789242&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 15,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC121&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;3373.87&quot;,
+            &quot;opening_stock_quantity&quot;: 34,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6862870771022&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
-            &quot;id&quot;: 2,
-            &quot;date&quot;: &quot;1983-03-01&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV663&quot;,
-            &quot;ven_inv_date&quot;: &quot;1970-09-22&quot;,
-            &quot;ven_inv_ref&quot;: &quot;et&quot;,
-            &quot;description&quot;: &quot;Voluptas quia recusandae voluptatibus qui animi amet.&quot;,
-            &quot;product_id&quot;: 20,
-            &quot;discount_percent&quot;: &quot;10.00&quot;,
-            &quot;discount_amt&quot;: &quot;293.67&quot;,
-            &quot;inv_amount&quot;: &quot;1129.27&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 5,
+            &quot;date&quot;: &quot;1977-09-23&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV104&quot;,
+            &quot;ven_inv_date&quot;: &quot;2007-05-29&quot;,
+            &quot;ven_inv_ref&quot;: &quot;rerum&quot;,
+            &quot;description&quot;: &quot;Tempore quasi sequi nihil repudiandae autem excepturi error.&quot;,
+            &quot;product_id&quot;: 11,
+            &quot;discount_percent&quot;: &quot;11.00&quot;,
+            &quot;discount_amt&quot;: &quot;381.21&quot;,
+            &quot;inv_amount&quot;: &quot;3181.71&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 8,
-        &quot;date&quot;: &quot;1970-07-07&quot;,
-        &quot;vendor_id&quot;: 3,
-        &quot;description&quot;: &quot;Dolor aut alias sed incidunt.&quot;,
-        &quot;product_id&quot;: 9,
-        &quot;return_inv_amount&quot;: &quot;1156.99&quot;,
-        &quot;purchase_id&quot;: 2,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;date&quot;: &quot;2000-04-25&quot;,
+        &quot;vendor_id&quot;: 5,
+        &quot;description&quot;: &quot;Sed veritatis a delectus eaque.&quot;,
+        &quot;product_id&quot;: 10,
+        &quot;return_inv_amount&quot;: &quot;1525.75&quot;,
+        &quot;purchase_id&quot;: 5,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 3,
-            &quot;first_name&quot;: &quot;Virginia&quot;,
-            &quot;last_name&quot;: &quot;Rice&quot;,
-            &quot;cnic&quot;: &quot;34082-7362456-8&quot;,
-            &quot;address&quot;: &quot;80622 Orpha Turnpike\nWest Rosaport, TN 62759&quot;,
-            &quot;city_id&quot;: 17,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 5,
+            &quot;first_name&quot;: &quot;Queen&quot;,
+            &quot;last_name&quot;: &quot;Oberbrunner&quot;,
+            &quot;cnic&quot;: &quot;92801-3908294-0&quot;,
+            &quot;address&quot;: &quot;325 Moore Circle\nEast Ulicesview, KS 24342&quot;,
+            &quot;city_id&quot;: 192,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 9,
+            &quot;id&quot;: 10,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC314&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa22?text=fashion+deleniti&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;2082.67&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;1852287048379&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC128&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005522?text=fashion+et&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3590.53&quot;,
+            &quot;opening_stock_quantity&quot;: 21,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6325101202080&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
-            &quot;id&quot;: 2,
-            &quot;date&quot;: &quot;1983-03-01&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV663&quot;,
-            &quot;ven_inv_date&quot;: &quot;1970-09-22&quot;,
-            &quot;ven_inv_ref&quot;: &quot;et&quot;,
-            &quot;description&quot;: &quot;Voluptas quia recusandae voluptatibus qui animi amet.&quot;,
-            &quot;product_id&quot;: 20,
-            &quot;discount_percent&quot;: &quot;10.00&quot;,
-            &quot;discount_amt&quot;: &quot;293.67&quot;,
-            &quot;inv_amount&quot;: &quot;1129.27&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 5,
+            &quot;date&quot;: &quot;1977-09-23&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV104&quot;,
+            &quot;ven_inv_date&quot;: &quot;2007-05-29&quot;,
+            &quot;ven_inv_ref&quot;: &quot;rerum&quot;,
+            &quot;description&quot;: &quot;Tempore quasi sequi nihil repudiandae autem excepturi error.&quot;,
+            &quot;product_id&quot;: 11,
+            &quot;discount_percent&quot;: &quot;11.00&quot;,
+            &quot;discount_amt&quot;: &quot;381.21&quot;,
+            &quot;inv_amount&quot;: &quot;3181.71&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 9,
-        &quot;date&quot;: &quot;2012-05-18&quot;,
-        &quot;vendor_id&quot;: 10,
-        &quot;description&quot;: &quot;Rerum voluptate saepe voluptatibus cum soluta.&quot;,
-        &quot;product_id&quot;: 4,
-        &quot;return_inv_amount&quot;: &quot;1874.24&quot;,
+        &quot;date&quot;: &quot;1978-12-01&quot;,
+        &quot;vendor_id&quot;: 4,
+        &quot;description&quot;: &quot;Rem earum aut reiciendis voluptatem vitae ea pariatur.&quot;,
+        &quot;product_id&quot;: 14,
+        &quot;return_inv_amount&quot;: &quot;520.36&quot;,
         &quot;purchase_id&quot;: 4,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 10,
-            &quot;first_name&quot;: &quot;Lily&quot;,
-            &quot;last_name&quot;: &quot;Wisoky&quot;,
-            &quot;cnic&quot;: &quot;53630-6251043-9&quot;,
-            &quot;address&quot;: &quot;174 Russ Manors\nMadelineview, MT 09367-6853&quot;,
-            &quot;city_id&quot;: 460,
+            &quot;id&quot;: 4,
+            &quot;first_name&quot;: &quot;Russel&quot;,
+            &quot;last_name&quot;: &quot;Lind&quot;,
+            &quot;cnic&quot;: &quot;70853-8463742-5&quot;,
+            &quot;address&quot;: &quot;195 Keeling Brook\nSchmelerstad, MD 22782&quot;,
+            &quot;city_id&quot;: 44,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 4,
+            &quot;id&quot;: 14,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC291&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bbbb?text=fashion+ea&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;1235.08&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;2481259121728&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC827&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3520.93&quot;,
+            &quot;opening_stock_quantity&quot;: 38,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;6757008708424&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
             &quot;id&quot;: 4,
-            &quot;date&quot;: &quot;2014-09-12&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV999&quot;,
-            &quot;ven_inv_date&quot;: &quot;2012-12-22&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Suscipit quo et voluptas fugiat.&quot;,
-            &quot;product_id&quot;: 17,
-            &quot;discount_percent&quot;: &quot;13.00&quot;,
-            &quot;discount_amt&quot;: &quot;468.34&quot;,
-            &quot;inv_amount&quot;: &quot;1301.45&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;date&quot;: &quot;1999-07-01&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV723&quot;,
+            &quot;ven_inv_date&quot;: &quot;1977-08-22&quot;,
+            &quot;ven_inv_ref&quot;: &quot;deleniti&quot;,
+            &quot;description&quot;: &quot;Provident natus deserunt aspernatur dolores eos corrupti voluptate.&quot;,
+            &quot;product_id&quot;: 7,
+            &quot;discount_percent&quot;: &quot;7.00&quot;,
+            &quot;discount_amt&quot;: &quot;338.12&quot;,
+            &quot;inv_amount&quot;: &quot;3012.08&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
-        &quot;date&quot;: &quot;1970-11-30&quot;,
-        &quot;vendor_id&quot;: 7,
-        &quot;description&quot;: &quot;Qui optio animi aut mollitia.&quot;,
-        &quot;product_id&quot;: 11,
-        &quot;return_inv_amount&quot;: &quot;1496.71&quot;,
+        &quot;date&quot;: &quot;2009-07-30&quot;,
+        &quot;vendor_id&quot;: 6,
+        &quot;description&quot;: &quot;Sed atque accusamus perspiciatis ducimus.&quot;,
+        &quot;product_id&quot;: 9,
+        &quot;return_inv_amount&quot;: &quot;558.32&quot;,
         &quot;purchase_id&quot;: 4,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;vendor&quot;: {
-            &quot;id&quot;: 7,
-            &quot;first_name&quot;: &quot;Silas&quot;,
-            &quot;last_name&quot;: &quot;Bechtelar&quot;,
-            &quot;cnic&quot;: &quot;49754-4969029-4&quot;,
-            &quot;address&quot;: &quot;329 Grant Wells\nSidmouth, OK 61753&quot;,
-            &quot;city_id&quot;: 384,
+            &quot;id&quot;: 6,
+            &quot;first_name&quot;: &quot;Marina&quot;,
+            &quot;last_name&quot;: &quot;Morissette&quot;,
+            &quot;cnic&quot;: &quot;13204-3990013-3&quot;,
+            &quot;address&quot;: &quot;77919 D&#039;Amore Junction Apt. 172\nRogersville, MS 63293-9085&quot;,
+            &quot;city_id&quot;: 477,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 11,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC949&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003366?text=fashion+labore&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;2307.70&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 7,
-            &quot;barcode&quot;: &quot;3189993944816&quot;,
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC352&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3418.89&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;3439172304468&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         },
         &quot;purchase&quot;: {
             &quot;id&quot;: 4,
-            &quot;date&quot;: &quot;2014-09-12&quot;,
-            &quot;ven_inv_no&quot;: &quot;INV999&quot;,
-            &quot;ven_inv_date&quot;: &quot;2012-12-22&quot;,
-            &quot;ven_inv_ref&quot;: &quot;quia&quot;,
-            &quot;description&quot;: &quot;Suscipit quo et voluptas fugiat.&quot;,
-            &quot;product_id&quot;: 17,
-            &quot;discount_percent&quot;: &quot;13.00&quot;,
-            &quot;discount_amt&quot;: &quot;468.34&quot;,
-            &quot;inv_amount&quot;: &quot;1301.45&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;date&quot;: &quot;1999-07-01&quot;,
+            &quot;ven_inv_no&quot;: &quot;INV723&quot;,
+            &quot;ven_inv_date&quot;: &quot;1977-08-22&quot;,
+            &quot;ven_inv_ref&quot;: &quot;deleniti&quot;,
+            &quot;description&quot;: &quot;Provident natus deserunt aspernatur dolores eos corrupti voluptate.&quot;,
+            &quot;product_id&quot;: 7,
+            &quot;discount_percent&quot;: &quot;7.00&quot;,
+            &quot;discount_amt&quot;: &quot;338.12&quot;,
+            &quot;inv_amount&quot;: &quot;3012.08&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:45.000000Z&quot;
         }
     }
 ]</code>
@@ -15727,7 +16068,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date\": \"2025-09-30T09:35:34\",
+    \"date\": \"2025-09-30T21:10:47\",
     \"vendor_id\": \"architecto\",
     \"description\": \"Eius et animi quos velit et.\",
     \"product_id\": \"architecto\",
@@ -15748,7 +16089,7 @@ const headers = {
 };
 
 let body = {
-    "date": "2025-09-30T09:35:34",
+    "date": "2025-09-30T21:10:47",
     "vendor_id": "architecto",
     "description": "Eius et animi quos velit et.",
     "product_id": "architecto",
@@ -15842,10 +16183,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date"                data-endpoint="POSTapi-purchase_returns"
-               value="2025-09-30T09:35:34"
+               value="2025-09-30T21:10:47"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:34</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:47</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>vendor_id</code></b>&nbsp;&nbsp;
@@ -15955,682 +16296,682 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;purchase_return_id&quot;: 8,
-        &quot;product_id&quot;: 18,
-        &quot;qty&quot;: 8,
-        &quot;pur_price&quot;: &quot;904.15&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 9,
+        &quot;product_id&quot;: 13,
+        &quot;qty&quot;: 5,
+        &quot;pur_price&quot;: &quot;421.86&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 8,
-            &quot;date&quot;: &quot;1970-07-07&quot;,
-            &quot;vendor_id&quot;: 3,
-            &quot;description&quot;: &quot;Dolor aut alias sed incidunt.&quot;,
-            &quot;product_id&quot;: 9,
-            &quot;return_inv_amount&quot;: &quot;1156.99&quot;,
-            &quot;purchase_id&quot;: 2,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 9,
+            &quot;date&quot;: &quot;1978-12-01&quot;,
+            &quot;vendor_id&quot;: 4,
+            &quot;description&quot;: &quot;Rem earum aut reiciendis voluptatem vitae ea pariatur.&quot;,
+            &quot;product_id&quot;: 14,
+            &quot;return_inv_amount&quot;: &quot;520.36&quot;,
+            &quot;purchase_id&quot;: 4,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 18,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC427&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1048.90&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5563224224416&quot;,
+            &quot;id&quot;: 13,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC890&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;1408.92&quot;,
+            &quot;opening_stock_quantity&quot;: 40,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;8407216399140&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;purchase_return_id&quot;: 10,
-        &quot;product_id&quot;: 10,
-        &quot;qty&quot;: 1,
-        &quot;pur_price&quot;: &quot;1182.72&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 6,
+        &quot;product_id&quot;: 13,
+        &quot;qty&quot;: 6,
+        &quot;pur_price&quot;: &quot;447.02&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 10,
-            &quot;date&quot;: &quot;1970-11-30&quot;,
+            &quot;id&quot;: 6,
+            &quot;date&quot;: &quot;1989-05-21&quot;,
             &quot;vendor_id&quot;: 7,
-            &quot;description&quot;: &quot;Qui optio animi aut mollitia.&quot;,
-            &quot;product_id&quot;: 11,
-            &quot;return_inv_amount&quot;: &quot;1496.71&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;description&quot;: &quot;Numquam aliquid ipsa temporibus voluptatibus.&quot;,
+            &quot;product_id&quot;: 8,
+            &quot;return_inv_amount&quot;: &quot;1475.63&quot;,
+            &quot;purchase_id&quot;: 3,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 10,
+            &quot;id&quot;: 13,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC097&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011cc?text=fashion+ex&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;3119.77&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;1262368207630&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC890&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;1408.92&quot;,
+            &quot;opening_stock_quantity&quot;: 40,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;8407216399140&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;purchase_return_id&quot;: 9,
-        &quot;product_id&quot;: 13,
-        &quot;qty&quot;: 3,
-        &quot;pur_price&quot;: &quot;504.21&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 1,
+        &quot;product_id&quot;: 8,
+        &quot;qty&quot;: 1,
+        &quot;pur_price&quot;: &quot;1172.50&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 9,
-            &quot;date&quot;: &quot;2012-05-18&quot;,
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;2014-08-08&quot;,
             &quot;vendor_id&quot;: 10,
-            &quot;description&quot;: &quot;Rerum voluptate saepe voluptatibus cum soluta.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1874.24&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+            &quot;product_id&quot;: 13,
+            &quot;return_inv_amount&quot;: &quot;849.49&quot;,
+            &quot;purchase_id&quot;: 2,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 13,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC938&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003311?text=fashion+maiores&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4501.73&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;4504553999973&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 8,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC321&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+neque&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;2270.77&quot;,
+            &quot;opening_stock_quantity&quot;: 7,
+            &quot;user_id&quot;: 8,
+            &quot;barcode&quot;: &quot;0792413436766&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;purchase_return_id&quot;: 9,
-        &quot;product_id&quot;: 20,
-        &quot;qty&quot;: 7,
-        &quot;pur_price&quot;: &quot;1415.04&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 8,
+        &quot;product_id&quot;: 18,
+        &quot;qty&quot;: 8,
+        &quot;pur_price&quot;: &quot;1579.30&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 9,
-            &quot;date&quot;: &quot;2012-05-18&quot;,
-            &quot;vendor_id&quot;: 10,
-            &quot;description&quot;: &quot;Rerum voluptate saepe voluptatibus cum soluta.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1874.24&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 8,
+            &quot;date&quot;: &quot;2000-04-25&quot;,
+            &quot;vendor_id&quot;: 5,
+            &quot;description&quot;: &quot;Sed veritatis a delectus eaque.&quot;,
+            &quot;product_id&quot;: 10,
+            &quot;return_inv_amount&quot;: &quot;1525.75&quot;,
+            &quot;purchase_id&quot;: 5,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 20,
+            &quot;id&quot;: 18,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC840&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ccdd?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 8,
-            &quot;sale_price&quot;: &quot;2207.68&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 8,
-            &quot;barcode&quot;: &quot;8549482551843&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC646&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3061.41&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;0233899013435&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;purchase_return_id&quot;: 8,
-        &quot;product_id&quot;: 13,
-        &quot;qty&quot;: 10,
-        &quot;pur_price&quot;: &quot;621.75&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 9,
+        &quot;product_id&quot;: 14,
+        &quot;qty&quot;: 7,
+        &quot;pur_price&quot;: &quot;117.28&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 8,
-            &quot;date&quot;: &quot;1970-07-07&quot;,
-            &quot;vendor_id&quot;: 3,
-            &quot;description&quot;: &quot;Dolor aut alias sed incidunt.&quot;,
-            &quot;product_id&quot;: 9,
-            &quot;return_inv_amount&quot;: &quot;1156.99&quot;,
-            &quot;purchase_id&quot;: 2,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 9,
+            &quot;date&quot;: &quot;1978-12-01&quot;,
+            &quot;vendor_id&quot;: 4,
+            &quot;description&quot;: &quot;Rem earum aut reiciendis voluptatem vitae ea pariatur.&quot;,
+            &quot;product_id&quot;: 14,
+            &quot;return_inv_amount&quot;: &quot;520.36&quot;,
+            &quot;purchase_id&quot;: 4,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 13,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC938&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003311?text=fashion+maiores&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4501.73&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;4504553999973&quot;,
+            &quot;id&quot;: 14,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC827&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3520.93&quot;,
+            &quot;opening_stock_quantity&quot;: 38,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;6757008708424&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;purchase_return_id&quot;: 9,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 4,
-        &quot;pur_price&quot;: &quot;1519.02&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 3,
+        &quot;product_id&quot;: 18,
+        &quot;qty&quot;: 6,
+        &quot;pur_price&quot;: &quot;156.99&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 9,
-            &quot;date&quot;: &quot;2012-05-18&quot;,
-            &quot;vendor_id&quot;: 10,
-            &quot;description&quot;: &quot;Rerum voluptate saepe voluptatibus cum soluta.&quot;,
+            &quot;id&quot;: 3,
+            &quot;date&quot;: &quot;1986-08-30&quot;,
+            &quot;vendor_id&quot;: 9,
+            &quot;description&quot;: &quot;Libero ut similique officiis molestias quos deleniti iste et.&quot;,
             &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1874.24&quot;,
+            &quot;return_inv_amount&quot;: &quot;833.90&quot;,
             &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 18,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC646&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3061.41&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;0233899013435&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;purchase_return_id&quot;: 10,
-        &quot;product_id&quot;: 6,
-        &quot;qty&quot;: 3,
-        &quot;pur_price&quot;: &quot;1756.81&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;purchase_return&quot;: {
-            &quot;id&quot;: 10,
-            &quot;date&quot;: &quot;1970-11-30&quot;,
-            &quot;vendor_id&quot;: 7,
-            &quot;description&quot;: &quot;Qui optio animi aut mollitia.&quot;,
-            &quot;product_id&quot;: 11,
-            &quot;return_inv_amount&quot;: &quot;1496.71&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
-        },
-        &quot;product&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC475&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;4064.25&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;4249762233653&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 8,
-        &quot;purchase_return_id&quot;: 3,
-        &quot;product_id&quot;: 9,
-        &quot;qty&quot;: 7,
-        &quot;pur_price&quot;: &quot;584.03&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;purchase_return&quot;: {
-            &quot;id&quot;: 3,
-            &quot;date&quot;: &quot;1978-04-30&quot;,
-            &quot;vendor_id&quot;: 6,
-            &quot;description&quot;: &quot;Architecto voluptas aperiam tempore soluta et ab suscipit.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1293.14&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
-        },
-        &quot;product&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC314&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa22?text=fashion+deleniti&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;2082.67&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;1852287048379&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 9,
-        &quot;purchase_return_id&quot;: 10,
-        &quot;product_id&quot;: 5,
-        &quot;qty&quot;: 10,
-        &quot;pur_price&quot;: &quot;1983.34&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;purchase_return&quot;: {
-            &quot;id&quot;: 10,
-            &quot;date&quot;: &quot;1970-11-30&quot;,
-            &quot;vendor_id&quot;: 7,
-            &quot;description&quot;: &quot;Qui optio animi aut mollitia.&quot;,
-            &quot;product_id&quot;: 11,
-            &quot;return_inv_amount&quot;: &quot;1496.71&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
-        },
-        &quot;product&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC113&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4488.74&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 3,
-            &quot;barcode&quot;: &quot;7740891708809&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 10,
-        &quot;purchase_return_id&quot;: 5,
-        &quot;product_id&quot;: 2,
-        &quot;qty&quot;: 2,
-        &quot;pur_price&quot;: &quot;389.36&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;purchase_return&quot;: {
-            &quot;id&quot;: 5,
-            &quot;date&quot;: &quot;1993-11-17&quot;,
-            &quot;vendor_id&quot;: 7,
-            &quot;description&quot;: &quot;Est nobis est est tenetur.&quot;,
-            &quot;product_id&quot;: 6,
-            &quot;return_inv_amount&quot;: &quot;287.52&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
-        },
-        &quot;product&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC838&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000055?text=fashion+quidem&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3362.56&quot;,
-            &quot;opening_stock_quantity&quot;: 39,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;7932057961313&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 11,
-        &quot;purchase_return_id&quot;: 10,
-        &quot;product_id&quot;: 11,
-        &quot;qty&quot;: 7,
-        &quot;pur_price&quot;: &quot;809.22&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;purchase_return&quot;: {
-            &quot;id&quot;: 10,
-            &quot;date&quot;: &quot;1970-11-30&quot;,
-            &quot;vendor_id&quot;: 7,
-            &quot;description&quot;: &quot;Qui optio animi aut mollitia.&quot;,
-            &quot;product_id&quot;: 11,
-            &quot;return_inv_amount&quot;: &quot;1496.71&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
-        },
-        &quot;product&quot;: {
-            &quot;id&quot;: 11,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC949&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003366?text=fashion+labore&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;2307.70&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 7,
-            &quot;barcode&quot;: &quot;3189993944816&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 12,
-        &quot;purchase_return_id&quot;: 2,
-        &quot;product_id&quot;: 11,
-        &quot;qty&quot;: 9,
-        &quot;pur_price&quot;: &quot;160.14&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;purchase_return&quot;: {
-            &quot;id&quot;: 2,
-            &quot;date&quot;: &quot;1990-11-05&quot;,
-            &quot;vendor_id&quot;: 3,
-            &quot;description&quot;: &quot;Iusto voluptas reprehenderit iure pariatur voluptatum.&quot;,
-            &quot;product_id&quot;: 18,
-            &quot;return_inv_amount&quot;: &quot;1544.16&quot;,
-            &quot;purchase_id&quot;: 3,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
-        },
-        &quot;product&quot;: {
-            &quot;id&quot;: 11,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC949&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003366?text=fashion+labore&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;2307.70&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 7,
-            &quot;barcode&quot;: &quot;3189993944816&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 13,
-        &quot;purchase_return_id&quot;: 10,
+        &quot;purchase_return_id&quot;: 1,
         &quot;product_id&quot;: 16,
-        &quot;qty&quot;: 2,
-        &quot;pur_price&quot;: &quot;1749.57&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;qty&quot;: 8,
+        &quot;pur_price&quot;: &quot;455.27&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 10,
-            &quot;date&quot;: &quot;1970-11-30&quot;,
-            &quot;vendor_id&quot;: 7,
-            &quot;description&quot;: &quot;Qui optio animi aut mollitia.&quot;,
-            &quot;product_id&quot;: 11,
-            &quot;return_inv_amount&quot;: &quot;1496.71&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;2014-08-08&quot;,
+            &quot;vendor_id&quot;: 10,
+            &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+            &quot;product_id&quot;: 13,
+            &quot;return_inv_amount&quot;: &quot;849.49&quot;,
+            &quot;purchase_id&quot;: 2,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 16,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC909&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/002277?text=fashion+provident&quot;,
+            &quot;design_code&quot;: &quot;DC679&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099cc?text=fashion+reprehenderit&quot;,
+            &quot;sub_category_id&quot;: 6,
+            &quot;sale_price&quot;: &quot;2060.12&quot;,
+            &quot;opening_stock_quantity&quot;: 23,
+            &quot;user_id&quot;: 2,
+            &quot;barcode&quot;: &quot;1271315082404&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 8,
+        &quot;purchase_return_id&quot;: 10,
+        &quot;product_id&quot;: 1,
+        &quot;qty&quot;: 6,
+        &quot;pur_price&quot;: &quot;804.79&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;purchase_return&quot;: {
+            &quot;id&quot;: 10,
+            &quot;date&quot;: &quot;2009-07-30&quot;,
+            &quot;vendor_id&quot;: 6,
+            &quot;description&quot;: &quot;Sed atque accusamus perspiciatis ducimus.&quot;,
+            &quot;product_id&quot;: 9,
+            &quot;return_inv_amount&quot;: &quot;558.32&quot;,
+            &quot;purchase_id&quot;: 4,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
+        },
+        &quot;product&quot;: {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC253&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+soluta&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;3704.74&quot;,
-            &quot;opening_stock_quantity&quot;: 13,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;8366658157124&quot;,
+            &quot;sale_price&quot;: &quot;2485.88&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;4672764781165&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 9,
+        &quot;purchase_return_id&quot;: 3,
+        &quot;product_id&quot;: 1,
+        &quot;qty&quot;: 3,
+        &quot;pur_price&quot;: &quot;1776.36&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;purchase_return&quot;: {
+            &quot;id&quot;: 3,
+            &quot;date&quot;: &quot;1986-08-30&quot;,
+            &quot;vendor_id&quot;: 9,
+            &quot;description&quot;: &quot;Libero ut similique officiis molestias quos deleniti iste et.&quot;,
+            &quot;product_id&quot;: 4,
+            &quot;return_inv_amount&quot;: &quot;833.90&quot;,
+            &quot;purchase_id&quot;: 4,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
+        },
+        &quot;product&quot;: {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC253&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+soluta&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;2485.88&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;4672764781165&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 10,
+        &quot;purchase_return_id&quot;: 1,
+        &quot;product_id&quot;: 15,
+        &quot;qty&quot;: 3,
+        &quot;pur_price&quot;: &quot;625.01&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;purchase_return&quot;: {
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;2014-08-08&quot;,
+            &quot;vendor_id&quot;: 10,
+            &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+            &quot;product_id&quot;: 13,
+            &quot;return_inv_amount&quot;: &quot;849.49&quot;,
+            &quot;purchase_id&quot;: 2,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
+        },
+        &quot;product&quot;: {
+            &quot;id&quot;: 15,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC121&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;3373.87&quot;,
+            &quot;opening_stock_quantity&quot;: 34,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6862870771022&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 11,
+        &quot;purchase_return_id&quot;: 1,
+        &quot;product_id&quot;: 18,
+        &quot;qty&quot;: 9,
+        &quot;pur_price&quot;: &quot;1998.57&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;purchase_return&quot;: {
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;2014-08-08&quot;,
+            &quot;vendor_id&quot;: 10,
+            &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+            &quot;product_id&quot;: 13,
+            &quot;return_inv_amount&quot;: &quot;849.49&quot;,
+            &quot;purchase_id&quot;: 2,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
+        },
+        &quot;product&quot;: {
+            &quot;id&quot;: 18,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC646&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3061.41&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;0233899013435&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 12,
+        &quot;purchase_return_id&quot;: 8,
+        &quot;product_id&quot;: 9,
+        &quot;qty&quot;: 7,
+        &quot;pur_price&quot;: &quot;1524.33&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;purchase_return&quot;: {
+            &quot;id&quot;: 8,
+            &quot;date&quot;: &quot;2000-04-25&quot;,
+            &quot;vendor_id&quot;: 5,
+            &quot;description&quot;: &quot;Sed veritatis a delectus eaque.&quot;,
+            &quot;product_id&quot;: 10,
+            &quot;return_inv_amount&quot;: &quot;1525.75&quot;,
+            &quot;purchase_id&quot;: 5,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
+        },
+        &quot;product&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC352&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3418.89&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;3439172304468&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
+        }
+    },
+    {
+        &quot;id&quot;: 13,
+        &quot;purchase_return_id&quot;: 8,
+        &quot;product_id&quot;: 9,
+        &quot;qty&quot;: 6,
+        &quot;pur_price&quot;: &quot;803.84&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;purchase_return&quot;: {
+            &quot;id&quot;: 8,
+            &quot;date&quot;: &quot;2000-04-25&quot;,
+            &quot;vendor_id&quot;: 5,
+            &quot;description&quot;: &quot;Sed veritatis a delectus eaque.&quot;,
+            &quot;product_id&quot;: 10,
+            &quot;return_inv_amount&quot;: &quot;1525.75&quot;,
+            &quot;purchase_id&quot;: 5,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
+        },
+        &quot;product&quot;: {
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC352&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3418.89&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;3439172304468&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
-        &quot;purchase_return_id&quot;: 9,
-        &quot;product_id&quot;: 18,
-        &quot;qty&quot;: 7,
-        &quot;pur_price&quot;: &quot;578.80&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 7,
+        &quot;product_id&quot;: 5,
+        &quot;qty&quot;: 4,
+        &quot;pur_price&quot;: &quot;783.57&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 9,
-            &quot;date&quot;: &quot;2012-05-18&quot;,
+            &quot;id&quot;: 7,
+            &quot;date&quot;: &quot;2004-10-11&quot;,
             &quot;vendor_id&quot;: 10,
-            &quot;description&quot;: &quot;Rerum voluptate saepe voluptatibus cum soluta.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1874.24&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;description&quot;: &quot;Veniam dolores dolores ducimus eligendi minus dolor.&quot;,
+            &quot;product_id&quot;: 15,
+            &quot;return_inv_amount&quot;: &quot;1082.55&quot;,
+            &quot;purchase_id&quot;: 5,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 18,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC427&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1048.90&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5563224224416&quot;,
+            &quot;id&quot;: 5,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC371&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+laborum&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1312.58&quot;,
+            &quot;opening_stock_quantity&quot;: 43,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;0727022858913&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
-        &quot;purchase_return_id&quot;: 9,
-        &quot;product_id&quot;: 12,
-        &quot;qty&quot;: 9,
-        &quot;pur_price&quot;: &quot;1277.29&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 6,
+        &quot;product_id&quot;: 15,
+        &quot;qty&quot;: 10,
+        &quot;pur_price&quot;: &quot;797.61&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 9,
-            &quot;date&quot;: &quot;2012-05-18&quot;,
-            &quot;vendor_id&quot;: 10,
-            &quot;description&quot;: &quot;Rerum voluptate saepe voluptatibus cum soluta.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1874.24&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 6,
+            &quot;date&quot;: &quot;1989-05-21&quot;,
+            &quot;vendor_id&quot;: 7,
+            &quot;description&quot;: &quot;Numquam aliquid ipsa temporibus voluptatibus.&quot;,
+            &quot;product_id&quot;: 8,
+            &quot;return_inv_amount&quot;: &quot;1475.63&quot;,
+            &quot;purchase_id&quot;: 3,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 12,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC996&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ff00?text=fashion+dolore&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;4608.89&quot;,
-            &quot;opening_stock_quantity&quot;: 27,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;0640151710863&quot;,
+            &quot;id&quot;: 15,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC121&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;3373.87&quot;,
+            &quot;opening_stock_quantity&quot;: 34,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6862870771022&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
-        &quot;purchase_return_id&quot;: 3,
-        &quot;product_id&quot;: 12,
-        &quot;qty&quot;: 6,
-        &quot;pur_price&quot;: &quot;482.89&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 4,
+        &quot;product_id&quot;: 6,
+        &quot;qty&quot;: 7,
+        &quot;pur_price&quot;: &quot;1584.55&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 3,
-            &quot;date&quot;: &quot;1978-04-30&quot;,
-            &quot;vendor_id&quot;: 6,
-            &quot;description&quot;: &quot;Architecto voluptas aperiam tempore soluta et ab suscipit.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;1293.14&quot;,
-            &quot;purchase_id&quot;: 4,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 4,
+            &quot;date&quot;: &quot;2025-07-07&quot;,
+            &quot;vendor_id&quot;: 7,
+            &quot;description&quot;: &quot;Sunt rerum a ad repudiandae aperiam voluptas doloribus.&quot;,
+            &quot;product_id&quot;: 20,
+            &quot;return_inv_amount&quot;: &quot;1006.07&quot;,
+            &quot;purchase_id&quot;: 5,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 12,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC996&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ff00?text=fashion+dolore&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;4608.89&quot;,
-            &quot;opening_stock_quantity&quot;: 27,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;0640151710863&quot;,
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC803&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eedd?text=fashion+cupiditate&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1009.31&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;6534638685024&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
-        &quot;purchase_return_id&quot;: 1,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 9,
-        &quot;pur_price&quot;: &quot;206.78&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 5,
+        &quot;product_id&quot;: 9,
+        &quot;qty&quot;: 7,
+        &quot;pur_price&quot;: &quot;603.16&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 1,
-            &quot;date&quot;: &quot;2019-01-01&quot;,
+            &quot;id&quot;: 5,
+            &quot;date&quot;: &quot;1972-04-11&quot;,
             &quot;vendor_id&quot;: 4,
-            &quot;description&quot;: &quot;Maxime qui est dolorum voluptates.&quot;,
-            &quot;product_id&quot;: 4,
-            &quot;return_inv_amount&quot;: &quot;730.98&quot;,
+            &quot;description&quot;: &quot;Sit est rerum non veritatis et in voluptas.&quot;,
+            &quot;product_id&quot;: 20,
+            &quot;return_inv_amount&quot;: &quot;1216.23&quot;,
             &quot;purchase_id&quot;: 1,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
+            &quot;id&quot;: 9,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC352&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3418.89&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;3439172304468&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
-        &quot;purchase_return_id&quot;: 2,
-        &quot;product_id&quot;: 12,
+        &quot;purchase_return_id&quot;: 8,
+        &quot;product_id&quot;: 6,
         &quot;qty&quot;: 4,
-        &quot;pur_price&quot;: &quot;1687.13&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;pur_price&quot;: &quot;1566.34&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 2,
-            &quot;date&quot;: &quot;1990-11-05&quot;,
-            &quot;vendor_id&quot;: 3,
-            &quot;description&quot;: &quot;Iusto voluptas reprehenderit iure pariatur voluptatum.&quot;,
-            &quot;product_id&quot;: 18,
-            &quot;return_inv_amount&quot;: &quot;1544.16&quot;,
-            &quot;purchase_id&quot;: 3,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 8,
+            &quot;date&quot;: &quot;2000-04-25&quot;,
+            &quot;vendor_id&quot;: 5,
+            &quot;description&quot;: &quot;Sed veritatis a delectus eaque.&quot;,
+            &quot;product_id&quot;: 10,
+            &quot;return_inv_amount&quot;: &quot;1525.75&quot;,
+            &quot;purchase_id&quot;: 5,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 12,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC996&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ff00?text=fashion+dolore&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;4608.89&quot;,
-            &quot;opening_stock_quantity&quot;: 27,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;0640151710863&quot;,
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC803&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eedd?text=fashion+cupiditate&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1009.31&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;6534638685024&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
-        &quot;purchase_return_id&quot;: 8,
-        &quot;product_id&quot;: 5,
-        &quot;qty&quot;: 7,
-        &quot;pur_price&quot;: &quot;267.19&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 1,
+        &quot;product_id&quot;: 16,
+        &quot;qty&quot;: 6,
+        &quot;pur_price&quot;: &quot;1665.87&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 8,
-            &quot;date&quot;: &quot;1970-07-07&quot;,
-            &quot;vendor_id&quot;: 3,
-            &quot;description&quot;: &quot;Dolor aut alias sed incidunt.&quot;,
-            &quot;product_id&quot;: 9,
-            &quot;return_inv_amount&quot;: &quot;1156.99&quot;,
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;2014-08-08&quot;,
+            &quot;vendor_id&quot;: 10,
+            &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+            &quot;product_id&quot;: 13,
+            &quot;return_inv_amount&quot;: &quot;849.49&quot;,
             &quot;purchase_id&quot;: 2,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC113&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
+            &quot;id&quot;: 16,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC679&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099cc?text=fashion+reprehenderit&quot;,
             &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4488.74&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 3,
-            &quot;barcode&quot;: &quot;7740891708809&quot;,
+            &quot;sale_price&quot;: &quot;2060.12&quot;,
+            &quot;opening_stock_quantity&quot;: 23,
+            &quot;user_id&quot;: 2,
+            &quot;barcode&quot;: &quot;1271315082404&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 20,
-        &quot;purchase_return_id&quot;: 6,
-        &quot;product_id&quot;: 8,
-        &quot;qty&quot;: 6,
-        &quot;pur_price&quot;: &quot;573.86&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;purchase_return_id&quot;: 1,
+        &quot;product_id&quot;: 10,
+        &quot;qty&quot;: 10,
+        &quot;pur_price&quot;: &quot;271.77&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;purchase_return&quot;: {
-            &quot;id&quot;: 6,
-            &quot;date&quot;: &quot;2011-05-16&quot;,
-            &quot;vendor_id&quot;: 4,
-            &quot;description&quot;: &quot;Sint recusandae est aliquam fuga impedit quia temporibus natus.&quot;,
-            &quot;product_id&quot;: 7,
-            &quot;return_inv_amount&quot;: &quot;1297.82&quot;,
-            &quot;purchase_id&quot;: 1,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 1,
+            &quot;date&quot;: &quot;2014-08-08&quot;,
+            &quot;vendor_id&quot;: 10,
+            &quot;description&quot;: &quot;Qui labore ullam odio dolores.&quot;,
+            &quot;product_id&quot;: 13,
+            &quot;return_inv_amount&quot;: &quot;849.49&quot;,
+            &quot;purchase_id&quot;: 2,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC129&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000066?text=fashion+voluptatibus&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;4118.57&quot;,
-            &quot;opening_stock_quantity&quot;: 17,
-            &quot;user_id&quot;: 4,
-            &quot;barcode&quot;: &quot;1361364078173&quot;,
+            &quot;id&quot;: 10,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC128&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005522?text=fashion+et&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3590.53&quot;,
+            &quot;opening_stock_quantity&quot;: 21,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6325101202080&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     }
 ]</code>
@@ -16926,502 +17267,502 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;customer_id&quot;: 18,
-        &quot;inv_date&quot;: &quot;2011-01-28&quot;,
-        &quot;inv_amout&quot;: &quot;1402.58&quot;,
+        &quot;customer_id&quot;: 5,
+        &quot;inv_date&quot;: &quot;1970-10-30&quot;,
+        &quot;inv_amout&quot;: &quot;2238.06&quot;,
         &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;70.13&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discPer&quot;: &quot;0.00&quot;,
+        &quot;discount&quot;: &quot;0.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 18,
-            &quot;cnic&quot;: &quot;72990-4682903-7&quot;,
-            &quot;name&quot;: &quot;Miss Hollie Lehner V&quot;,
-            &quot;email&quot;: &quot;gay.klocko@example.org&quot;,
-            &quot;address&quot;: &quot;351 McKenzie Hills Apt. 270\nSouth Vidal, RI 14179&quot;,
-            &quot;city_id&quot;: 29,
-            &quot;cell_no1&quot;: &quot;03746208204&quot;,
-            &quot;cell_no2&quot;: &quot;03854088736&quot;,
+            &quot;id&quot;: 5,
+            &quot;cnic&quot;: &quot;60140-4179540-0&quot;,
+            &quot;name&quot;: &quot;Magdalena Ryan&quot;,
+            &quot;email&quot;: &quot;vpowlowski@example.com&quot;,
+            &quot;address&quot;: &quot;719 Alessandro Lake Suite 243\nPort Candelario, ME 60757-3571&quot;,
+            &quot;city_id&quot;: 45,
+            &quot;cell_no1&quot;: &quot;03596017033&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
         &quot;customer_id&quot;: 9,
-        &quot;inv_date&quot;: &quot;1972-11-07&quot;,
-        &quot;inv_amout&quot;: &quot;2195.39&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;109.77&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;inv_date&quot;: &quot;1985-01-19&quot;,
+        &quot;inv_amout&quot;: &quot;1421.87&quot;,
+        &quot;tax&quot;: &quot;0.00&quot;,
+        &quot;discPer&quot;: &quot;10.00&quot;,
+        &quot;discount&quot;: &quot;142.19&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
             &quot;id&quot;: 9,
-            &quot;cnic&quot;: &quot;75198-8013400-6&quot;,
-            &quot;name&quot;: &quot;Alessandro Doyle DVM&quot;,
-            &quot;email&quot;: &quot;mona24@example.org&quot;,
-            &quot;address&quot;: &quot;3894 Keebler Streets Apt. 797\nLake Torey, NE 20406&quot;,
-            &quot;city_id&quot;: 22,
-            &quot;cell_no1&quot;: &quot;03348477218&quot;,
-            &quot;cell_no2&quot;: &quot;03360044089&quot;,
+            &quot;cnic&quot;: &quot;67693-9636844-7&quot;,
+            &quot;name&quot;: &quot;Gilda Hagenes DVM&quot;,
+            &quot;email&quot;: &quot;conn.genoveva@example.net&quot;,
+            &quot;address&quot;: &quot;3562 Becker Radial Apt. 425\nEast Maryjanehaven, CT 79075-5497&quot;,
+            &quot;city_id&quot;: 3,
+            &quot;cell_no1&quot;: &quot;03921795209&quot;,
+            &quot;cell_no2&quot;: &quot;03368042088&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;customer_id&quot;: 18,
-        &quot;inv_date&quot;: &quot;1995-03-24&quot;,
-        &quot;inv_amout&quot;: &quot;4582.55&quot;,
+        &quot;customer_id&quot;: 12,
+        &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+        &quot;inv_amout&quot;: &quot;1023.04&quot;,
         &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;458.26&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discPer&quot;: &quot;5.00&quot;,
+        &quot;discount&quot;: &quot;51.15&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 18,
-            &quot;cnic&quot;: &quot;72990-4682903-7&quot;,
-            &quot;name&quot;: &quot;Miss Hollie Lehner V&quot;,
-            &quot;email&quot;: &quot;gay.klocko@example.org&quot;,
-            &quot;address&quot;: &quot;351 McKenzie Hills Apt. 270\nSouth Vidal, RI 14179&quot;,
-            &quot;city_id&quot;: 29,
-            &quot;cell_no1&quot;: &quot;03746208204&quot;,
-            &quot;cell_no2&quot;: &quot;03854088736&quot;,
+            &quot;id&quot;: 12,
+            &quot;cnic&quot;: &quot;67717-5072863-5&quot;,
+            &quot;name&quot;: &quot;Kaelyn Gusikowski DVM&quot;,
+            &quot;email&quot;: &quot;kayley64@example.net&quot;,
+            &quot;address&quot;: &quot;5921 Boyle Unions\nHuelsmouth, VT 98676&quot;,
+            &quot;city_id&quot;: 18,
+            &quot;cell_no1&quot;: &quot;03382928707&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;customer_id&quot;: 7,
-        &quot;inv_date&quot;: &quot;1971-06-15&quot;,
-        &quot;inv_amout&quot;: &quot;2308.81&quot;,
-        &quot;tax&quot;: &quot;100.00&quot;,
+        &quot;customer_id&quot;: 20,
+        &quot;inv_date&quot;: &quot;2010-03-13&quot;,
+        &quot;inv_amout&quot;: &quot;2210.87&quot;,
+        &quot;tax&quot;: &quot;0.00&quot;,
         &quot;discPer&quot;: &quot;0.00&quot;,
         &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
+            &quot;id&quot;: 20,
+            &quot;cnic&quot;: &quot;31643-2404389-1&quot;,
+            &quot;name&quot;: &quot;Titus Padberg&quot;,
+            &quot;email&quot;: &quot;florine31@example.org&quot;,
+            &quot;address&quot;: &quot;269 Stokes Wells\nNorth Sebastianton, PA 86382-0315&quot;,
+            &quot;city_id&quot;: 34,
+            &quot;cell_no1&quot;: &quot;03820900417&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;customer_id&quot;: 12,
-        &quot;inv_date&quot;: &quot;2019-05-14&quot;,
-        &quot;inv_amout&quot;: &quot;4807.49&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;240.37&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 11,
+        &quot;inv_date&quot;: &quot;1982-09-08&quot;,
+        &quot;inv_amout&quot;: &quot;949.29&quot;,
+        &quot;tax&quot;: &quot;0.00&quot;,
+        &quot;discPer&quot;: &quot;0.00&quot;,
+        &quot;discount&quot;: &quot;0.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 12,
-            &quot;cnic&quot;: &quot;19663-4382760-6&quot;,
-            &quot;name&quot;: &quot;Ms. Yazmin Stehr II&quot;,
-            &quot;email&quot;: &quot;bradtke.drew@example.org&quot;,
-            &quot;address&quot;: &quot;4913 Dickinson Roads\nNew Nyasia, VT 22401-6718&quot;,
-            &quot;city_id&quot;: 16,
-            &quot;cell_no1&quot;: &quot;03647117817&quot;,
-            &quot;cell_no2&quot;: &quot;03260465733&quot;,
+            &quot;id&quot;: 11,
+            &quot;cnic&quot;: &quot;49657-4616988-4&quot;,
+            &quot;name&quot;: &quot;Lilly Wyman&quot;,
+            &quot;email&quot;: &quot;taylor84@example.net&quot;,
+            &quot;address&quot;: &quot;2175 Tillman Valleys\nWaynemouth, NY 97609-8573&quot;,
+            &quot;city_id&quot;: 36,
+            &quot;cell_no1&quot;: &quot;03475268005&quot;,
+            &quot;cell_no2&quot;: &quot;03008192770&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;customer_id&quot;: 9,
-        &quot;inv_date&quot;: &quot;2018-01-10&quot;,
-        &quot;inv_amout&quot;: &quot;3742.48&quot;,
+        &quot;customer_id&quot;: 17,
+        &quot;inv_date&quot;: &quot;2017-04-27&quot;,
+        &quot;inv_amout&quot;: &quot;1633.21&quot;,
         &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;0.00&quot;,
-        &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discPer&quot;: &quot;10.00&quot;,
+        &quot;discount&quot;: &quot;163.32&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 9,
-            &quot;cnic&quot;: &quot;75198-8013400-6&quot;,
-            &quot;name&quot;: &quot;Alessandro Doyle DVM&quot;,
-            &quot;email&quot;: &quot;mona24@example.org&quot;,
-            &quot;address&quot;: &quot;3894 Keebler Streets Apt. 797\nLake Torey, NE 20406&quot;,
-            &quot;city_id&quot;: 22,
-            &quot;cell_no1&quot;: &quot;03348477218&quot;,
-            &quot;cell_no2&quot;: &quot;03360044089&quot;,
+            &quot;id&quot;: 17,
+            &quot;cnic&quot;: &quot;67618-7529634-0&quot;,
+            &quot;name&quot;: &quot;Mr. Roel Zieme&quot;,
+            &quot;email&quot;: &quot;elisabeth26@example.org&quot;,
+            &quot;address&quot;: &quot;707 Isobel Ways Suite 080\nLake Kennaport, MS 66590-0643&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03605841297&quot;,
+            &quot;cell_no2&quot;: &quot;03230459410&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;customer_id&quot;: 18,
-        &quot;inv_date&quot;: &quot;1983-10-15&quot;,
-        &quot;inv_amout&quot;: &quot;4525.24&quot;,
-        &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;452.52&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 9,
+        &quot;inv_date&quot;: &quot;2000-12-22&quot;,
+        &quot;inv_amout&quot;: &quot;953.07&quot;,
+        &quot;tax&quot;: &quot;50.00&quot;,
+        &quot;discPer&quot;: &quot;5.00&quot;,
+        &quot;discount&quot;: &quot;47.65&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 18,
-            &quot;cnic&quot;: &quot;72990-4682903-7&quot;,
-            &quot;name&quot;: &quot;Miss Hollie Lehner V&quot;,
-            &quot;email&quot;: &quot;gay.klocko@example.org&quot;,
-            &quot;address&quot;: &quot;351 McKenzie Hills Apt. 270\nSouth Vidal, RI 14179&quot;,
-            &quot;city_id&quot;: 29,
-            &quot;cell_no1&quot;: &quot;03746208204&quot;,
-            &quot;cell_no2&quot;: &quot;03854088736&quot;,
+            &quot;id&quot;: 9,
+            &quot;cnic&quot;: &quot;67693-9636844-7&quot;,
+            &quot;name&quot;: &quot;Gilda Hagenes DVM&quot;,
+            &quot;email&quot;: &quot;conn.genoveva@example.net&quot;,
+            &quot;address&quot;: &quot;3562 Becker Radial Apt. 425\nEast Maryjanehaven, CT 79075-5497&quot;,
+            &quot;city_id&quot;: 3,
+            &quot;cell_no1&quot;: &quot;03921795209&quot;,
+            &quot;cell_no2&quot;: &quot;03368042088&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 8,
-        &quot;customer_id&quot;: 7,
-        &quot;inv_date&quot;: &quot;1970-04-03&quot;,
-        &quot;inv_amout&quot;: &quot;2034.83&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;203.48&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 8,
+        &quot;inv_date&quot;: &quot;2019-03-07&quot;,
+        &quot;inv_amout&quot;: &quot;3281.32&quot;,
+        &quot;tax&quot;: &quot;0.00&quot;,
+        &quot;discPer&quot;: &quot;0.00&quot;,
+        &quot;discount&quot;: &quot;0.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 8,
+            &quot;cnic&quot;: &quot;41488-5438603-5&quot;,
+            &quot;name&quot;: &quot;Prof. Houston Klein&quot;,
+            &quot;email&quot;: &quot;jdibbert@example.org&quot;,
+            &quot;address&quot;: &quot;9579 Crist Squares Suite 406\nMcClureberg, MA 86197-3387&quot;,
+            &quot;city_id&quot;: 11,
+            &quot;cell_no1&quot;: &quot;03052859680&quot;,
+            &quot;cell_no2&quot;: &quot;03316526585&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 9,
-        &quot;customer_id&quot;: 20,
-        &quot;inv_date&quot;: &quot;1984-05-25&quot;,
-        &quot;inv_amout&quot;: &quot;1569.53&quot;,
-        &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;0.00&quot;,
-        &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 14,
+        &quot;inv_date&quot;: &quot;1994-03-03&quot;,
+        &quot;inv_amout&quot;: &quot;1705.49&quot;,
+        &quot;tax&quot;: &quot;50.00&quot;,
+        &quot;discPer&quot;: &quot;10.00&quot;,
+        &quot;discount&quot;: &quot;170.55&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 20,
-            &quot;cnic&quot;: &quot;66115-3375925-5&quot;,
-            &quot;name&quot;: &quot;Savanah Kreiger&quot;,
-            &quot;email&quot;: &quot;ava51@example.com&quot;,
-            &quot;address&quot;: &quot;326 Goldner Causeway\nNorth Emilianotown, MN 29550&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03851840143&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 14,
+            &quot;cnic&quot;: &quot;69084-3622146-6&quot;,
+            &quot;name&quot;: &quot;Erling Harris&quot;,
+            &quot;email&quot;: &quot;klein.esmeralda@example.net&quot;,
+            &quot;address&quot;: &quot;1574 Nash Road\nRobertsmouth, NH 86140&quot;,
+            &quot;city_id&quot;: 28,
+            &quot;cell_no1&quot;: &quot;03127856872&quot;,
+            &quot;cell_no2&quot;: &quot;03453689371&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
-        &quot;customer_id&quot;: 8,
-        &quot;inv_date&quot;: &quot;2011-04-26&quot;,
-        &quot;inv_amout&quot;: &quot;4721.38&quot;,
+        &quot;customer_id&quot;: 11,
+        &quot;inv_date&quot;: &quot;1974-11-18&quot;,
+        &quot;inv_amout&quot;: &quot;2733.05&quot;,
         &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;0.00&quot;,
-        &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discPer&quot;: &quot;10.00&quot;,
+        &quot;discount&quot;: &quot;273.31&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;87152-8044368-2&quot;,
-            &quot;name&quot;: &quot;Clarissa Kub Jr.&quot;,
-            &quot;email&quot;: &quot;swalter@example.org&quot;,
-            &quot;address&quot;: &quot;8527 Leatha Walks Apt. 154\nLynchville, AL 55073&quot;,
-            &quot;city_id&quot;: 4,
-            &quot;cell_no1&quot;: &quot;03069947838&quot;,
-            &quot;cell_no2&quot;: &quot;03785407833&quot;,
+            &quot;id&quot;: 11,
+            &quot;cnic&quot;: &quot;49657-4616988-4&quot;,
+            &quot;name&quot;: &quot;Lilly Wyman&quot;,
+            &quot;email&quot;: &quot;taylor84@example.net&quot;,
+            &quot;address&quot;: &quot;2175 Tillman Valleys\nWaynemouth, NY 97609-8573&quot;,
+            &quot;city_id&quot;: 36,
+            &quot;cell_no1&quot;: &quot;03475268005&quot;,
+            &quot;cell_no2&quot;: &quot;03008192770&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 11,
-        &quot;customer_id&quot;: 14,
-        &quot;inv_date&quot;: &quot;1998-01-03&quot;,
-        &quot;inv_amout&quot;: &quot;3080.64&quot;,
-        &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;0.00&quot;,
-        &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 1,
+        &quot;inv_date&quot;: &quot;1999-12-04&quot;,
+        &quot;inv_amout&quot;: &quot;4957.77&quot;,
+        &quot;tax&quot;: &quot;100.00&quot;,
+        &quot;discPer&quot;: &quot;5.00&quot;,
+        &quot;discount&quot;: &quot;247.89&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 14,
-            &quot;cnic&quot;: &quot;60417-5207483-6&quot;,
-            &quot;name&quot;: &quot;Willie Daniel Jr.&quot;,
-            &quot;email&quot;: &quot;cierra15@example.org&quot;,
-            &quot;address&quot;: &quot;51027 Irwin Streets Suite 772\nGutmannview, NV 59302-8461&quot;,
-            &quot;city_id&quot;: 19,
-            &quot;cell_no1&quot;: &quot;03391443229&quot;,
-            &quot;cell_no2&quot;: &quot;03550774149&quot;,
+            &quot;id&quot;: 1,
+            &quot;cnic&quot;: &quot;12761-3000776-8&quot;,
+            &quot;name&quot;: &quot;Trisha Kreiger&quot;,
+            &quot;email&quot;: &quot;botsford.emilia@example.org&quot;,
+            &quot;address&quot;: &quot;88210 Elroy Loop\nNew Rosalynmouth, NJ 30434-5406&quot;,
+            &quot;city_id&quot;: 50,
+            &quot;cell_no1&quot;: &quot;03949586304&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 12,
-        &quot;customer_id&quot;: 6,
-        &quot;inv_date&quot;: &quot;2014-07-06&quot;,
-        &quot;inv_amout&quot;: &quot;4564.83&quot;,
-        &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;456.48&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 10,
+        &quot;inv_date&quot;: &quot;1981-09-09&quot;,
+        &quot;inv_amout&quot;: &quot;1816.93&quot;,
+        &quot;tax&quot;: &quot;100.00&quot;,
+        &quot;discPer&quot;: &quot;0.00&quot;,
+        &quot;discount&quot;: &quot;0.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 6,
-            &quot;cnic&quot;: &quot;52355-4256040-4&quot;,
-            &quot;name&quot;: &quot;Mara Russel&quot;,
-            &quot;email&quot;: &quot;anderson.soledad@example.com&quot;,
-            &quot;address&quot;: &quot;33455 Eldon Land\nVivaton, WA 78829&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03544342552&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 10,
+            &quot;cnic&quot;: &quot;38974-7731763-9&quot;,
+            &quot;name&quot;: &quot;Mr. Jamel Dooley&quot;,
+            &quot;email&quot;: &quot;ccorkery@example.com&quot;,
+            &quot;address&quot;: &quot;55593 Berry Avenue Apt. 703\nDurganville, WY 38977-0542&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03943412357&quot;,
+            &quot;cell_no2&quot;: &quot;03610041201&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 13,
-        &quot;customer_id&quot;: 10,
-        &quot;inv_date&quot;: &quot;1980-04-26&quot;,
-        &quot;inv_amout&quot;: &quot;4589.27&quot;,
-        &quot;tax&quot;: &quot;0.00&quot;,
+        &quot;customer_id&quot;: 4,
+        &quot;inv_date&quot;: &quot;1987-06-10&quot;,
+        &quot;inv_amout&quot;: &quot;2513.47&quot;,
+        &quot;tax&quot;: &quot;50.00&quot;,
         &quot;discPer&quot;: &quot;0.00&quot;,
         &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 10,
-            &quot;cnic&quot;: &quot;61389-1912211-5&quot;,
-            &quot;name&quot;: &quot;Prof. Chris Cruickshank&quot;,
-            &quot;email&quot;: &quot;king81@example.net&quot;,
-            &quot;address&quot;: &quot;9827 Jast Shore\nBergstromfort, ID 22291-7014&quot;,
-            &quot;city_id&quot;: 28,
-            &quot;cell_no1&quot;: &quot;03386127705&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 4,
+            &quot;cnic&quot;: &quot;55313-6824337-2&quot;,
+            &quot;name&quot;: &quot;Devonte Macejkovic&quot;,
+            &quot;email&quot;: &quot;leilani53@example.net&quot;,
+            &quot;address&quot;: &quot;88703 Marcellus Knolls Suite 661\nBergnaumton, OK 38594-5812&quot;,
+            &quot;city_id&quot;: 40,
+            &quot;cell_no1&quot;: &quot;03829283333&quot;,
+            &quot;cell_no2&quot;: &quot;03368251764&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
-        &quot;customer_id&quot;: 18,
-        &quot;inv_date&quot;: &quot;2017-02-04&quot;,
-        &quot;inv_amout&quot;: &quot;2507.83&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;250.78&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 5,
+        &quot;inv_date&quot;: &quot;2019-04-13&quot;,
+        &quot;inv_amout&quot;: &quot;4217.53&quot;,
+        &quot;tax&quot;: &quot;100.00&quot;,
+        &quot;discPer&quot;: &quot;5.00&quot;,
+        &quot;discount&quot;: &quot;210.88&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 18,
-            &quot;cnic&quot;: &quot;72990-4682903-7&quot;,
-            &quot;name&quot;: &quot;Miss Hollie Lehner V&quot;,
-            &quot;email&quot;: &quot;gay.klocko@example.org&quot;,
-            &quot;address&quot;: &quot;351 McKenzie Hills Apt. 270\nSouth Vidal, RI 14179&quot;,
-            &quot;city_id&quot;: 29,
-            &quot;cell_no1&quot;: &quot;03746208204&quot;,
-            &quot;cell_no2&quot;: &quot;03854088736&quot;,
+            &quot;id&quot;: 5,
+            &quot;cnic&quot;: &quot;60140-4179540-0&quot;,
+            &quot;name&quot;: &quot;Magdalena Ryan&quot;,
+            &quot;email&quot;: &quot;vpowlowski@example.com&quot;,
+            &quot;address&quot;: &quot;719 Alessandro Lake Suite 243\nPort Candelario, ME 60757-3571&quot;,
+            &quot;city_id&quot;: 45,
+            &quot;cell_no1&quot;: &quot;03596017033&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
-        &quot;customer_id&quot;: 14,
-        &quot;inv_date&quot;: &quot;1986-08-01&quot;,
-        &quot;inv_amout&quot;: &quot;4325.85&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
+        &quot;customer_id&quot;: 13,
+        &quot;inv_date&quot;: &quot;1980-02-24&quot;,
+        &quot;inv_amout&quot;: &quot;1266.02&quot;,
+        &quot;tax&quot;: &quot;100.00&quot;,
         &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;432.59&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discount&quot;: &quot;126.60&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 14,
-            &quot;cnic&quot;: &quot;60417-5207483-6&quot;,
-            &quot;name&quot;: &quot;Willie Daniel Jr.&quot;,
-            &quot;email&quot;: &quot;cierra15@example.org&quot;,
-            &quot;address&quot;: &quot;51027 Irwin Streets Suite 772\nGutmannview, NV 59302-8461&quot;,
-            &quot;city_id&quot;: 19,
-            &quot;cell_no1&quot;: &quot;03391443229&quot;,
-            &quot;cell_no2&quot;: &quot;03550774149&quot;,
+            &quot;id&quot;: 13,
+            &quot;cnic&quot;: &quot;97595-6621663-8&quot;,
+            &quot;name&quot;: &quot;Mr. Frank Glover IV&quot;,
+            &quot;email&quot;: &quot;jkirlin@example.com&quot;,
+            &quot;address&quot;: &quot;8207 Monahan Mountains\nClintton, VT 57319-5914&quot;,
+            &quot;city_id&quot;: 24,
+            &quot;cell_no1&quot;: &quot;03340589188&quot;,
+            &quot;cell_no2&quot;: &quot;03236252413&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
-        &quot;customer_id&quot;: 14,
-        &quot;inv_date&quot;: &quot;1971-12-13&quot;,
-        &quot;inv_amout&quot;: &quot;4723.13&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;236.16&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 12,
+        &quot;inv_date&quot;: &quot;1989-09-27&quot;,
+        &quot;inv_amout&quot;: &quot;4960.29&quot;,
+        &quot;tax&quot;: &quot;100.00&quot;,
+        &quot;discPer&quot;: &quot;10.00&quot;,
+        &quot;discount&quot;: &quot;496.03&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 14,
-            &quot;cnic&quot;: &quot;60417-5207483-6&quot;,
-            &quot;name&quot;: &quot;Willie Daniel Jr.&quot;,
-            &quot;email&quot;: &quot;cierra15@example.org&quot;,
-            &quot;address&quot;: &quot;51027 Irwin Streets Suite 772\nGutmannview, NV 59302-8461&quot;,
-            &quot;city_id&quot;: 19,
-            &quot;cell_no1&quot;: &quot;03391443229&quot;,
-            &quot;cell_no2&quot;: &quot;03550774149&quot;,
+            &quot;id&quot;: 12,
+            &quot;cnic&quot;: &quot;67717-5072863-5&quot;,
+            &quot;name&quot;: &quot;Kaelyn Gusikowski DVM&quot;,
+            &quot;email&quot;: &quot;kayley64@example.net&quot;,
+            &quot;address&quot;: &quot;5921 Boyle Unions\nHuelsmouth, VT 98676&quot;,
+            &quot;city_id&quot;: 18,
+            &quot;cell_no1&quot;: &quot;03382928707&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
-        &quot;customer_id&quot;: 8,
-        &quot;inv_date&quot;: &quot;2005-03-03&quot;,
-        &quot;inv_amout&quot;: &quot;2008.05&quot;,
+        &quot;customer_id&quot;: 16,
+        &quot;inv_date&quot;: &quot;2021-02-17&quot;,
+        &quot;inv_amout&quot;: &quot;4222.88&quot;,
         &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;10.00&quot;,
-        &quot;discount&quot;: &quot;200.81&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discPer&quot;: &quot;0.00&quot;,
+        &quot;discount&quot;: &quot;0.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;87152-8044368-2&quot;,
-            &quot;name&quot;: &quot;Clarissa Kub Jr.&quot;,
-            &quot;email&quot;: &quot;swalter@example.org&quot;,
-            &quot;address&quot;: &quot;8527 Leatha Walks Apt. 154\nLynchville, AL 55073&quot;,
-            &quot;city_id&quot;: 4,
-            &quot;cell_no1&quot;: &quot;03069947838&quot;,
-            &quot;cell_no2&quot;: &quot;03785407833&quot;,
+            &quot;id&quot;: 16,
+            &quot;cnic&quot;: &quot;70647-1131572-4&quot;,
+            &quot;name&quot;: &quot;Raymond Bernier&quot;,
+            &quot;email&quot;: &quot;tmcglynn@example.net&quot;,
+            &quot;address&quot;: &quot;2984 Quigley Groves Apt. 120\nDeclanborough, DE 57372-1704&quot;,
+            &quot;city_id&quot;: 2,
+            &quot;cell_no1&quot;: &quot;03389263781&quot;,
+            &quot;cell_no2&quot;: &quot;03605017803&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
-        &quot;customer_id&quot;: 16,
-        &quot;inv_date&quot;: &quot;1976-08-25&quot;,
-        &quot;inv_amout&quot;: &quot;1751.30&quot;,
-        &quot;tax&quot;: &quot;100.00&quot;,
-        &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;87.57&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 6,
+        &quot;inv_date&quot;: &quot;1995-09-09&quot;,
+        &quot;inv_amout&quot;: &quot;2567.51&quot;,
+        &quot;tax&quot;: &quot;0.00&quot;,
+        &quot;discPer&quot;: &quot;10.00&quot;,
+        &quot;discount&quot;: &quot;256.75&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 16,
-            &quot;cnic&quot;: &quot;83466-1236688-8&quot;,
-            &quot;name&quot;: &quot;Elfrieda Lynch&quot;,
-            &quot;email&quot;: &quot;schneider.tessie@example.org&quot;,
-            &quot;address&quot;: &quot;97266 Hyatt Roads Apt. 522\nEast Henry, ID 98776-5167&quot;,
-            &quot;city_id&quot;: 1,
-            &quot;cell_no1&quot;: &quot;03822444304&quot;,
-            &quot;cell_no2&quot;: &quot;03211808176&quot;,
+            &quot;id&quot;: 6,
+            &quot;cnic&quot;: &quot;22782-2131276-3&quot;,
+            &quot;name&quot;: &quot;Dr. Diego Schumm&quot;,
+            &quot;email&quot;: &quot;beaulah87@example.com&quot;,
+            &quot;address&quot;: &quot;95809 Myrl Flat Apt. 005\nWest Coltenshire, UT 76527-7432&quot;,
+            &quot;city_id&quot;: 14,
+            &quot;cell_no1&quot;: &quot;03474785145&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
-        &quot;customer_id&quot;: 8,
-        &quot;inv_date&quot;: &quot;2010-05-23&quot;,
-        &quot;inv_amout&quot;: &quot;2585.36&quot;,
+        &quot;customer_id&quot;: 15,
+        &quot;inv_date&quot;: &quot;2001-07-25&quot;,
+        &quot;inv_amout&quot;: &quot;2039.19&quot;,
         &quot;tax&quot;: &quot;0.00&quot;,
-        &quot;discPer&quot;: &quot;0.00&quot;,
-        &quot;discount&quot;: &quot;0.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;discPer&quot;: &quot;5.00&quot;,
+        &quot;discount&quot;: &quot;101.96&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;87152-8044368-2&quot;,
-            &quot;name&quot;: &quot;Clarissa Kub Jr.&quot;,
-            &quot;email&quot;: &quot;swalter@example.org&quot;,
-            &quot;address&quot;: &quot;8527 Leatha Walks Apt. 154\nLynchville, AL 55073&quot;,
-            &quot;city_id&quot;: 4,
-            &quot;cell_no1&quot;: &quot;03069947838&quot;,
-            &quot;cell_no2&quot;: &quot;03785407833&quot;,
+            &quot;id&quot;: 15,
+            &quot;cnic&quot;: &quot;64227-8639328-6&quot;,
+            &quot;name&quot;: &quot;Ms. Marion Barrows&quot;,
+            &quot;email&quot;: &quot;tessie46@example.org&quot;,
+            &quot;address&quot;: &quot;47978 Misty Locks Suite 783\nAustinland, LA 80972&quot;,
+            &quot;city_id&quot;: 47,
+            &quot;cell_no1&quot;: &quot;03888104138&quot;,
+            &quot;cell_no2&quot;: &quot;03312701588&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 20,
-        &quot;customer_id&quot;: 2,
-        &quot;inv_date&quot;: &quot;2002-03-08&quot;,
-        &quot;inv_amout&quot;: &quot;1725.01&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
-        &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;86.25&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
+        &quot;customer_id&quot;: 14,
+        &quot;inv_date&quot;: &quot;2000-01-27&quot;,
+        &quot;inv_amout&quot;: &quot;1226.16&quot;,
+        &quot;tax&quot;: &quot;100.00&quot;,
+        &quot;discPer&quot;: &quot;0.00&quot;,
+        &quot;discount&quot;: &quot;0.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 2,
-            &quot;cnic&quot;: &quot;98678-5650776-7&quot;,
-            &quot;name&quot;: &quot;Mr. Brendon Steuber Jr.&quot;,
-            &quot;email&quot;: &quot;era.kohler@example.org&quot;,
-            &quot;address&quot;: &quot;7913 Mabelle Rapid Suite 384\nEdwardland, PA 95929&quot;,
-            &quot;city_id&quot;: 13,
-            &quot;cell_no1&quot;: &quot;03569155320&quot;,
-            &quot;cell_no2&quot;: &quot;03833597571&quot;,
+            &quot;id&quot;: 14,
+            &quot;cnic&quot;: &quot;69084-3622146-6&quot;,
+            &quot;name&quot;: &quot;Erling Harris&quot;,
+            &quot;email&quot;: &quot;klein.esmeralda@example.net&quot;,
+            &quot;address&quot;: &quot;1574 Nash Road\nRobertsmouth, NH 86140&quot;,
+            &quot;city_id&quot;: 28,
+            &quot;cell_no1&quot;: &quot;03127856872&quot;,
+            &quot;cell_no2&quot;: &quot;03453689371&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     }
 ]</code>
@@ -17516,7 +17857,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"customer_id\": \"architecto\",
-    \"inv_date\": \"2025-09-30T09:35:34\",
+    \"inv_date\": \"2025-09-30T21:10:47\",
     \"inv_amout\": 39,
     \"tax\": 84,
     \"discPer\": 12,
@@ -17537,7 +17878,7 @@ const headers = {
 
 let body = {
     "customer_id": "architecto",
-    "inv_date": "2025-09-30T09:35:34",
+    "inv_date": "2025-09-30T21:10:47",
     "inv_amout": 39,
     "tax": 84,
     "discPer": 12,
@@ -17641,10 +17982,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="inv_date"                data-endpoint="POSTapi-pos"
-               value="2025-09-30T09:35:34"
+               value="2025-09-30T21:10:47"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:34</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:47</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>inv_amout</code></b>&nbsp;&nbsp;
@@ -17846,7 +18187,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"customer_id\": \"architecto\",
-    \"inv_date\": \"2025-09-30T09:35:35\",
+    \"inv_date\": \"2025-09-30T21:10:47\",
     \"inv_amout\": 39,
     \"tax\": 84,
     \"discPer\": 12,
@@ -17867,7 +18208,7 @@ const headers = {
 
 let body = {
     "customer_id": "architecto",
-    "inv_date": "2025-09-30T09:35:35",
+    "inv_date": "2025-09-30T21:10:47",
     "inv_amout": 39,
     "tax": 84,
     "discPer": 12,
@@ -17983,10 +18324,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="inv_date"                data-endpoint="PUTapi-pos--id-"
-               value="2025-09-30T09:35:35"
+               value="2025-09-30T21:10:47"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:35</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:47</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>inv_amout</code></b>&nbsp;&nbsp;
@@ -18205,1022 +18546,1022 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;pos_id&quot;: 5,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 5,
-        &quot;sale_price&quot;: &quot;4055.79&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 3,
+        &quot;product_id&quot;: 13,
+        &quot;qty&quot;: 4,
+        &quot;sale_price&quot;: &quot;4701.19&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 5,
+            &quot;id&quot;: 3,
             &quot;customer_id&quot;: 12,
-            &quot;inv_date&quot;: &quot;2019-05-14&quot;,
-            &quot;inv_amout&quot;: &quot;4807.49&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+            &quot;inv_amout&quot;: &quot;1023.04&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;240.37&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;51.15&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
+            &quot;id&quot;: 13,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC890&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;1408.92&quot;,
+            &quot;opening_stock_quantity&quot;: 40,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;8407216399140&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;pos_id&quot;: 16,
-        &quot;product_id&quot;: 13,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;3675.86&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 4,
+        &quot;product_id&quot;: 6,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;375.41&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 16,
-            &quot;customer_id&quot;: 14,
-            &quot;inv_date&quot;: &quot;1971-12-13&quot;,
-            &quot;inv_amout&quot;: &quot;4723.13&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
-            &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;236.16&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 4,
+            &quot;customer_id&quot;: 20,
+            &quot;inv_date&quot;: &quot;2010-03-13&quot;,
+            &quot;inv_amout&quot;: &quot;2210.87&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
+            &quot;discPer&quot;: &quot;0.00&quot;,
+            &quot;discount&quot;: &quot;0.00&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 13,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC938&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003311?text=fashion+maiores&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4501.73&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;4504553999973&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC803&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eedd?text=fashion+cupiditate&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1009.31&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;6534638685024&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;pos_id&quot;: 6,
-        &quot;product_id&quot;: 18,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;4902.90&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 5,
+        &quot;product_id&quot;: 13,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;2862.27&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 6,
-            &quot;customer_id&quot;: 9,
-            &quot;inv_date&quot;: &quot;2018-01-10&quot;,
-            &quot;inv_amout&quot;: &quot;3742.48&quot;,
+            &quot;id&quot;: 5,
+            &quot;customer_id&quot;: 11,
+            &quot;inv_date&quot;: &quot;1982-09-08&quot;,
+            &quot;inv_amout&quot;: &quot;949.29&quot;,
             &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;0.00&quot;,
             &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 18,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC427&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1048.90&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5563224224416&quot;,
+            &quot;id&quot;: 13,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC890&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;1408.92&quot;,
+            &quot;opening_stock_quantity&quot;: 40,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;8407216399140&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;pos_id&quot;: 8,
-        &quot;product_id&quot;: 13,
-        &quot;qty&quot;: 5,
-        &quot;sale_price&quot;: &quot;3488.52&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 14,
+        &quot;product_id&quot;: 7,
+        &quot;qty&quot;: 2,
+        &quot;sale_price&quot;: &quot;2728.80&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 8,
-            &quot;customer_id&quot;: 7,
-            &quot;inv_date&quot;: &quot;1970-04-03&quot;,
-            &quot;inv_amout&quot;: &quot;2034.83&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;203.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 14,
+            &quot;customer_id&quot;: 5,
+            &quot;inv_date&quot;: &quot;2019-04-13&quot;,
+            &quot;inv_amout&quot;: &quot;4217.53&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;210.88&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 13,
+            &quot;id&quot;: 7,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC938&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003311?text=fashion+maiores&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4501.73&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;4504553999973&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC753&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004499?text=fashion+sit&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;2520.09&quot;,
+            &quot;opening_stock_quantity&quot;: 24,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;2485838489162&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;pos_id&quot;: 19,
-        &quot;product_id&quot;: 16,
+        &quot;pos_id&quot;: 16,
+        &quot;product_id&quot;: 18,
         &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;2948.36&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;3075.46&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 19,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2010-05-23&quot;,
-            &quot;inv_amout&quot;: &quot;2585.36&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;0.00&quot;,
-            &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 16,
+            &quot;customer_id&quot;: 12,
+            &quot;inv_date&quot;: &quot;1989-09-27&quot;,
+            &quot;inv_amout&quot;: &quot;4960.29&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;discPer&quot;: &quot;10.00&quot;,
+            &quot;discount&quot;: &quot;496.03&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 16,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC909&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/002277?text=fashion+provident&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;3704.74&quot;,
-            &quot;opening_stock_quantity&quot;: 13,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;8366658157124&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 18,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC646&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3061.41&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;0233899013435&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;pos_id&quot;: 4,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 5,
-        &quot;sale_price&quot;: &quot;937.36&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 5,
+        &quot;product_id&quot;: 14,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;450.20&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 4,
-            &quot;customer_id&quot;: 7,
-            &quot;inv_date&quot;: &quot;1971-06-15&quot;,
-            &quot;inv_amout&quot;: &quot;2308.81&quot;,
-            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;id&quot;: 5,
+            &quot;customer_id&quot;: 11,
+            &quot;inv_date&quot;: &quot;1982-09-08&quot;,
+            &quot;inv_amout&quot;: &quot;949.29&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;0.00&quot;,
             &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 14,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC827&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3520.93&quot;,
+            &quot;opening_stock_quantity&quot;: 38,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;6757008708424&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;pos_id&quot;: 8,
-        &quot;product_id&quot;: 12,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;2769.78&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 19,
+        &quot;product_id&quot;: 11,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;3729.11&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 8,
-            &quot;customer_id&quot;: 7,
-            &quot;inv_date&quot;: &quot;1970-04-03&quot;,
-            &quot;inv_amout&quot;: &quot;2034.83&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;203.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 19,
+            &quot;customer_id&quot;: 15,
+            &quot;inv_date&quot;: &quot;2001-07-25&quot;,
+            &quot;inv_amout&quot;: &quot;2039.19&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;101.96&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 12,
+            &quot;id&quot;: 11,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC996&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ff00?text=fashion+dolore&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;4608.89&quot;,
-            &quot;opening_stock_quantity&quot;: 27,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;0640151710863&quot;,
+            &quot;design_code&quot;: &quot;DC429&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000077?text=fashion+fugiat&quot;,
+            &quot;sub_category_id&quot;: 6,
+            &quot;sale_price&quot;: &quot;2231.10&quot;,
+            &quot;opening_stock_quantity&quot;: 19,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;7488251693944&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 8,
-        &quot;pos_id&quot;: 6,
-        &quot;product_id&quot;: 6,
-        &quot;qty&quot;: 1,
-        &quot;sale_price&quot;: &quot;1794.50&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 14,
+        &quot;product_id&quot;: 1,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;1704.33&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 6,
-            &quot;customer_id&quot;: 9,
-            &quot;inv_date&quot;: &quot;2018-01-10&quot;,
-            &quot;inv_amout&quot;: &quot;3742.48&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;0.00&quot;,
-            &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 14,
+            &quot;customer_id&quot;: 5,
+            &quot;inv_date&quot;: &quot;2019-04-13&quot;,
+            &quot;inv_amout&quot;: &quot;4217.53&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;210.88&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 6,
+            &quot;id&quot;: 1,
             &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC475&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;4064.25&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;4249762233653&quot;,
+            &quot;design_code&quot;: &quot;DC253&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+soluta&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;2485.88&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;4672764781165&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 9,
-        &quot;pos_id&quot;: 6,
-        &quot;product_id&quot;: 9,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;4846.39&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 13,
+        &quot;product_id&quot;: 18,
+        &quot;qty&quot;: 4,
+        &quot;sale_price&quot;: &quot;2878.69&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 6,
-            &quot;customer_id&quot;: 9,
-            &quot;inv_date&quot;: &quot;2018-01-10&quot;,
-            &quot;inv_amout&quot;: &quot;3742.48&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
+            &quot;id&quot;: 13,
+            &quot;customer_id&quot;: 4,
+            &quot;inv_date&quot;: &quot;1987-06-10&quot;,
+            &quot;inv_amout&quot;: &quot;2513.47&quot;,
+            &quot;tax&quot;: &quot;50.00&quot;,
             &quot;discPer&quot;: &quot;0.00&quot;,
             &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC314&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa22?text=fashion+deleniti&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;2082.67&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;1852287048379&quot;,
+            &quot;id&quot;: 18,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC646&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3061.41&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;0233899013435&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
-        &quot;pos_id&quot;: 15,
-        &quot;product_id&quot;: 12,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;3160.21&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 10,
+        &quot;product_id&quot;: 10,
+        &quot;qty&quot;: 3,
+        &quot;sale_price&quot;: &quot;4434.05&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 15,
-            &quot;customer_id&quot;: 14,
-            &quot;inv_date&quot;: &quot;1986-08-01&quot;,
-            &quot;inv_amout&quot;: &quot;4325.85&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;id&quot;: 10,
+            &quot;customer_id&quot;: 11,
+            &quot;inv_date&quot;: &quot;1974-11-18&quot;,
+            &quot;inv_amout&quot;: &quot;2733.05&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;432.59&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;273.31&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 12,
+            &quot;id&quot;: 10,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC996&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ff00?text=fashion+dolore&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;4608.89&quot;,
-            &quot;opening_stock_quantity&quot;: 27,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;0640151710863&quot;,
+            &quot;design_code&quot;: &quot;DC128&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005522?text=fashion+et&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3590.53&quot;,
+            &quot;opening_stock_quantity&quot;: 21,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6325101202080&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 11,
-        &quot;pos_id&quot;: 7,
-        &quot;product_id&quot;: 16,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;3173.03&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 11,
+        &quot;product_id&quot;: 15,
+        &quot;qty&quot;: 4,
+        &quot;sale_price&quot;: &quot;922.11&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 7,
-            &quot;customer_id&quot;: 18,
-            &quot;inv_date&quot;: &quot;1983-10-15&quot;,
-            &quot;inv_amout&quot;: &quot;4525.24&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;452.52&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 11,
+            &quot;customer_id&quot;: 1,
+            &quot;inv_date&quot;: &quot;1999-12-04&quot;,
+            &quot;inv_amout&quot;: &quot;4957.77&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;247.89&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 16,
+            &quot;id&quot;: 15,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC909&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/002277?text=fashion+provident&quot;,
+            &quot;design_code&quot;: &quot;DC121&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;3704.74&quot;,
-            &quot;opening_stock_quantity&quot;: 13,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;8366658157124&quot;,
+            &quot;sale_price&quot;: &quot;3373.87&quot;,
+            &quot;opening_stock_quantity&quot;: 34,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6862870771022&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 12,
-        &quot;pos_id&quot;: 18,
-        &quot;product_id&quot;: 6,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;1892.37&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 9,
+        &quot;product_id&quot;: 14,
+        &quot;qty&quot;: 2,
+        &quot;sale_price&quot;: &quot;4336.53&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 18,
-            &quot;customer_id&quot;: 16,
-            &quot;inv_date&quot;: &quot;1976-08-25&quot;,
-            &quot;inv_amout&quot;: &quot;1751.30&quot;,
-            &quot;tax&quot;: &quot;100.00&quot;,
-            &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;87.57&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 9,
+            &quot;customer_id&quot;: 14,
+            &quot;inv_date&quot;: &quot;1994-03-03&quot;,
+            &quot;inv_amout&quot;: &quot;1705.49&quot;,
+            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;discPer&quot;: &quot;10.00&quot;,
+            &quot;discount&quot;: &quot;170.55&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC475&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044dd?text=fashion+vitae&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;4064.25&quot;,
-            &quot;opening_stock_quantity&quot;: 50,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;4249762233653&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 14,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC827&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0077cc?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3520.93&quot;,
+            &quot;opening_stock_quantity&quot;: 38,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;6757008708424&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 13,
-        &quot;pos_id&quot;: 10,
-        &quot;product_id&quot;: 5,
-        &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;3585.79&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 19,
+        &quot;product_id&quot;: 17,
+        &quot;qty&quot;: 2,
+        &quot;sale_price&quot;: &quot;185.44&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 10,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2011-04-26&quot;,
-            &quot;inv_amout&quot;: &quot;4721.38&quot;,
+            &quot;id&quot;: 19,
+            &quot;customer_id&quot;: 15,
+            &quot;inv_date&quot;: &quot;2001-07-25&quot;,
+            &quot;inv_amout&quot;: &quot;2039.19&quot;,
             &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;0.00&quot;,
-            &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;101.96&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC113&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4488.74&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 3,
-            &quot;barcode&quot;: &quot;7740891708809&quot;,
+            &quot;id&quot;: 17,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC010&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006699?text=fashion+eum&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;2289.24&quot;,
+            &quot;opening_stock_quantity&quot;: 26,
+            &quot;user_id&quot;: 9,
+            &quot;barcode&quot;: &quot;9198863119449&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
-        &quot;pos_id&quot;: 19,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;3657.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 7,
+        &quot;product_id&quot;: 6,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;227.84&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 19,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2010-05-23&quot;,
-            &quot;inv_amout&quot;: &quot;2585.36&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;0.00&quot;,
-            &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 7,
+            &quot;customer_id&quot;: 9,
+            &quot;inv_date&quot;: &quot;2000-12-22&quot;,
+            &quot;inv_amout&quot;: &quot;953.07&quot;,
+            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;47.65&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
+            &quot;id&quot;: 6,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC803&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eedd?text=fashion+cupiditate&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1009.31&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;6534638685024&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
-        &quot;pos_id&quot;: 12,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;2147.01&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 10,
+        &quot;product_id&quot;: 3,
+        &quot;qty&quot;: 3,
+        &quot;sale_price&quot;: &quot;769.30&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 12,
-            &quot;customer_id&quot;: 6,
-            &quot;inv_date&quot;: &quot;2014-07-06&quot;,
-            &quot;inv_amout&quot;: &quot;4564.83&quot;,
+            &quot;id&quot;: 10,
+            &quot;customer_id&quot;: 11,
+            &quot;inv_date&quot;: &quot;1974-11-18&quot;,
+            &quot;inv_amout&quot;: &quot;2733.05&quot;,
             &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;456.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;273.31&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC090&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ffdd?text=fashion+minima&quot;,
+            &quot;sub_category_id&quot;: 4,
+            &quot;sale_price&quot;: &quot;3528.74&quot;,
+            &quot;opening_stock_quantity&quot;: 37,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;3985944361226&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
-        &quot;pos_id&quot;: 19,
-        &quot;product_id&quot;: 18,
-        &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;4969.32&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 11,
+        &quot;product_id&quot;: 15,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;2039.82&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 19,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2010-05-23&quot;,
-            &quot;inv_amout&quot;: &quot;2585.36&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;0.00&quot;,
-            &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 11,
+            &quot;customer_id&quot;: 1,
+            &quot;inv_date&quot;: &quot;1999-12-04&quot;,
+            &quot;inv_amout&quot;: &quot;4957.77&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;247.89&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 18,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC427&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
+            &quot;id&quot;: 15,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC121&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1048.90&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5563224224416&quot;,
+            &quot;sale_price&quot;: &quot;3373.87&quot;,
+            &quot;opening_stock_quantity&quot;: 34,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6862870771022&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
         &quot;pos_id&quot;: 12,
-        &quot;product_id&quot;: 20,
-        &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;4559.27&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;product_id&quot;: 5,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;762.32&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
             &quot;id&quot;: 12,
-            &quot;customer_id&quot;: 6,
-            &quot;inv_date&quot;: &quot;2014-07-06&quot;,
-            &quot;inv_amout&quot;: &quot;4564.83&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;456.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;customer_id&quot;: 10,
+            &quot;inv_date&quot;: &quot;1981-09-09&quot;,
+            &quot;inv_amout&quot;: &quot;1816.93&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
+            &quot;discPer&quot;: &quot;0.00&quot;,
+            &quot;discount&quot;: &quot;0.00&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 20,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC840&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ccdd?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 8,
-            &quot;sale_price&quot;: &quot;2207.68&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 8,
-            &quot;barcode&quot;: &quot;8549482551843&quot;,
+            &quot;id&quot;: 5,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC371&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+laborum&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1312.58&quot;,
+            &quot;opening_stock_quantity&quot;: 43,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;0727022858913&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
-        &quot;pos_id&quot;: 8,
-        &quot;product_id&quot;: 8,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;620.80&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 2,
+        &quot;product_id&quot;: 4,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;2918.73&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 8,
-            &quot;customer_id&quot;: 7,
-            &quot;inv_date&quot;: &quot;1970-04-03&quot;,
-            &quot;inv_amout&quot;: &quot;2034.83&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;id&quot;: 2,
+            &quot;customer_id&quot;: 9,
+            &quot;inv_date&quot;: &quot;1985-01-19&quot;,
+            &quot;inv_amout&quot;: &quot;1421.87&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;203.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;142.19&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC129&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000066?text=fashion+voluptatibus&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;4118.57&quot;,
-            &quot;opening_stock_quantity&quot;: 17,
-            &quot;user_id&quot;: 4,
-            &quot;barcode&quot;: &quot;1361364078173&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;id&quot;: 4,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC710&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008822?text=fashion+est&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;1674.73&quot;,
+            &quot;opening_stock_quantity&quot;: 23,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;1191943436878&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
         &quot;pos_id&quot;: 3,
-        &quot;product_id&quot;: 7,
-        &quot;qty&quot;: 1,
-        &quot;sale_price&quot;: &quot;141.86&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;product_id&quot;: 2,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;2184.01&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
             &quot;id&quot;: 3,
-            &quot;customer_id&quot;: 18,
-            &quot;inv_date&quot;: &quot;1995-03-24&quot;,
-            &quot;inv_amout&quot;: &quot;4582.55&quot;,
+            &quot;customer_id&quot;: 12,
+            &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+            &quot;inv_amout&quot;: &quot;1023.04&quot;,
             &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;458.26&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;51.15&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 7,
+            &quot;id&quot;: 2,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC807&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3569.43&quot;,
-            &quot;opening_stock_quantity&quot;: 11,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;5277470339830&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC910&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007788?text=fashion+eius&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3738.02&quot;,
+            &quot;opening_stock_quantity&quot;: 8,
+            &quot;user_id&quot;: 5,
+            &quot;barcode&quot;: &quot;2053571025949&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 20,
-        &quot;pos_id&quot;: 17,
-        &quot;product_id&quot;: 1,
+        &quot;pos_id&quot;: 2,
+        &quot;product_id&quot;: 17,
         &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;3494.87&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;3449.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 17,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2005-03-03&quot;,
-            &quot;inv_amout&quot;: &quot;2008.05&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;id&quot;: 2,
+            &quot;customer_id&quot;: 9,
+            &quot;inv_date&quot;: &quot;1985-01-19&quot;,
+            &quot;inv_amout&quot;: &quot;1421.87&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;200.81&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;142.19&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC632&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+aut&quot;,
-            &quot;sub_category_id&quot;: 8,
-            &quot;sale_price&quot;: &quot;1874.72&quot;,
-            &quot;opening_stock_quantity&quot;: 17,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5124109198491&quot;,
+            &quot;id&quot;: 17,
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC010&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006699?text=fashion+eum&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;2289.24&quot;,
+            &quot;opening_stock_quantity&quot;: 26,
+            &quot;user_id&quot;: 9,
+            &quot;barcode&quot;: &quot;9198863119449&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 21,
-        &quot;pos_id&quot;: 5,
-        &quot;product_id&quot;: 4,
+        &quot;pos_id&quot;: 3,
+        &quot;product_id&quot;: 8,
         &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;2657.28&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;3323.67&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 5,
+            &quot;id&quot;: 3,
             &quot;customer_id&quot;: 12,
-            &quot;inv_date&quot;: &quot;2019-05-14&quot;,
-            &quot;inv_amout&quot;: &quot;4807.49&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+            &quot;inv_amout&quot;: &quot;1023.04&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;240.37&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;51.15&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC291&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bbbb?text=fashion+ea&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;1235.08&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;2481259121728&quot;,
+            &quot;id&quot;: 8,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC321&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001166?text=fashion+neque&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;2270.77&quot;,
+            &quot;opening_stock_quantity&quot;: 7,
+            &quot;user_id&quot;: 8,
+            &quot;barcode&quot;: &quot;0792413436766&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 22,
-        &quot;pos_id&quot;: 2,
-        &quot;product_id&quot;: 5,
+        &quot;pos_id&quot;: 14,
+        &quot;product_id&quot;: 11,
         &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;3072.60&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;1959.42&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 2,
-            &quot;customer_id&quot;: 9,
-            &quot;inv_date&quot;: &quot;1972-11-07&quot;,
-            &quot;inv_amout&quot;: &quot;2195.39&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;id&quot;: 14,
+            &quot;customer_id&quot;: 5,
+            &quot;inv_date&quot;: &quot;2019-04-13&quot;,
+            &quot;inv_amout&quot;: &quot;4217.53&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
             &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;109.77&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;210.88&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC113&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099dd?text=fashion+veritatis&quot;,
+            &quot;id&quot;: 11,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC429&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000077?text=fashion+fugiat&quot;,
             &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4488.74&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
+            &quot;sale_price&quot;: &quot;2231.10&quot;,
+            &quot;opening_stock_quantity&quot;: 19,
             &quot;user_id&quot;: 3,
-            &quot;barcode&quot;: &quot;7740891708809&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;barcode&quot;: &quot;7488251693944&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 23,
-        &quot;pos_id&quot;: 10,
-        &quot;product_id&quot;: 16,
-        &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;2538.33&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 3,
+        &quot;product_id&quot;: 15,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;1967.78&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 10,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2011-04-26&quot;,
-            &quot;inv_amout&quot;: &quot;4721.38&quot;,
+            &quot;id&quot;: 3,
+            &quot;customer_id&quot;: 12,
+            &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+            &quot;inv_amout&quot;: &quot;1023.04&quot;,
             &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;0.00&quot;,
-            &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;51.15&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 16,
+            &quot;id&quot;: 15,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC909&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/002277?text=fashion+provident&quot;,
+            &quot;design_code&quot;: &quot;DC121&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001155?text=fashion+ex&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;3704.74&quot;,
-            &quot;opening_stock_quantity&quot;: 13,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;8366658157124&quot;,
+            &quot;sale_price&quot;: &quot;3373.87&quot;,
+            &quot;opening_stock_quantity&quot;: 34,
+            &quot;user_id&quot;: 6,
+            &quot;barcode&quot;: &quot;6862870771022&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 24,
-        &quot;pos_id&quot;: 3,
-        &quot;product_id&quot;: 2,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;2236.86&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 17,
+        &quot;product_id&quot;: 1,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;2830.91&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 3,
-            &quot;customer_id&quot;: 18,
-            &quot;inv_date&quot;: &quot;1995-03-24&quot;,
-            &quot;inv_amout&quot;: &quot;4582.55&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;458.26&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 17,
+            &quot;customer_id&quot;: 16,
+            &quot;inv_date&quot;: &quot;2021-02-17&quot;,
+            &quot;inv_amout&quot;: &quot;4222.88&quot;,
+            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;discPer&quot;: &quot;0.00&quot;,
+            &quot;discount&quot;: &quot;0.00&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC838&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000055?text=fashion+quidem&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3362.56&quot;,
-            &quot;opening_stock_quantity&quot;: 39,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;7932057961313&quot;,
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC253&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007744?text=fashion+soluta&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;2485.88&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;4672764781165&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 25,
-        &quot;pos_id&quot;: 12,
-        &quot;product_id&quot;: 2,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;900.28&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 10,
+        &quot;product_id&quot;: 13,
+        &quot;qty&quot;: 1,
+        &quot;sale_price&quot;: &quot;2417.95&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 12,
-            &quot;customer_id&quot;: 6,
-            &quot;inv_date&quot;: &quot;2014-07-06&quot;,
-            &quot;inv_amout&quot;: &quot;4564.83&quot;,
+            &quot;id&quot;: 10,
+            &quot;customer_id&quot;: 11,
+            &quot;inv_date&quot;: &quot;1974-11-18&quot;,
+            &quot;inv_amout&quot;: &quot;2733.05&quot;,
             &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;456.48&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;273.31&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 2,
+            &quot;id&quot;: 13,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC838&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000055?text=fashion+quidem&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3362.56&quot;,
-            &quot;opening_stock_quantity&quot;: 39,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;7932057961313&quot;,
+            &quot;design_code&quot;: &quot;DC890&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;1408.92&quot;,
+            &quot;opening_stock_quantity&quot;: 40,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;8407216399140&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 26,
-        &quot;pos_id&quot;: 13,
-        &quot;product_id&quot;: 3,
-        &quot;qty&quot;: 5,
-        &quot;sale_price&quot;: &quot;2581.55&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 12,
+        &quot;product_id&quot;: 4,
+        &quot;qty&quot;: 4,
+        &quot;sale_price&quot;: &quot;1757.62&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 13,
+            &quot;id&quot;: 12,
             &quot;customer_id&quot;: 10,
-            &quot;inv_date&quot;: &quot;1980-04-26&quot;,
-            &quot;inv_amout&quot;: &quot;4589.27&quot;,
-            &quot;tax&quot;: &quot;0.00&quot;,
+            &quot;inv_date&quot;: &quot;1981-09-09&quot;,
+            &quot;inv_amout&quot;: &quot;1816.93&quot;,
+            &quot;tax&quot;: &quot;100.00&quot;,
             &quot;discPer&quot;: &quot;0.00&quot;,
             &quot;discount&quot;: &quot;0.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC754&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0088ff?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;4987.75&quot;,
-            &quot;opening_stock_quantity&quot;: 22,
+            &quot;id&quot;: 4,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC710&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008822?text=fashion+est&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;1674.73&quot;,
+            &quot;opening_stock_quantity&quot;: 23,
             &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;3203020582120&quot;,
+            &quot;barcode&quot;: &quot;1191943436878&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 27,
-        &quot;pos_id&quot;: 17,
-        &quot;product_id&quot;: 20,
-        &quot;qty&quot;: 4,
-        &quot;sale_price&quot;: &quot;3276.68&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 3,
+        &quot;product_id&quot;: 18,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;2855.28&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 17,
-            &quot;customer_id&quot;: 8,
-            &quot;inv_date&quot;: &quot;2005-03-03&quot;,
-            &quot;inv_amout&quot;: &quot;2008.05&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;200.81&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 3,
+            &quot;customer_id&quot;: 12,
+            &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+            &quot;inv_amout&quot;: &quot;1023.04&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
+            &quot;discPer&quot;: &quot;5.00&quot;,
+            &quot;discount&quot;: &quot;51.15&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 20,
+            &quot;id&quot;: 18,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC840&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ccdd?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 8,
-            &quot;sale_price&quot;: &quot;2207.68&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 8,
-            &quot;barcode&quot;: &quot;8549482551843&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC646&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006633?text=fashion+accusamus&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;3061.41&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;0233899013435&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 28,
-        &quot;pos_id&quot;: 5,
-        &quot;product_id&quot;: 2,
-        &quot;qty&quot;: 3,
-        &quot;sale_price&quot;: &quot;3295.13&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 19,
+        &quot;product_id&quot;: 6,
+        &quot;qty&quot;: 5,
+        &quot;sale_price&quot;: &quot;2435.55&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 5,
-            &quot;customer_id&quot;: 12,
-            &quot;inv_date&quot;: &quot;2019-05-14&quot;,
-            &quot;inv_amout&quot;: &quot;4807.49&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
+            &quot;id&quot;: 19,
+            &quot;customer_id&quot;: 15,
+            &quot;inv_date&quot;: &quot;2001-07-25&quot;,
+            &quot;inv_amout&quot;: &quot;2039.19&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
             &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;240.37&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discount&quot;: &quot;101.96&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 2,
+            &quot;id&quot;: 6,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC838&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000055?text=fashion+quidem&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;3362.56&quot;,
-            &quot;opening_stock_quantity&quot;: 39,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;7932057961313&quot;,
+            &quot;design_code&quot;: &quot;DC803&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00eedd?text=fashion+cupiditate&quot;,
+            &quot;sub_category_id&quot;: 7,
+            &quot;sale_price&quot;: &quot;1009.31&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;6534638685024&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 29,
-        &quot;pos_id&quot;: 1,
-        &quot;product_id&quot;: 3,
-        &quot;qty&quot;: 2,
-        &quot;sale_price&quot;: &quot;833.44&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;pos_id&quot;: 8,
+        &quot;product_id&quot;: 9,
+        &quot;qty&quot;: 3,
+        &quot;sale_price&quot;: &quot;4933.82&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 1,
-            &quot;customer_id&quot;: 18,
-            &quot;inv_date&quot;: &quot;2011-01-28&quot;,
-            &quot;inv_amout&quot;: &quot;1402.58&quot;,
-            &quot;tax&quot;: &quot;50.00&quot;,
-            &quot;discPer&quot;: &quot;5.00&quot;,
-            &quot;discount&quot;: &quot;70.13&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;id&quot;: 8,
+            &quot;customer_id&quot;: 8,
+            &quot;inv_date&quot;: &quot;2019-03-07&quot;,
+            &quot;inv_amout&quot;: &quot;3281.32&quot;,
+            &quot;tax&quot;: &quot;0.00&quot;,
+            &quot;discPer&quot;: &quot;0.00&quot;,
+            &quot;discount&quot;: &quot;0.00&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC754&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0088ff?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;4987.75&quot;,
-            &quot;opening_stock_quantity&quot;: 22,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;3203020582120&quot;,
+            &quot;id&quot;: 9,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC352&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000022?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3418.89&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;3439172304468&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 30,
-        &quot;pos_id&quot;: 15,
-        &quot;product_id&quot;: 18,
+        &quot;pos_id&quot;: 1,
+        &quot;product_id&quot;: 19,
         &quot;qty&quot;: 5,
-        &quot;sale_price&quot;: &quot;1423.06&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;sale_price&quot;: &quot;352.23&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;pos&quot;: {
-            &quot;id&quot;: 15,
-            &quot;customer_id&quot;: 14,
-            &quot;inv_date&quot;: &quot;1986-08-01&quot;,
-            &quot;inv_amout&quot;: &quot;4325.85&quot;,
+            &quot;id&quot;: 1,
+            &quot;customer_id&quot;: 5,
+            &quot;inv_date&quot;: &quot;1970-10-30&quot;,
+            &quot;inv_amout&quot;: &quot;2238.06&quot;,
             &quot;tax&quot;: &quot;50.00&quot;,
-            &quot;discPer&quot;: &quot;10.00&quot;,
-            &quot;discount&quot;: &quot;432.59&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+            &quot;discPer&quot;: &quot;0.00&quot;,
+            &quot;discount&quot;: &quot;0.00&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
         },
         &quot;product&quot;: {
-            &quot;id&quot;: 18,
+            &quot;id&quot;: 19,
             &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC427&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00bb55?text=fashion+est&quot;,
+            &quot;design_code&quot;: &quot;DC969&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/000099?text=fashion+est&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1048.90&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;5563224224416&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+            &quot;sale_price&quot;: &quot;2168.95&quot;,
+            &quot;opening_stock_quantity&quot;: 31,
+            &quot;user_id&quot;: 8,
+            &quot;barcode&quot;: &quot;0327696229066&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
         }
     }
 ]</code>
@@ -19515,36 +19856,36 @@ access-control-allow-origin: *
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;id&quot;: 1,
-    &quot;pos_id&quot;: 5,
-    &quot;product_id&quot;: 7,
-    &quot;qty&quot;: 5,
-    &quot;sale_price&quot;: &quot;4055.79&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+    &quot;pos_id&quot;: 3,
+    &quot;product_id&quot;: 13,
+    &quot;qty&quot;: 4,
+    &quot;sale_price&quot;: &quot;4701.19&quot;,
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
     &quot;pos&quot;: {
-        &quot;id&quot;: 5,
+        &quot;id&quot;: 3,
         &quot;customer_id&quot;: 12,
-        &quot;inv_date&quot;: &quot;2019-05-14&quot;,
-        &quot;inv_amout&quot;: &quot;4807.49&quot;,
-        &quot;tax&quot;: &quot;50.00&quot;,
+        &quot;inv_date&quot;: &quot;1994-05-23&quot;,
+        &quot;inv_amout&quot;: &quot;1023.04&quot;,
+        &quot;tax&quot;: &quot;0.00&quot;,
         &quot;discPer&quot;: &quot;5.00&quot;,
-        &quot;discount&quot;: &quot;240.37&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:55.000000Z&quot;
+        &quot;discount&quot;: &quot;51.15&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:46.000000Z&quot;
     },
     &quot;product&quot;: {
-        &quot;id&quot;: 7,
-        &quot;title&quot;: &quot;Banarci&quot;,
-        &quot;design_code&quot;: &quot;DC807&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009900?text=fashion+repellendus&quot;,
-        &quot;sub_category_id&quot;: 6,
-        &quot;sale_price&quot;: &quot;3569.43&quot;,
-        &quot;opening_stock_quantity&quot;: 11,
-        &quot;user_id&quot;: 6,
-        &quot;barcode&quot;: &quot;5277470339830&quot;,
+        &quot;id&quot;: 13,
+        &quot;title&quot;: &quot;Long Shirt&quot;,
+        &quot;design_code&quot;: &quot;DC890&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0011aa?text=fashion+laboriosam&quot;,
+        &quot;sub_category_id&quot;: 3,
+        &quot;sale_price&quot;: &quot;1408.92&quot;,
+        &quot;opening_stock_quantity&quot;: 40,
+        &quot;user_id&quot;: 3,
+        &quot;barcode&quot;: &quot;8407216399140&quot;,
         &quot;status&quot;: &quot;Inactive&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:54.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:44.000000Z&quot;
     }
 }</code>
  </pre>
@@ -19983,922 +20324,922 @@ access-control-allow-origin: *
 <code class="language-json" style="max-height: 300px;">[
     {
         &quot;id&quot;: 1,
-        &quot;customer_id&quot;: 16,
-        &quot;invRet_date&quot;: &quot;2000-10-15&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-5632&quot;,
-        &quot;return_inv_amout&quot;: &quot;3857.46&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 10,
+        &quot;invRet_date&quot;: &quot;1972-12-10&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5211&quot;,
+        &quot;return_inv_amout&quot;: &quot;2979.61&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 16,
-            &quot;cnic&quot;: &quot;83466-1236688-8&quot;,
-            &quot;name&quot;: &quot;Elfrieda Lynch&quot;,
-            &quot;email&quot;: &quot;schneider.tessie@example.org&quot;,
-            &quot;address&quot;: &quot;97266 Hyatt Roads Apt. 522\nEast Henry, ID 98776-5167&quot;,
-            &quot;city_id&quot;: 1,
-            &quot;cell_no1&quot;: &quot;03822444304&quot;,
-            &quot;cell_no2&quot;: &quot;03211808176&quot;,
+            &quot;id&quot;: 10,
+            &quot;cnic&quot;: &quot;38974-7731763-9&quot;,
+            &quot;name&quot;: &quot;Mr. Jamel Dooley&quot;,
+            &quot;email&quot;: &quot;ccorkery@example.com&quot;,
+            &quot;address&quot;: &quot;55593 Berry Avenue Apt. 703\nDurganville, WY 38977-0542&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03943412357&quot;,
+            &quot;cell_no2&quot;: &quot;03610041201&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
-        &quot;customer_id&quot;: 14,
-        &quot;invRet_date&quot;: &quot;1989-11-24&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4180&quot;,
-        &quot;return_inv_amout&quot;: &quot;1333.65&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 20,
+        &quot;invRet_date&quot;: &quot;2006-04-17&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8978&quot;,
+        &quot;return_inv_amout&quot;: &quot;4363.84&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 14,
-            &quot;cnic&quot;: &quot;60417-5207483-6&quot;,
-            &quot;name&quot;: &quot;Willie Daniel Jr.&quot;,
-            &quot;email&quot;: &quot;cierra15@example.org&quot;,
-            &quot;address&quot;: &quot;51027 Irwin Streets Suite 772\nGutmannview, NV 59302-8461&quot;,
-            &quot;city_id&quot;: 19,
-            &quot;cell_no1&quot;: &quot;03391443229&quot;,
-            &quot;cell_no2&quot;: &quot;03550774149&quot;,
+            &quot;id&quot;: 20,
+            &quot;cnic&quot;: &quot;31643-2404389-1&quot;,
+            &quot;name&quot;: &quot;Titus Padberg&quot;,
+            &quot;email&quot;: &quot;florine31@example.org&quot;,
+            &quot;address&quot;: &quot;269 Stokes Wells\nNorth Sebastianton, PA 86382-0315&quot;,
+            &quot;city_id&quot;: 34,
+            &quot;cell_no1&quot;: &quot;03820900417&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
-        &quot;customer_id&quot;: 9,
-        &quot;invRet_date&quot;: &quot;1999-05-31&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-7173&quot;,
-        &quot;return_inv_amout&quot;: &quot;2138.44&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 12,
+        &quot;invRet_date&quot;: &quot;1995-01-19&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5395&quot;,
+        &quot;return_inv_amout&quot;: &quot;852.99&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 9,
-            &quot;cnic&quot;: &quot;75198-8013400-6&quot;,
-            &quot;name&quot;: &quot;Alessandro Doyle DVM&quot;,
-            &quot;email&quot;: &quot;mona24@example.org&quot;,
-            &quot;address&quot;: &quot;3894 Keebler Streets Apt. 797\nLake Torey, NE 20406&quot;,
-            &quot;city_id&quot;: 22,
-            &quot;cell_no1&quot;: &quot;03348477218&quot;,
-            &quot;cell_no2&quot;: &quot;03360044089&quot;,
+            &quot;id&quot;: 12,
+            &quot;cnic&quot;: &quot;67717-5072863-5&quot;,
+            &quot;name&quot;: &quot;Kaelyn Gusikowski DVM&quot;,
+            &quot;email&quot;: &quot;kayley64@example.net&quot;,
+            &quot;address&quot;: &quot;5921 Boyle Unions\nHuelsmouth, VT 98676&quot;,
+            &quot;city_id&quot;: 18,
+            &quot;cell_no1&quot;: &quot;03382928707&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
-        &quot;customer_id&quot;: 3,
-        &quot;invRet_date&quot;: &quot;1980-04-30&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-6415&quot;,
-        &quot;return_inv_amout&quot;: &quot;1682.32&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 5,
+        &quot;invRet_date&quot;: &quot;2005-02-01&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-9616&quot;,
+        &quot;return_inv_amout&quot;: &quot;3337.56&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 3,
-            &quot;cnic&quot;: &quot;88271-7145546-0&quot;,
-            &quot;name&quot;: &quot;Noel Lindgren&quot;,
-            &quot;email&quot;: &quot;asenger@example.net&quot;,
-            &quot;address&quot;: &quot;594 Deon Harbor Apt. 763\nPort Linwood, ND 26768-7826&quot;,
-            &quot;city_id&quot;: 10,
-            &quot;cell_no1&quot;: &quot;03467211601&quot;,
-            &quot;cell_no2&quot;: &quot;03825060603&quot;,
+            &quot;id&quot;: 5,
+            &quot;cnic&quot;: &quot;60140-4179540-0&quot;,
+            &quot;name&quot;: &quot;Magdalena Ryan&quot;,
+            &quot;email&quot;: &quot;vpowlowski@example.com&quot;,
+            &quot;address&quot;: &quot;719 Alessandro Lake Suite 243\nPort Candelario, ME 60757-3571&quot;,
+            &quot;city_id&quot;: 45,
+            &quot;cell_no1&quot;: &quot;03596017033&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
-        &quot;customer_id&quot;: 5,
-        &quot;invRet_date&quot;: &quot;2006-08-06&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4268&quot;,
-        &quot;return_inv_amout&quot;: &quot;1496.84&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 13,
+        &quot;invRet_date&quot;: &quot;2022-01-01&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-9091&quot;,
+        &quot;return_inv_amout&quot;: &quot;3979.16&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 5,
-            &quot;cnic&quot;: &quot;20070-8628796-2&quot;,
-            &quot;name&quot;: &quot;Wilton Stanton&quot;,
-            &quot;email&quot;: &quot;fwillms@example.com&quot;,
-            &quot;address&quot;: &quot;280 Angel Underpass\nMarvinhaven, DE 68752&quot;,
-            &quot;city_id&quot;: 44,
-            &quot;cell_no1&quot;: &quot;03136971273&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 13,
+            &quot;cnic&quot;: &quot;97595-6621663-8&quot;,
+            &quot;name&quot;: &quot;Mr. Frank Glover IV&quot;,
+            &quot;email&quot;: &quot;jkirlin@example.com&quot;,
+            &quot;address&quot;: &quot;8207 Monahan Mountains\nClintton, VT 57319-5914&quot;,
+            &quot;city_id&quot;: 24,
+            &quot;cell_no1&quot;: &quot;03340589188&quot;,
+            &quot;cell_no2&quot;: &quot;03236252413&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
-        &quot;customer_id&quot;: 15,
-        &quot;invRet_date&quot;: &quot;1991-02-07&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-8988&quot;,
-        &quot;return_inv_amout&quot;: &quot;1963.75&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 20,
+        &quot;invRet_date&quot;: &quot;2016-02-28&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-2808&quot;,
+        &quot;return_inv_amout&quot;: &quot;3106.09&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 15,
-            &quot;cnic&quot;: &quot;47450-6420329-9&quot;,
-            &quot;name&quot;: &quot;Gabe Little&quot;,
-            &quot;email&quot;: &quot;janick.ruecker@example.org&quot;,
-            &quot;address&quot;: &quot;996 Vernon Ford\nLeopoldostad, DC 88416&quot;,
-            &quot;city_id&quot;: 13,
-            &quot;cell_no1&quot;: &quot;03183339152&quot;,
+            &quot;id&quot;: 20,
+            &quot;cnic&quot;: &quot;31643-2404389-1&quot;,
+            &quot;name&quot;: &quot;Titus Padberg&quot;,
+            &quot;email&quot;: &quot;florine31@example.org&quot;,
+            &quot;address&quot;: &quot;269 Stokes Wells\nNorth Sebastianton, PA 86382-0315&quot;,
+            &quot;city_id&quot;: 34,
+            &quot;cell_no1&quot;: &quot;03820900417&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
-        &quot;customer_id&quot;: 8,
-        &quot;invRet_date&quot;: &quot;1985-11-20&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-6152&quot;,
-        &quot;return_inv_amout&quot;: &quot;341.23&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 19,
+        &quot;invRet_date&quot;: &quot;2006-12-28&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8615&quot;,
+        &quot;return_inv_amout&quot;: &quot;1027.62&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;87152-8044368-2&quot;,
-            &quot;name&quot;: &quot;Clarissa Kub Jr.&quot;,
-            &quot;email&quot;: &quot;swalter@example.org&quot;,
-            &quot;address&quot;: &quot;8527 Leatha Walks Apt. 154\nLynchville, AL 55073&quot;,
-            &quot;city_id&quot;: 4,
-            &quot;cell_no1&quot;: &quot;03069947838&quot;,
-            &quot;cell_no2&quot;: &quot;03785407833&quot;,
+            &quot;id&quot;: 19,
+            &quot;cnic&quot;: &quot;79912-4873302-1&quot;,
+            &quot;name&quot;: &quot;Mr. Johnson McGlynn MD&quot;,
+            &quot;email&quot;: &quot;carlotta.toy@example.com&quot;,
+            &quot;address&quot;: &quot;50038 Micah Bridge Apt. 897\nWest Chanel, TX 70893&quot;,
+            &quot;city_id&quot;: 30,
+            &quot;cell_no1&quot;: &quot;03137793570&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 8,
-        &quot;customer_id&quot;: 11,
-        &quot;invRet_date&quot;: &quot;1986-07-07&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4309&quot;,
-        &quot;return_inv_amout&quot;: &quot;4605.14&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 18,
+        &quot;invRet_date&quot;: &quot;2000-07-04&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-1866&quot;,
+        &quot;return_inv_amout&quot;: &quot;3643.45&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 11,
-            &quot;cnic&quot;: &quot;95851-3697110-7&quot;,
-            &quot;name&quot;: &quot;Mrs. Graciela Brakus&quot;,
-            &quot;email&quot;: &quot;tdavis@example.com&quot;,
-            &quot;address&quot;: &quot;3380 Meda Vista\nEast Mae, MO 90009-1712&quot;,
-            &quot;city_id&quot;: 34,
-            &quot;cell_no1&quot;: &quot;03243904814&quot;,
-            &quot;cell_no2&quot;: &quot;03134104440&quot;,
+            &quot;id&quot;: 18,
+            &quot;cnic&quot;: &quot;27440-7061480-4&quot;,
+            &quot;name&quot;: &quot;Amira Renner&quot;,
+            &quot;email&quot;: &quot;waelchi.chyna@example.com&quot;,
+            &quot;address&quot;: &quot;13848 Rosenbaum Islands Apt. 619\nMonahanfort, NJ 80156&quot;,
+            &quot;city_id&quot;: 7,
+            &quot;cell_no1&quot;: &quot;03147475071&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 9,
-        &quot;customer_id&quot;: 7,
-        &quot;invRet_date&quot;: &quot;1978-03-10&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-8737&quot;,
-        &quot;return_inv_amout&quot;: &quot;202.17&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 4,
+        &quot;invRet_date&quot;: &quot;2010-05-09&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5590&quot;,
+        &quot;return_inv_amout&quot;: &quot;4754.82&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 4,
+            &quot;cnic&quot;: &quot;55313-6824337-2&quot;,
+            &quot;name&quot;: &quot;Devonte Macejkovic&quot;,
+            &quot;email&quot;: &quot;leilani53@example.net&quot;,
+            &quot;address&quot;: &quot;88703 Marcellus Knolls Suite 661\nBergnaumton, OK 38594-5812&quot;,
+            &quot;city_id&quot;: 40,
+            &quot;cell_no1&quot;: &quot;03829283333&quot;,
+            &quot;cell_no2&quot;: &quot;03368251764&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
-        &quot;customer_id&quot;: 9,
-        &quot;invRet_date&quot;: &quot;1986-02-24&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-1808&quot;,
-        &quot;return_inv_amout&quot;: &quot;946.41&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 16,
+        &quot;invRet_date&quot;: &quot;2014-06-15&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5493&quot;,
+        &quot;return_inv_amout&quot;: &quot;670.33&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 9,
-            &quot;cnic&quot;: &quot;75198-8013400-6&quot;,
-            &quot;name&quot;: &quot;Alessandro Doyle DVM&quot;,
-            &quot;email&quot;: &quot;mona24@example.org&quot;,
-            &quot;address&quot;: &quot;3894 Keebler Streets Apt. 797\nLake Torey, NE 20406&quot;,
-            &quot;city_id&quot;: 22,
-            &quot;cell_no1&quot;: &quot;03348477218&quot;,
-            &quot;cell_no2&quot;: &quot;03360044089&quot;,
+            &quot;id&quot;: 16,
+            &quot;cnic&quot;: &quot;70647-1131572-4&quot;,
+            &quot;name&quot;: &quot;Raymond Bernier&quot;,
+            &quot;email&quot;: &quot;tmcglynn@example.net&quot;,
+            &quot;address&quot;: &quot;2984 Quigley Groves Apt. 120\nDeclanborough, DE 57372-1704&quot;,
+            &quot;city_id&quot;: 2,
+            &quot;cell_no1&quot;: &quot;03389263781&quot;,
+            &quot;cell_no2&quot;: &quot;03605017803&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 11,
         &quot;customer_id&quot;: 12,
-        &quot;invRet_date&quot;: &quot;2003-04-29&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-2833&quot;,
-        &quot;return_inv_amout&quot;: &quot;130.89&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;invRet_date&quot;: &quot;2002-04-07&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-6377&quot;,
+        &quot;return_inv_amout&quot;: &quot;4318.73&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
             &quot;id&quot;: 12,
-            &quot;cnic&quot;: &quot;19663-4382760-6&quot;,
-            &quot;name&quot;: &quot;Ms. Yazmin Stehr II&quot;,
-            &quot;email&quot;: &quot;bradtke.drew@example.org&quot;,
-            &quot;address&quot;: &quot;4913 Dickinson Roads\nNew Nyasia, VT 22401-6718&quot;,
-            &quot;city_id&quot;: 16,
-            &quot;cell_no1&quot;: &quot;03647117817&quot;,
-            &quot;cell_no2&quot;: &quot;03260465733&quot;,
+            &quot;cnic&quot;: &quot;67717-5072863-5&quot;,
+            &quot;name&quot;: &quot;Kaelyn Gusikowski DVM&quot;,
+            &quot;email&quot;: &quot;kayley64@example.net&quot;,
+            &quot;address&quot;: &quot;5921 Boyle Unions\nHuelsmouth, VT 98676&quot;,
+            &quot;city_id&quot;: 18,
+            &quot;cell_no1&quot;: &quot;03382928707&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 12,
-        &quot;customer_id&quot;: 19,
-        &quot;invRet_date&quot;: &quot;1996-09-15&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-5246&quot;,
-        &quot;return_inv_amout&quot;: &quot;4755.85&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 13,
+        &quot;invRet_date&quot;: &quot;1999-11-27&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-7555&quot;,
+        &quot;return_inv_amout&quot;: &quot;1444.48&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 19,
-            &quot;cnic&quot;: &quot;43418-8193969-1&quot;,
-            &quot;name&quot;: &quot;Torey McGlynn&quot;,
-            &quot;email&quot;: &quot;fvandervort@example.com&quot;,
-            &quot;address&quot;: &quot;157 Ona Stream Suite 869\nSouth Cristal, CO 95221&quot;,
-            &quot;city_id&quot;: 25,
-            &quot;cell_no1&quot;: &quot;03355925806&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 13,
+            &quot;cnic&quot;: &quot;97595-6621663-8&quot;,
+            &quot;name&quot;: &quot;Mr. Frank Glover IV&quot;,
+            &quot;email&quot;: &quot;jkirlin@example.com&quot;,
+            &quot;address&quot;: &quot;8207 Monahan Mountains\nClintton, VT 57319-5914&quot;,
+            &quot;city_id&quot;: 24,
+            &quot;cell_no1&quot;: &quot;03340589188&quot;,
+            &quot;cell_no2&quot;: &quot;03236252413&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 13,
-        &quot;customer_id&quot;: 5,
-        &quot;invRet_date&quot;: &quot;2022-11-22&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-9114&quot;,
-        &quot;return_inv_amout&quot;: &quot;249.33&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 11,
+        &quot;invRet_date&quot;: &quot;2018-03-12&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-3959&quot;,
+        &quot;return_inv_amout&quot;: &quot;1781.06&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 5,
-            &quot;cnic&quot;: &quot;20070-8628796-2&quot;,
-            &quot;name&quot;: &quot;Wilton Stanton&quot;,
-            &quot;email&quot;: &quot;fwillms@example.com&quot;,
-            &quot;address&quot;: &quot;280 Angel Underpass\nMarvinhaven, DE 68752&quot;,
-            &quot;city_id&quot;: 44,
-            &quot;cell_no1&quot;: &quot;03136971273&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 11,
+            &quot;cnic&quot;: &quot;49657-4616988-4&quot;,
+            &quot;name&quot;: &quot;Lilly Wyman&quot;,
+            &quot;email&quot;: &quot;taylor84@example.net&quot;,
+            &quot;address&quot;: &quot;2175 Tillman Valleys\nWaynemouth, NY 97609-8573&quot;,
+            &quot;city_id&quot;: 36,
+            &quot;cell_no1&quot;: &quot;03475268005&quot;,
+            &quot;cell_no2&quot;: &quot;03008192770&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
-        &quot;customer_id&quot;: 7,
-        &quot;invRet_date&quot;: &quot;1989-06-29&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-2888&quot;,
-        &quot;return_inv_amout&quot;: &quot;563.27&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 15,
+        &quot;invRet_date&quot;: &quot;1997-08-12&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5546&quot;,
+        &quot;return_inv_amout&quot;: &quot;2140.33&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 15,
+            &quot;cnic&quot;: &quot;64227-8639328-6&quot;,
+            &quot;name&quot;: &quot;Ms. Marion Barrows&quot;,
+            &quot;email&quot;: &quot;tessie46@example.org&quot;,
+            &quot;address&quot;: &quot;47978 Misty Locks Suite 783\nAustinland, LA 80972&quot;,
+            &quot;city_id&quot;: 47,
+            &quot;cell_no1&quot;: &quot;03888104138&quot;,
+            &quot;cell_no2&quot;: &quot;03312701588&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
-        &quot;customer_id&quot;: 10,
-        &quot;invRet_date&quot;: &quot;2014-02-02&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-8621&quot;,
-        &quot;return_inv_amout&quot;: &quot;1061.25&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 1,
+        &quot;invRet_date&quot;: &quot;2008-10-13&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5120&quot;,
+        &quot;return_inv_amout&quot;: &quot;1027.62&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 10,
-            &quot;cnic&quot;: &quot;61389-1912211-5&quot;,
-            &quot;name&quot;: &quot;Prof. Chris Cruickshank&quot;,
-            &quot;email&quot;: &quot;king81@example.net&quot;,
-            &quot;address&quot;: &quot;9827 Jast Shore\nBergstromfort, ID 22291-7014&quot;,
-            &quot;city_id&quot;: 28,
-            &quot;cell_no1&quot;: &quot;03386127705&quot;,
+            &quot;id&quot;: 1,
+            &quot;cnic&quot;: &quot;12761-3000776-8&quot;,
+            &quot;name&quot;: &quot;Trisha Kreiger&quot;,
+            &quot;email&quot;: &quot;botsford.emilia@example.org&quot;,
+            &quot;address&quot;: &quot;88210 Elroy Loop\nNew Rosalynmouth, NJ 30434-5406&quot;,
+            &quot;city_id&quot;: 50,
+            &quot;cell_no1&quot;: &quot;03949586304&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
-        &quot;customer_id&quot;: 19,
-        &quot;invRet_date&quot;: &quot;2016-05-25&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-1246&quot;,
-        &quot;return_inv_amout&quot;: &quot;924.96&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 10,
+        &quot;invRet_date&quot;: &quot;2023-03-23&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-1881&quot;,
+        &quot;return_inv_amout&quot;: &quot;935.68&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 19,
-            &quot;cnic&quot;: &quot;43418-8193969-1&quot;,
-            &quot;name&quot;: &quot;Torey McGlynn&quot;,
-            &quot;email&quot;: &quot;fvandervort@example.com&quot;,
-            &quot;address&quot;: &quot;157 Ona Stream Suite 869\nSouth Cristal, CO 95221&quot;,
-            &quot;city_id&quot;: 25,
-            &quot;cell_no1&quot;: &quot;03355925806&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 10,
+            &quot;cnic&quot;: &quot;38974-7731763-9&quot;,
+            &quot;name&quot;: &quot;Mr. Jamel Dooley&quot;,
+            &quot;email&quot;: &quot;ccorkery@example.com&quot;,
+            &quot;address&quot;: &quot;55593 Berry Avenue Apt. 703\nDurganville, WY 38977-0542&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03943412357&quot;,
+            &quot;cell_no2&quot;: &quot;03610041201&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
-        &quot;customer_id&quot;: 6,
-        &quot;invRet_date&quot;: &quot;2011-08-31&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-7324&quot;,
-        &quot;return_inv_amout&quot;: &quot;2501.20&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 5,
+        &quot;invRet_date&quot;: &quot;1983-12-09&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-4677&quot;,
+        &quot;return_inv_amout&quot;: &quot;2270.18&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 6,
-            &quot;cnic&quot;: &quot;52355-4256040-4&quot;,
-            &quot;name&quot;: &quot;Mara Russel&quot;,
-            &quot;email&quot;: &quot;anderson.soledad@example.com&quot;,
-            &quot;address&quot;: &quot;33455 Eldon Land\nVivaton, WA 78829&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03544342552&quot;,
+            &quot;id&quot;: 5,
+            &quot;cnic&quot;: &quot;60140-4179540-0&quot;,
+            &quot;name&quot;: &quot;Magdalena Ryan&quot;,
+            &quot;email&quot;: &quot;vpowlowski@example.com&quot;,
+            &quot;address&quot;: &quot;719 Alessandro Lake Suite 243\nPort Candelario, ME 60757-3571&quot;,
+            &quot;city_id&quot;: 45,
+            &quot;cell_no1&quot;: &quot;03596017033&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
-        &quot;customer_id&quot;: 6,
-        &quot;invRet_date&quot;: &quot;1985-12-21&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-3329&quot;,
-        &quot;return_inv_amout&quot;: &quot;2650.48&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 11,
+        &quot;invRet_date&quot;: &quot;1982-12-27&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-1945&quot;,
+        &quot;return_inv_amout&quot;: &quot;755.59&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 6,
-            &quot;cnic&quot;: &quot;52355-4256040-4&quot;,
-            &quot;name&quot;: &quot;Mara Russel&quot;,
-            &quot;email&quot;: &quot;anderson.soledad@example.com&quot;,
-            &quot;address&quot;: &quot;33455 Eldon Land\nVivaton, WA 78829&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03544342552&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 11,
+            &quot;cnic&quot;: &quot;49657-4616988-4&quot;,
+            &quot;name&quot;: &quot;Lilly Wyman&quot;,
+            &quot;email&quot;: &quot;taylor84@example.net&quot;,
+            &quot;address&quot;: &quot;2175 Tillman Valleys\nWaynemouth, NY 97609-8573&quot;,
+            &quot;city_id&quot;: 36,
+            &quot;cell_no1&quot;: &quot;03475268005&quot;,
+            &quot;cell_no2&quot;: &quot;03008192770&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
-        &quot;customer_id&quot;: 17,
-        &quot;invRet_date&quot;: &quot;2016-11-26&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-7587&quot;,
-        &quot;return_inv_amout&quot;: &quot;2246.25&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 9,
+        &quot;invRet_date&quot;: &quot;1997-09-01&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-1456&quot;,
+        &quot;return_inv_amout&quot;: &quot;3966.85&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 17,
-            &quot;cnic&quot;: &quot;42628-2056465-5&quot;,
-            &quot;name&quot;: &quot;Veda Schmitt&quot;,
-            &quot;email&quot;: &quot;yasmin90@example.org&quot;,
-            &quot;address&quot;: &quot;179 Dicki Mews\nSouth Landen, ND 87462-7768&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03569340842&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 9,
+            &quot;cnic&quot;: &quot;67693-9636844-7&quot;,
+            &quot;name&quot;: &quot;Gilda Hagenes DVM&quot;,
+            &quot;email&quot;: &quot;conn.genoveva@example.net&quot;,
+            &quot;address&quot;: &quot;3562 Becker Radial Apt. 425\nEast Maryjanehaven, CT 79075-5497&quot;,
+            &quot;city_id&quot;: 3,
+            &quot;cell_no1&quot;: &quot;03921795209&quot;,
+            &quot;cell_no2&quot;: &quot;03368042088&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 20,
-        &quot;customer_id&quot;: 7,
-        &quot;invRet_date&quot;: &quot;1975-10-26&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-9301&quot;,
-        &quot;return_inv_amout&quot;: &quot;2396.68&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 20,
+        &quot;invRet_date&quot;: &quot;1990-03-01&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-4394&quot;,
+        &quot;return_inv_amout&quot;: &quot;2428.89&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
+            &quot;id&quot;: 20,
+            &quot;cnic&quot;: &quot;31643-2404389-1&quot;,
+            &quot;name&quot;: &quot;Titus Padberg&quot;,
+            &quot;email&quot;: &quot;florine31@example.org&quot;,
+            &quot;address&quot;: &quot;269 Stokes Wells\nNorth Sebastianton, PA 86382-0315&quot;,
+            &quot;city_id&quot;: 34,
+            &quot;cell_no1&quot;: &quot;03820900417&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 21,
-        &quot;customer_id&quot;: 13,
-        &quot;invRet_date&quot;: &quot;2008-11-09&quot;,
+        &quot;customer_id&quot;: 4,
+        &quot;invRet_date&quot;: &quot;2015-10-02&quot;,
         &quot;pos_inv_no&quot;: &quot;POS-3986&quot;,
-        &quot;return_inv_amout&quot;: &quot;4214.33&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;return_inv_amout&quot;: &quot;2465.64&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 13,
-            &quot;cnic&quot;: &quot;83630-3358663-5&quot;,
-            &quot;name&quot;: &quot;Dr. Garrett Tremblay I&quot;,
-            &quot;email&quot;: &quot;ned.schaden@example.net&quot;,
-            &quot;address&quot;: &quot;10721 Luis Rue\nJuniorport, MS 47483&quot;,
-            &quot;city_id&quot;: 29,
-            &quot;cell_no1&quot;: &quot;03567211662&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 4,
+            &quot;cnic&quot;: &quot;55313-6824337-2&quot;,
+            &quot;name&quot;: &quot;Devonte Macejkovic&quot;,
+            &quot;email&quot;: &quot;leilani53@example.net&quot;,
+            &quot;address&quot;: &quot;88703 Marcellus Knolls Suite 661\nBergnaumton, OK 38594-5812&quot;,
+            &quot;city_id&quot;: 40,
+            &quot;cell_no1&quot;: &quot;03829283333&quot;,
+            &quot;cell_no2&quot;: &quot;03368251764&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 22,
-        &quot;customer_id&quot;: 19,
-        &quot;invRet_date&quot;: &quot;1996-12-22&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-6351&quot;,
-        &quot;return_inv_amout&quot;: &quot;820.67&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 4,
+        &quot;invRet_date&quot;: &quot;1987-12-22&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-3900&quot;,
+        &quot;return_inv_amout&quot;: &quot;125.74&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 19,
-            &quot;cnic&quot;: &quot;43418-8193969-1&quot;,
-            &quot;name&quot;: &quot;Torey McGlynn&quot;,
-            &quot;email&quot;: &quot;fvandervort@example.com&quot;,
-            &quot;address&quot;: &quot;157 Ona Stream Suite 869\nSouth Cristal, CO 95221&quot;,
-            &quot;city_id&quot;: 25,
-            &quot;cell_no1&quot;: &quot;03355925806&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 4,
+            &quot;cnic&quot;: &quot;55313-6824337-2&quot;,
+            &quot;name&quot;: &quot;Devonte Macejkovic&quot;,
+            &quot;email&quot;: &quot;leilani53@example.net&quot;,
+            &quot;address&quot;: &quot;88703 Marcellus Knolls Suite 661\nBergnaumton, OK 38594-5812&quot;,
+            &quot;city_id&quot;: 40,
+            &quot;cell_no1&quot;: &quot;03829283333&quot;,
+            &quot;cell_no2&quot;: &quot;03368251764&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 23,
-        &quot;customer_id&quot;: 6,
-        &quot;invRet_date&quot;: &quot;1976-11-06&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-5792&quot;,
-        &quot;return_inv_amout&quot;: &quot;4457.46&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 8,
+        &quot;invRet_date&quot;: &quot;2024-03-11&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8750&quot;,
+        &quot;return_inv_amout&quot;: &quot;1745.73&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 6,
-            &quot;cnic&quot;: &quot;52355-4256040-4&quot;,
-            &quot;name&quot;: &quot;Mara Russel&quot;,
-            &quot;email&quot;: &quot;anderson.soledad@example.com&quot;,
-            &quot;address&quot;: &quot;33455 Eldon Land\nVivaton, WA 78829&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03544342552&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 8,
+            &quot;cnic&quot;: &quot;41488-5438603-5&quot;,
+            &quot;name&quot;: &quot;Prof. Houston Klein&quot;,
+            &quot;email&quot;: &quot;jdibbert@example.org&quot;,
+            &quot;address&quot;: &quot;9579 Crist Squares Suite 406\nMcClureberg, MA 86197-3387&quot;,
+            &quot;city_id&quot;: 11,
+            &quot;cell_no1&quot;: &quot;03052859680&quot;,
+            &quot;cell_no2&quot;: &quot;03316526585&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 24,
-        &quot;customer_id&quot;: 7,
-        &quot;invRet_date&quot;: &quot;2004-10-18&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-3995&quot;,
-        &quot;return_inv_amout&quot;: &quot;4129.02&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 8,
+        &quot;invRet_date&quot;: &quot;2021-07-12&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8571&quot;,
+        &quot;return_inv_amout&quot;: &quot;4134.00&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 8,
+            &quot;cnic&quot;: &quot;41488-5438603-5&quot;,
+            &quot;name&quot;: &quot;Prof. Houston Klein&quot;,
+            &quot;email&quot;: &quot;jdibbert@example.org&quot;,
+            &quot;address&quot;: &quot;9579 Crist Squares Suite 406\nMcClureberg, MA 86197-3387&quot;,
+            &quot;city_id&quot;: 11,
+            &quot;cell_no1&quot;: &quot;03052859680&quot;,
+            &quot;cell_no2&quot;: &quot;03316526585&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 25,
-        &quot;customer_id&quot;: 19,
-        &quot;invRet_date&quot;: &quot;2002-12-06&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-8654&quot;,
-        &quot;return_inv_amout&quot;: &quot;2799.10&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 10,
+        &quot;invRet_date&quot;: &quot;2002-11-13&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8979&quot;,
+        &quot;return_inv_amout&quot;: &quot;864.70&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 19,
-            &quot;cnic&quot;: &quot;43418-8193969-1&quot;,
-            &quot;name&quot;: &quot;Torey McGlynn&quot;,
-            &quot;email&quot;: &quot;fvandervort@example.com&quot;,
-            &quot;address&quot;: &quot;157 Ona Stream Suite 869\nSouth Cristal, CO 95221&quot;,
-            &quot;city_id&quot;: 25,
-            &quot;cell_no1&quot;: &quot;03355925806&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 10,
+            &quot;cnic&quot;: &quot;38974-7731763-9&quot;,
+            &quot;name&quot;: &quot;Mr. Jamel Dooley&quot;,
+            &quot;email&quot;: &quot;ccorkery@example.com&quot;,
+            &quot;address&quot;: &quot;55593 Berry Avenue Apt. 703\nDurganville, WY 38977-0542&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03943412357&quot;,
+            &quot;cell_no2&quot;: &quot;03610041201&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 26,
-        &quot;customer_id&quot;: 15,
-        &quot;invRet_date&quot;: &quot;2017-03-31&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4039&quot;,
-        &quot;return_inv_amout&quot;: &quot;1034.46&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 16,
+        &quot;invRet_date&quot;: &quot;2008-09-16&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-4145&quot;,
+        &quot;return_inv_amout&quot;: &quot;530.41&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 15,
-            &quot;cnic&quot;: &quot;47450-6420329-9&quot;,
-            &quot;name&quot;: &quot;Gabe Little&quot;,
-            &quot;email&quot;: &quot;janick.ruecker@example.org&quot;,
-            &quot;address&quot;: &quot;996 Vernon Ford\nLeopoldostad, DC 88416&quot;,
-            &quot;city_id&quot;: 13,
-            &quot;cell_no1&quot;: &quot;03183339152&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 16,
+            &quot;cnic&quot;: &quot;70647-1131572-4&quot;,
+            &quot;name&quot;: &quot;Raymond Bernier&quot;,
+            &quot;email&quot;: &quot;tmcglynn@example.net&quot;,
+            &quot;address&quot;: &quot;2984 Quigley Groves Apt. 120\nDeclanborough, DE 57372-1704&quot;,
+            &quot;city_id&quot;: 2,
+            &quot;cell_no1&quot;: &quot;03389263781&quot;,
+            &quot;cell_no2&quot;: &quot;03605017803&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 27,
-        &quot;customer_id&quot;: 18,
-        &quot;invRet_date&quot;: &quot;1990-08-04&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-2053&quot;,
-        &quot;return_inv_amout&quot;: &quot;1374.97&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 9,
+        &quot;invRet_date&quot;: &quot;1979-06-03&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5399&quot;,
+        &quot;return_inv_amout&quot;: &quot;2503.32&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 18,
-            &quot;cnic&quot;: &quot;72990-4682903-7&quot;,
-            &quot;name&quot;: &quot;Miss Hollie Lehner V&quot;,
-            &quot;email&quot;: &quot;gay.klocko@example.org&quot;,
-            &quot;address&quot;: &quot;351 McKenzie Hills Apt. 270\nSouth Vidal, RI 14179&quot;,
-            &quot;city_id&quot;: 29,
-            &quot;cell_no1&quot;: &quot;03746208204&quot;,
-            &quot;cell_no2&quot;: &quot;03854088736&quot;,
+            &quot;id&quot;: 9,
+            &quot;cnic&quot;: &quot;67693-9636844-7&quot;,
+            &quot;name&quot;: &quot;Gilda Hagenes DVM&quot;,
+            &quot;email&quot;: &quot;conn.genoveva@example.net&quot;,
+            &quot;address&quot;: &quot;3562 Becker Radial Apt. 425\nEast Maryjanehaven, CT 79075-5497&quot;,
+            &quot;city_id&quot;: 3,
+            &quot;cell_no1&quot;: &quot;03921795209&quot;,
+            &quot;cell_no2&quot;: &quot;03368042088&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:53.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 28,
-        &quot;customer_id&quot;: 11,
-        &quot;invRet_date&quot;: &quot;2022-07-24&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-5546&quot;,
-        &quot;return_inv_amout&quot;: &quot;3678.54&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 20,
+        &quot;invRet_date&quot;: &quot;1977-12-15&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-3577&quot;,
+        &quot;return_inv_amout&quot;: &quot;2044.73&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 11,
-            &quot;cnic&quot;: &quot;95851-3697110-7&quot;,
-            &quot;name&quot;: &quot;Mrs. Graciela Brakus&quot;,
-            &quot;email&quot;: &quot;tdavis@example.com&quot;,
-            &quot;address&quot;: &quot;3380 Meda Vista\nEast Mae, MO 90009-1712&quot;,
+            &quot;id&quot;: 20,
+            &quot;cnic&quot;: &quot;31643-2404389-1&quot;,
+            &quot;name&quot;: &quot;Titus Padberg&quot;,
+            &quot;email&quot;: &quot;florine31@example.org&quot;,
+            &quot;address&quot;: &quot;269 Stokes Wells\nNorth Sebastianton, PA 86382-0315&quot;,
             &quot;city_id&quot;: 34,
-            &quot;cell_no1&quot;: &quot;03243904814&quot;,
-            &quot;cell_no2&quot;: &quot;03134104440&quot;,
+            &quot;cell_no1&quot;: &quot;03820900417&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 29,
-        &quot;customer_id&quot;: 16,
-        &quot;invRet_date&quot;: &quot;1995-07-12&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4189&quot;,
-        &quot;return_inv_amout&quot;: &quot;626.00&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+        &quot;customer_id&quot;: 5,
+        &quot;invRet_date&quot;: &quot;1977-04-27&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8355&quot;,
+        &quot;return_inv_amout&quot;: &quot;2190.06&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 16,
-            &quot;cnic&quot;: &quot;83466-1236688-8&quot;,
-            &quot;name&quot;: &quot;Elfrieda Lynch&quot;,
-            &quot;email&quot;: &quot;schneider.tessie@example.org&quot;,
-            &quot;address&quot;: &quot;97266 Hyatt Roads Apt. 522\nEast Henry, ID 98776-5167&quot;,
-            &quot;city_id&quot;: 1,
-            &quot;cell_no1&quot;: &quot;03822444304&quot;,
-            &quot;cell_no2&quot;: &quot;03211808176&quot;,
+            &quot;id&quot;: 5,
+            &quot;cnic&quot;: &quot;60140-4179540-0&quot;,
+            &quot;name&quot;: &quot;Magdalena Ryan&quot;,
+            &quot;email&quot;: &quot;vpowlowski@example.com&quot;,
+            &quot;address&quot;: &quot;719 Alessandro Lake Suite 243\nPort Candelario, ME 60757-3571&quot;,
+            &quot;city_id&quot;: 45,
+            &quot;cell_no1&quot;: &quot;03596017033&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 30,
-        &quot;customer_id&quot;: 7,
-        &quot;invRet_date&quot;: &quot;1981-12-26&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-3763&quot;,
-        &quot;return_inv_amout&quot;: &quot;1692.53&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 15,
+        &quot;invRet_date&quot;: &quot;1997-05-03&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-3257&quot;,
+        &quot;return_inv_amout&quot;: &quot;4516.74&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 7,
-            &quot;cnic&quot;: &quot;57260-7760413-6&quot;,
-            &quot;name&quot;: &quot;Miss Lenna Von&quot;,
-            &quot;email&quot;: &quot;kacie17@example.org&quot;,
-            &quot;address&quot;: &quot;7532 Leanna Loop Suite 183\nEast Arelyton, CA 91301-3612&quot;,
-            &quot;city_id&quot;: 15,
-            &quot;cell_no1&quot;: &quot;03982030920&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 15,
+            &quot;cnic&quot;: &quot;64227-8639328-6&quot;,
+            &quot;name&quot;: &quot;Ms. Marion Barrows&quot;,
+            &quot;email&quot;: &quot;tessie46@example.org&quot;,
+            &quot;address&quot;: &quot;47978 Misty Locks Suite 783\nAustinland, LA 80972&quot;,
+            &quot;city_id&quot;: 47,
+            &quot;cell_no1&quot;: &quot;03888104138&quot;,
+            &quot;cell_no2&quot;: &quot;03312701588&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 31,
-        &quot;customer_id&quot;: 11,
-        &quot;invRet_date&quot;: &quot;2018-05-02&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-7184&quot;,
-        &quot;return_inv_amout&quot;: &quot;4615.94&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 19,
+        &quot;invRet_date&quot;: &quot;2010-12-08&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-7521&quot;,
+        &quot;return_inv_amout&quot;: &quot;1834.65&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 11,
-            &quot;cnic&quot;: &quot;95851-3697110-7&quot;,
-            &quot;name&quot;: &quot;Mrs. Graciela Brakus&quot;,
-            &quot;email&quot;: &quot;tdavis@example.com&quot;,
-            &quot;address&quot;: &quot;3380 Meda Vista\nEast Mae, MO 90009-1712&quot;,
-            &quot;city_id&quot;: 34,
-            &quot;cell_no1&quot;: &quot;03243904814&quot;,
-            &quot;cell_no2&quot;: &quot;03134104440&quot;,
+            &quot;id&quot;: 19,
+            &quot;cnic&quot;: &quot;79912-4873302-1&quot;,
+            &quot;name&quot;: &quot;Mr. Johnson McGlynn MD&quot;,
+            &quot;email&quot;: &quot;carlotta.toy@example.com&quot;,
+            &quot;address&quot;: &quot;50038 Micah Bridge Apt. 897\nWest Chanel, TX 70893&quot;,
+            &quot;city_id&quot;: 30,
+            &quot;cell_no1&quot;: &quot;03137793570&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 32,
-        &quot;customer_id&quot;: 14,
-        &quot;invRet_date&quot;: &quot;1972-05-09&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-9488&quot;,
-        &quot;return_inv_amout&quot;: &quot;3105.29&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 12,
+        &quot;invRet_date&quot;: &quot;1990-04-26&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-2994&quot;,
+        &quot;return_inv_amout&quot;: &quot;884.66&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 14,
-            &quot;cnic&quot;: &quot;60417-5207483-6&quot;,
-            &quot;name&quot;: &quot;Willie Daniel Jr.&quot;,
-            &quot;email&quot;: &quot;cierra15@example.org&quot;,
-            &quot;address&quot;: &quot;51027 Irwin Streets Suite 772\nGutmannview, NV 59302-8461&quot;,
-            &quot;city_id&quot;: 19,
-            &quot;cell_no1&quot;: &quot;03391443229&quot;,
-            &quot;cell_no2&quot;: &quot;03550774149&quot;,
+            &quot;id&quot;: 12,
+            &quot;cnic&quot;: &quot;67717-5072863-5&quot;,
+            &quot;name&quot;: &quot;Kaelyn Gusikowski DVM&quot;,
+            &quot;email&quot;: &quot;kayley64@example.net&quot;,
+            &quot;address&quot;: &quot;5921 Boyle Unions\nHuelsmouth, VT 98676&quot;,
+            &quot;city_id&quot;: 18,
+            &quot;cell_no1&quot;: &quot;03382928707&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 33,
-        &quot;customer_id&quot;: 4,
-        &quot;invRet_date&quot;: &quot;1986-05-14&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-2164&quot;,
-        &quot;return_inv_amout&quot;: &quot;1118.78&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 9,
+        &quot;invRet_date&quot;: &quot;1999-12-10&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-5391&quot;,
+        &quot;return_inv_amout&quot;: &quot;4614.71&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 4,
-            &quot;cnic&quot;: &quot;11162-9222072-7&quot;,
-            &quot;name&quot;: &quot;Prof. Jorge Klein IV&quot;,
-            &quot;email&quot;: &quot;casper.stefan@example.com&quot;,
-            &quot;address&quot;: &quot;9949 Omer Mountain\nWardberg, MA 44735-5159&quot;,
-            &quot;city_id&quot;: 49,
-            &quot;cell_no1&quot;: &quot;03231295559&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 9,
+            &quot;cnic&quot;: &quot;67693-9636844-7&quot;,
+            &quot;name&quot;: &quot;Gilda Hagenes DVM&quot;,
+            &quot;email&quot;: &quot;conn.genoveva@example.net&quot;,
+            &quot;address&quot;: &quot;3562 Becker Radial Apt. 425\nEast Maryjanehaven, CT 79075-5497&quot;,
+            &quot;city_id&quot;: 3,
+            &quot;cell_no1&quot;: &quot;03921795209&quot;,
+            &quot;cell_no2&quot;: &quot;03368042088&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 34,
         &quot;customer_id&quot;: 8,
-        &quot;invRet_date&quot;: &quot;1989-05-31&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4609&quot;,
-        &quot;return_inv_amout&quot;: &quot;2651.95&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;invRet_date&quot;: &quot;2012-08-21&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-3043&quot;,
+        &quot;return_inv_amout&quot;: &quot;2221.59&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
             &quot;id&quot;: 8,
-            &quot;cnic&quot;: &quot;87152-8044368-2&quot;,
-            &quot;name&quot;: &quot;Clarissa Kub Jr.&quot;,
-            &quot;email&quot;: &quot;swalter@example.org&quot;,
-            &quot;address&quot;: &quot;8527 Leatha Walks Apt. 154\nLynchville, AL 55073&quot;,
-            &quot;city_id&quot;: 4,
-            &quot;cell_no1&quot;: &quot;03069947838&quot;,
-            &quot;cell_no2&quot;: &quot;03785407833&quot;,
+            &quot;cnic&quot;: &quot;41488-5438603-5&quot;,
+            &quot;name&quot;: &quot;Prof. Houston Klein&quot;,
+            &quot;email&quot;: &quot;jdibbert@example.org&quot;,
+            &quot;address&quot;: &quot;9579 Crist Squares Suite 406\nMcClureberg, MA 86197-3387&quot;,
+            &quot;city_id&quot;: 11,
+            &quot;cell_no1&quot;: &quot;03052859680&quot;,
+            &quot;cell_no2&quot;: &quot;03316526585&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 35,
-        &quot;customer_id&quot;: 3,
-        &quot;invRet_date&quot;: &quot;1997-02-10&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-2184&quot;,
-        &quot;return_inv_amout&quot;: &quot;1238.02&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 17,
+        &quot;invRet_date&quot;: &quot;1994-08-18&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-7901&quot;,
+        &quot;return_inv_amout&quot;: &quot;2623.03&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 3,
-            &quot;cnic&quot;: &quot;88271-7145546-0&quot;,
-            &quot;name&quot;: &quot;Noel Lindgren&quot;,
-            &quot;email&quot;: &quot;asenger@example.net&quot;,
-            &quot;address&quot;: &quot;594 Deon Harbor Apt. 763\nPort Linwood, ND 26768-7826&quot;,
-            &quot;city_id&quot;: 10,
-            &quot;cell_no1&quot;: &quot;03467211601&quot;,
-            &quot;cell_no2&quot;: &quot;03825060603&quot;,
+            &quot;id&quot;: 17,
+            &quot;cnic&quot;: &quot;67618-7529634-0&quot;,
+            &quot;name&quot;: &quot;Mr. Roel Zieme&quot;,
+            &quot;email&quot;: &quot;elisabeth26@example.org&quot;,
+            &quot;address&quot;: &quot;707 Isobel Ways Suite 080\nLake Kennaport, MS 66590-0643&quot;,
+            &quot;city_id&quot;: 26,
+            &quot;cell_no1&quot;: &quot;03605841297&quot;,
+            &quot;cell_no2&quot;: &quot;03230459410&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 36,
-        &quot;customer_id&quot;: 2,
-        &quot;invRet_date&quot;: &quot;1990-12-31&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-9411&quot;,
-        &quot;return_inv_amout&quot;: &quot;4338.42&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 8,
+        &quot;invRet_date&quot;: &quot;1979-10-31&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-7956&quot;,
+        &quot;return_inv_amout&quot;: &quot;2123.72&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 2,
-            &quot;cnic&quot;: &quot;98678-5650776-7&quot;,
-            &quot;name&quot;: &quot;Mr. Brendon Steuber Jr.&quot;,
-            &quot;email&quot;: &quot;era.kohler@example.org&quot;,
-            &quot;address&quot;: &quot;7913 Mabelle Rapid Suite 384\nEdwardland, PA 95929&quot;,
-            &quot;city_id&quot;: 13,
-            &quot;cell_no1&quot;: &quot;03569155320&quot;,
-            &quot;cell_no2&quot;: &quot;03833597571&quot;,
+            &quot;id&quot;: 8,
+            &quot;cnic&quot;: &quot;41488-5438603-5&quot;,
+            &quot;name&quot;: &quot;Prof. Houston Klein&quot;,
+            &quot;email&quot;: &quot;jdibbert@example.org&quot;,
+            &quot;address&quot;: &quot;9579 Crist Squares Suite 406\nMcClureberg, MA 86197-3387&quot;,
+            &quot;city_id&quot;: 11,
+            &quot;cell_no1&quot;: &quot;03052859680&quot;,
+            &quot;cell_no2&quot;: &quot;03316526585&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 37,
-        &quot;customer_id&quot;: 11,
-        &quot;invRet_date&quot;: &quot;1977-02-10&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-7044&quot;,
-        &quot;return_inv_amout&quot;: &quot;1129.58&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 12,
+        &quot;invRet_date&quot;: &quot;1988-10-06&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-8584&quot;,
+        &quot;return_inv_amout&quot;: &quot;4672.02&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 11,
-            &quot;cnic&quot;: &quot;95851-3697110-7&quot;,
-            &quot;name&quot;: &quot;Mrs. Graciela Brakus&quot;,
-            &quot;email&quot;: &quot;tdavis@example.com&quot;,
-            &quot;address&quot;: &quot;3380 Meda Vista\nEast Mae, MO 90009-1712&quot;,
-            &quot;city_id&quot;: 34,
-            &quot;cell_no1&quot;: &quot;03243904814&quot;,
-            &quot;cell_no2&quot;: &quot;03134104440&quot;,
+            &quot;id&quot;: 12,
+            &quot;cnic&quot;: &quot;67717-5072863-5&quot;,
+            &quot;name&quot;: &quot;Kaelyn Gusikowski DVM&quot;,
+            &quot;email&quot;: &quot;kayley64@example.net&quot;,
+            &quot;address&quot;: &quot;5921 Boyle Unions\nHuelsmouth, VT 98676&quot;,
+            &quot;city_id&quot;: 18,
+            &quot;cell_no1&quot;: &quot;03382928707&quot;,
+            &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 38,
-        &quot;customer_id&quot;: 2,
-        &quot;invRet_date&quot;: &quot;1993-12-10&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-2409&quot;,
-        &quot;return_inv_amout&quot;: &quot;3834.31&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 16,
+        &quot;invRet_date&quot;: &quot;2001-09-21&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-3109&quot;,
+        &quot;return_inv_amout&quot;: &quot;2727.28&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 2,
-            &quot;cnic&quot;: &quot;98678-5650776-7&quot;,
-            &quot;name&quot;: &quot;Mr. Brendon Steuber Jr.&quot;,
-            &quot;email&quot;: &quot;era.kohler@example.org&quot;,
-            &quot;address&quot;: &quot;7913 Mabelle Rapid Suite 384\nEdwardland, PA 95929&quot;,
-            &quot;city_id&quot;: 13,
-            &quot;cell_no1&quot;: &quot;03569155320&quot;,
-            &quot;cell_no2&quot;: &quot;03833597571&quot;,
+            &quot;id&quot;: 16,
+            &quot;cnic&quot;: &quot;70647-1131572-4&quot;,
+            &quot;name&quot;: &quot;Raymond Bernier&quot;,
+            &quot;email&quot;: &quot;tmcglynn@example.net&quot;,
+            &quot;address&quot;: &quot;2984 Quigley Groves Apt. 120\nDeclanborough, DE 57372-1704&quot;,
+            &quot;city_id&quot;: 2,
+            &quot;cell_no1&quot;: &quot;03389263781&quot;,
+            &quot;cell_no2&quot;: &quot;03605017803&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 39,
-        &quot;customer_id&quot;: 10,
-        &quot;invRet_date&quot;: &quot;1970-07-28&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-9439&quot;,
-        &quot;return_inv_amout&quot;: &quot;3125.97&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 6,
+        &quot;invRet_date&quot;: &quot;2020-10-14&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-1219&quot;,
+        &quot;return_inv_amout&quot;: &quot;3519.80&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 10,
-            &quot;cnic&quot;: &quot;61389-1912211-5&quot;,
-            &quot;name&quot;: &quot;Prof. Chris Cruickshank&quot;,
-            &quot;email&quot;: &quot;king81@example.net&quot;,
-            &quot;address&quot;: &quot;9827 Jast Shore\nBergstromfort, ID 22291-7014&quot;,
-            &quot;city_id&quot;: 28,
-            &quot;cell_no1&quot;: &quot;03386127705&quot;,
+            &quot;id&quot;: 6,
+            &quot;cnic&quot;: &quot;22782-2131276-3&quot;,
+            &quot;name&quot;: &quot;Dr. Diego Schumm&quot;,
+            &quot;email&quot;: &quot;beaulah87@example.com&quot;,
+            &quot;address&quot;: &quot;95809 Myrl Flat Apt. 005\nWest Coltenshire, UT 76527-7432&quot;,
+            &quot;city_id&quot;: 14,
+            &quot;cell_no1&quot;: &quot;03474785145&quot;,
             &quot;cell_no2&quot;: null,
             &quot;image_path&quot;: &quot;default.png&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;status&quot;: &quot;inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 40,
-        &quot;customer_id&quot;: 17,
-        &quot;invRet_date&quot;: &quot;2005-04-23&quot;,
-        &quot;pos_inv_no&quot;: &quot;POS-4791&quot;,
-        &quot;return_inv_amout&quot;: &quot;131.15&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;customer_id&quot;: 15,
+        &quot;invRet_date&quot;: &quot;1985-08-16&quot;,
+        &quot;pos_inv_no&quot;: &quot;POS-1640&quot;,
+        &quot;return_inv_amout&quot;: &quot;1154.96&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;customer&quot;: {
-            &quot;id&quot;: 17,
-            &quot;cnic&quot;: &quot;42628-2056465-5&quot;,
-            &quot;name&quot;: &quot;Veda Schmitt&quot;,
-            &quot;email&quot;: &quot;yasmin90@example.org&quot;,
-            &quot;address&quot;: &quot;179 Dicki Mews\nSouth Landen, ND 87462-7768&quot;,
-            &quot;city_id&quot;: 18,
-            &quot;cell_no1&quot;: &quot;03569340842&quot;,
-            &quot;cell_no2&quot;: null,
+            &quot;id&quot;: 15,
+            &quot;cnic&quot;: &quot;64227-8639328-6&quot;,
+            &quot;name&quot;: &quot;Ms. Marion Barrows&quot;,
+            &quot;email&quot;: &quot;tessie46@example.org&quot;,
+            &quot;address&quot;: &quot;47978 Misty Locks Suite 783\nAustinland, LA 80972&quot;,
+            &quot;city_id&quot;: 47,
+            &quot;cell_no1&quot;: &quot;03888104138&quot;,
+            &quot;cell_no2&quot;: &quot;03312701588&quot;,
             &quot;image_path&quot;: &quot;default.png&quot;,
             &quot;status&quot;: &quot;inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
         }
     }
 ]</code>
@@ -20993,7 +21334,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"customer_id\": \"architecto\",
-    \"invRet_date\": \"2025-09-30T09:35:35\",
+    \"invRet_date\": \"2025-09-30T21:10:48\",
     \"pos_inv_no\": \"n\",
     \"return_inv_amout\": 84
 }"
@@ -21012,7 +21353,7 @@ const headers = {
 
 let body = {
     "customer_id": "architecto",
-    "invRet_date": "2025-09-30T09:35:35",
+    "invRet_date": "2025-09-30T21:10:48",
     "pos_inv_no": "n",
     "return_inv_amout": 84
 };
@@ -21114,10 +21455,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="invRet_date"                data-endpoint="POSTapi-pos_returns"
-               value="2025-09-30T09:35:35"
+               value="2025-09-30T21:10:48"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:35</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:48</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>pos_inv_no</code></b>&nbsp;&nbsp;
@@ -21193,25 +21534,25 @@ access-control-allow-origin: *
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;id&quot;: 1,
-    &quot;customer_id&quot;: 16,
-    &quot;invRet_date&quot;: &quot;2000-10-15&quot;,
-    &quot;pos_inv_no&quot;: &quot;POS-5632&quot;,
-    &quot;return_inv_amout&quot;: &quot;3857.46&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
+    &quot;customer_id&quot;: 10,
+    &quot;invRet_date&quot;: &quot;1972-12-10&quot;,
+    &quot;pos_inv_no&quot;: &quot;POS-5211&quot;,
+    &quot;return_inv_amout&quot;: &quot;2979.61&quot;,
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:47.000000Z&quot;,
     &quot;customer&quot;: {
-        &quot;id&quot;: 16,
-        &quot;cnic&quot;: &quot;83466-1236688-8&quot;,
-        &quot;name&quot;: &quot;Elfrieda Lynch&quot;,
-        &quot;email&quot;: &quot;schneider.tessie@example.org&quot;,
-        &quot;address&quot;: &quot;97266 Hyatt Roads Apt. 522\nEast Henry, ID 98776-5167&quot;,
-        &quot;city_id&quot;: 1,
-        &quot;cell_no1&quot;: &quot;03822444304&quot;,
-        &quot;cell_no2&quot;: &quot;03211808176&quot;,
+        &quot;id&quot;: 10,
+        &quot;cnic&quot;: &quot;38974-7731763-9&quot;,
+        &quot;name&quot;: &quot;Mr. Jamel Dooley&quot;,
+        &quot;email&quot;: &quot;ccorkery@example.com&quot;,
+        &quot;address&quot;: &quot;55593 Berry Avenue Apt. 703\nDurganville, WY 38977-0542&quot;,
+        &quot;city_id&quot;: 26,
+        &quot;cell_no1&quot;: &quot;03943412357&quot;,
+        &quot;cell_no2&quot;: &quot;03610041201&quot;,
         &quot;image_path&quot;: &quot;default.png&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:52.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:42.000000Z&quot;
     }
 }</code>
  </pre>
@@ -21317,7 +21658,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"customer_id\": \"architecto\",
-    \"invRet_date\": \"2025-09-30T09:35:35\",
+    \"invRet_date\": \"2025-09-30T21:10:48\",
     \"pos_inv_no\": \"n\",
     \"return_inv_amout\": 84
 }"
@@ -21336,7 +21677,7 @@ const headers = {
 
 let body = {
     "customer_id": "architecto",
-    "invRet_date": "2025-09-30T09:35:35",
+    "invRet_date": "2025-09-30T21:10:48",
     "pos_inv_no": "n",
     "return_inv_amout": 84
 };
@@ -21450,10 +21791,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="invRet_date"                data-endpoint="PUTapi-pos_returns--id-"
-               value="2025-09-30T09:35:35"
+               value="2025-09-30T21:10:48"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2025-09-30T09:35:35</code></p>
+<p>Must be a valid date. Example: <code>2025-09-30T21:10:48</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>pos_inv_no</code></b>&nbsp;&nbsp;
@@ -21652,640 +21993,640 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;pos_return_id&quot;: 21,
         &quot;product_id&quot;: 21,
-        &quot;qty&quot;: 6,
-        &quot;return_unit_price&quot;: &quot;62.24&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 4,
+        &quot;return_unit_price&quot;: &quot;217.93&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 21,
-            &quot;customer_id&quot;: 13,
-            &quot;invRet_date&quot;: &quot;2008-11-09&quot;,
+            &quot;customer_id&quot;: 4,
+            &quot;invRet_date&quot;: &quot;2015-10-02&quot;,
             &quot;pos_inv_no&quot;: &quot;POS-3986&quot;,
-            &quot;return_inv_amout&quot;: &quot;4214.33&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;return_inv_amout&quot;: &quot;2465.64&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 21,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC844&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ffee?text=fashion+eius&quot;,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC864&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008855?text=fashion+fugit&quot;,
             &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;1389.88&quot;,
-            &quot;opening_stock_quantity&quot;: 25,
-            &quot;user_id&quot;: 9,
-            &quot;barcode&quot;: &quot;3549834607834&quot;,
+            &quot;sale_price&quot;: &quot;1507.42&quot;,
+            &quot;opening_stock_quantity&quot;: 44,
+            &quot;user_id&quot;: 12,
+            &quot;barcode&quot;: &quot;3807646000268&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 2,
         &quot;pos_return_id&quot;: 22,
         &quot;product_id&quot;: 22,
-        &quot;qty&quot;: 10,
-        &quot;return_unit_price&quot;: &quot;377.74&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 2,
+        &quot;return_unit_price&quot;: &quot;82.75&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 22,
-            &quot;customer_id&quot;: 19,
-            &quot;invRet_date&quot;: &quot;1996-12-22&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-6351&quot;,
-            &quot;return_inv_amout&quot;: &quot;820.67&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 4,
+            &quot;invRet_date&quot;: &quot;1987-12-22&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-3900&quot;,
+            &quot;return_inv_amout&quot;: &quot;125.74&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 22,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC680&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008811?text=fashion+sit&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;4030.05&quot;,
-            &quot;opening_stock_quantity&quot;: 35,
-            &quot;user_id&quot;: 8,
-            &quot;barcode&quot;: &quot;3355214709254&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;design_code&quot;: &quot;DC061&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ccff?text=fashion+velit&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;2170.58&quot;,
+            &quot;opening_stock_quantity&quot;: 29,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;6135398040940&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 3,
         &quot;pos_return_id&quot;: 23,
         &quot;product_id&quot;: 23,
-        &quot;qty&quot;: 10,
-        &quot;return_unit_price&quot;: &quot;424.60&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 5,
+        &quot;return_unit_price&quot;: &quot;116.17&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 23,
-            &quot;customer_id&quot;: 6,
-            &quot;invRet_date&quot;: &quot;1976-11-06&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-5792&quot;,
-            &quot;return_inv_amout&quot;: &quot;4457.46&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 8,
+            &quot;invRet_date&quot;: &quot;2024-03-11&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-8750&quot;,
+            &quot;return_inv_amout&quot;: &quot;1745.73&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 23,
             &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC910&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001199?text=fashion+eos&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;1377.15&quot;,
-            &quot;opening_stock_quantity&quot;: 13,
+            &quot;design_code&quot;: &quot;DC086&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0055aa?text=fashion+unde&quot;,
+            &quot;sub_category_id&quot;: 8,
+            &quot;sale_price&quot;: &quot;4974.18&quot;,
+            &quot;opening_stock_quantity&quot;: 25,
             &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;1028355076425&quot;,
+            &quot;barcode&quot;: &quot;9311032824177&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 4,
         &quot;pos_return_id&quot;: 24,
         &quot;product_id&quot;: 24,
-        &quot;qty&quot;: 6,
-        &quot;return_unit_price&quot;: &quot;281.20&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 8,
+        &quot;return_unit_price&quot;: &quot;258.64&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 24,
-            &quot;customer_id&quot;: 7,
-            &quot;invRet_date&quot;: &quot;2004-10-18&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-3995&quot;,
-            &quot;return_inv_amout&quot;: &quot;4129.02&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 8,
+            &quot;invRet_date&quot;: &quot;2021-07-12&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-8571&quot;,
+            &quot;return_inv_amout&quot;: &quot;4134.00&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 24,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC561&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa22?text=fashion+et&quot;,
-            &quot;sub_category_id&quot;: 2,
-            &quot;sale_price&quot;: &quot;4762.48&quot;,
-            &quot;opening_stock_quantity&quot;: 9,
-            &quot;user_id&quot;: 2,
-            &quot;barcode&quot;: &quot;7156062082850&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;title&quot;: &quot;Long Shirt&quot;,
+            &quot;design_code&quot;: &quot;DC355&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/005544?text=fashion+eum&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;4975.03&quot;,
+            &quot;opening_stock_quantity&quot;: 6,
+            &quot;user_id&quot;: 12,
+            &quot;barcode&quot;: &quot;2048132273693&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 5,
         &quot;pos_return_id&quot;: 25,
         &quot;product_id&quot;: 25,
-        &quot;qty&quot;: 8,
-        &quot;return_unit_price&quot;: &quot;405.31&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 1,
+        &quot;return_unit_price&quot;: &quot;364.38&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 25,
-            &quot;customer_id&quot;: 19,
-            &quot;invRet_date&quot;: &quot;2002-12-06&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-8654&quot;,
-            &quot;return_inv_amout&quot;: &quot;2799.10&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 10,
+            &quot;invRet_date&quot;: &quot;2002-11-13&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-8979&quot;,
+            &quot;return_inv_amout&quot;: &quot;864.70&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 25,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC340&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099bb?text=fashion+qui&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;1521.97&quot;,
-            &quot;opening_stock_quantity&quot;: 43,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;5456746852055&quot;,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC403&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044cc?text=fashion+nihil&quot;,
+            &quot;sub_category_id&quot;: 3,
+            &quot;sale_price&quot;: &quot;3488.32&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
+            &quot;user_id&quot;: 12,
+            &quot;barcode&quot;: &quot;0631107636870&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 6,
         &quot;pos_return_id&quot;: 26,
         &quot;product_id&quot;: 26,
-        &quot;qty&quot;: 9,
-        &quot;return_unit_price&quot;: &quot;216.32&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 10,
+        &quot;return_unit_price&quot;: &quot;230.54&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 26,
-            &quot;customer_id&quot;: 15,
-            &quot;invRet_date&quot;: &quot;2017-03-31&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-4039&quot;,
-            &quot;return_inv_amout&quot;: &quot;1034.46&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 16,
+            &quot;invRet_date&quot;: &quot;2008-09-16&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-4145&quot;,
+            &quot;return_inv_amout&quot;: &quot;530.41&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 26,
             &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC546&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009999?text=fashion+in&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;4049.22&quot;,
-            &quot;opening_stock_quantity&quot;: 20,
+            &quot;design_code&quot;: &quot;DC871&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003355?text=fashion+aut&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;2539.78&quot;,
+            &quot;opening_stock_quantity&quot;: 32,
             &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;7550626218073&quot;,
+            &quot;barcode&quot;: &quot;2379400345027&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 7,
         &quot;pos_return_id&quot;: 27,
         &quot;product_id&quot;: 27,
-        &quot;qty&quot;: 6,
-        &quot;return_unit_price&quot;: &quot;447.28&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 5,
+        &quot;return_unit_price&quot;: &quot;317.91&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 27,
-            &quot;customer_id&quot;: 18,
-            &quot;invRet_date&quot;: &quot;1990-08-04&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-2053&quot;,
-            &quot;return_inv_amout&quot;: &quot;1374.97&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 9,
+            &quot;invRet_date&quot;: &quot;1979-06-03&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-5399&quot;,
+            &quot;return_inv_amout&quot;: &quot;2503.32&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 27,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC269&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00cc55?text=fashion+odit&quot;,
-            &quot;sub_category_id&quot;: 8,
-            &quot;sale_price&quot;: &quot;2209.85&quot;,
-            &quot;opening_stock_quantity&quot;: 40,
-            &quot;user_id&quot;: 5,
-            &quot;barcode&quot;: &quot;0599229261441&quot;,
-            &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC978&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001100?text=fashion+sit&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;2519.34&quot;,
+            &quot;opening_stock_quantity&quot;: 26,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;9494080678227&quot;,
+            &quot;status&quot;: &quot;Active&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 8,
         &quot;pos_return_id&quot;: 28,
         &quot;product_id&quot;: 28,
-        &quot;qty&quot;: 9,
-        &quot;return_unit_price&quot;: &quot;455.38&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 4,
+        &quot;return_unit_price&quot;: &quot;71.57&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 28,
-            &quot;customer_id&quot;: 11,
-            &quot;invRet_date&quot;: &quot;2022-07-24&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-5546&quot;,
-            &quot;return_inv_amout&quot;: &quot;3678.54&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 20,
+            &quot;invRet_date&quot;: &quot;1977-12-15&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-3577&quot;,
+            &quot;return_inv_amout&quot;: &quot;2044.73&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 28,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC123&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa33?text=fashion+ut&quot;,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC545&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddff?text=fashion+quaerat&quot;,
             &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;3842.13&quot;,
-            &quot;opening_stock_quantity&quot;: 49,
-            &quot;user_id&quot;: 4,
-            &quot;barcode&quot;: &quot;0476655131459&quot;,
+            &quot;sale_price&quot;: &quot;1126.24&quot;,
+            &quot;opening_stock_quantity&quot;: 22,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;0681458323943&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 9,
         &quot;pos_return_id&quot;: 29,
         &quot;product_id&quot;: 29,
-        &quot;qty&quot;: 3,
-        &quot;return_unit_price&quot;: &quot;271.83&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 9,
+        &quot;return_unit_price&quot;: &quot;477.91&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 29,
-            &quot;customer_id&quot;: 16,
-            &quot;invRet_date&quot;: &quot;1995-07-12&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-4189&quot;,
-            &quot;return_inv_amout&quot;: &quot;626.00&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+            &quot;customer_id&quot;: 5,
+            &quot;invRet_date&quot;: &quot;1977-04-27&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-8355&quot;,
+            &quot;return_inv_amout&quot;: &quot;2190.06&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 29,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC934&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ee22?text=fashion+odit&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;3136.74&quot;,
-            &quot;opening_stock_quantity&quot;: 44,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;6160772872084&quot;,
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC770&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0000aa?text=fashion+et&quot;,
+            &quot;sub_category_id&quot;: 6,
+            &quot;sale_price&quot;: &quot;1041.29&quot;,
+            &quot;opening_stock_quantity&quot;: 18,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;9020659275391&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 10,
         &quot;pos_return_id&quot;: 30,
         &quot;product_id&quot;: 30,
-        &quot;qty&quot;: 2,
-        &quot;return_unit_price&quot;: &quot;293.55&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 7,
+        &quot;return_unit_price&quot;: &quot;231.29&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 30,
-            &quot;customer_id&quot;: 7,
-            &quot;invRet_date&quot;: &quot;1981-12-26&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-3763&quot;,
-            &quot;return_inv_amout&quot;: &quot;1692.53&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 15,
+            &quot;invRet_date&quot;: &quot;1997-05-03&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-3257&quot;,
+            &quot;return_inv_amout&quot;: &quot;4516.74&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 30,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC453&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004477?text=fashion+facere&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;2705.87&quot;,
-            &quot;opening_stock_quantity&quot;: 28,
-            &quot;user_id&quot;: 7,
-            &quot;barcode&quot;: &quot;3896007756661&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC571&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003366?text=fashion+vero&quot;,
+            &quot;sub_category_id&quot;: 6,
+            &quot;sale_price&quot;: &quot;1372.82&quot;,
+            &quot;opening_stock_quantity&quot;: 5,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;9513919127726&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 11,
         &quot;pos_return_id&quot;: 31,
         &quot;product_id&quot;: 31,
-        &quot;qty&quot;: 8,
-        &quot;return_unit_price&quot;: &quot;411.40&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 3,
+        &quot;return_unit_price&quot;: &quot;200.53&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 31,
-            &quot;customer_id&quot;: 11,
-            &quot;invRet_date&quot;: &quot;2018-05-02&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-7184&quot;,
-            &quot;return_inv_amout&quot;: &quot;4615.94&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 19,
+            &quot;invRet_date&quot;: &quot;2010-12-08&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-7521&quot;,
+            &quot;return_inv_amout&quot;: &quot;1834.65&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 31,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC453&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0000cc?text=fashion+et&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;3429.66&quot;,
-            &quot;opening_stock_quantity&quot;: 47,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;5254840705990&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC219&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0099ee?text=fashion+enim&quot;,
+            &quot;sub_category_id&quot;: 5,
+            &quot;sale_price&quot;: &quot;1922.41&quot;,
+            &quot;opening_stock_quantity&quot;: 25,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;6506478682617&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 12,
         &quot;pos_return_id&quot;: 32,
         &quot;product_id&quot;: 32,
-        &quot;qty&quot;: 10,
-        &quot;return_unit_price&quot;: &quot;118.24&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 8,
+        &quot;return_unit_price&quot;: &quot;433.83&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 32,
-            &quot;customer_id&quot;: 14,
-            &quot;invRet_date&quot;: &quot;1972-05-09&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-9488&quot;,
-            &quot;return_inv_amout&quot;: &quot;3105.29&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 12,
+            &quot;invRet_date&quot;: &quot;1990-04-26&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-2994&quot;,
+            &quot;return_inv_amout&quot;: &quot;884.66&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 32,
             &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC847&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ee55?text=fashion+eius&quot;,
+            &quot;design_code&quot;: &quot;DC159&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007711?text=fashion+nostrum&quot;,
             &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;2535.75&quot;,
-            &quot;opening_stock_quantity&quot;: 16,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;6323534572848&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;sale_price&quot;: &quot;3349.71&quot;,
+            &quot;opening_stock_quantity&quot;: 50,
+            &quot;user_id&quot;: 1,
+            &quot;barcode&quot;: &quot;6039573742042&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 13,
         &quot;pos_return_id&quot;: 33,
         &quot;product_id&quot;: 33,
-        &quot;qty&quot;: 6,
-        &quot;return_unit_price&quot;: &quot;231.86&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 1,
+        &quot;return_unit_price&quot;: &quot;153.35&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 33,
-            &quot;customer_id&quot;: 4,
-            &quot;invRet_date&quot;: &quot;1986-05-14&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-2164&quot;,
-            &quot;return_inv_amout&quot;: &quot;1118.78&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 9,
+            &quot;invRet_date&quot;: &quot;1999-12-10&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-5391&quot;,
+            &quot;return_inv_amout&quot;: &quot;4614.71&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 33,
-            &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC626&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0044ff?text=fashion+reprehenderit&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;4742.66&quot;,
-            &quot;opening_stock_quantity&quot;: 37,
-            &quot;user_id&quot;: 11,
-            &quot;barcode&quot;: &quot;9274523877765&quot;,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC130&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/006677?text=fashion+incidunt&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;4724.09&quot;,
+            &quot;opening_stock_quantity&quot;: 21,
+            &quot;user_id&quot;: 2,
+            &quot;barcode&quot;: &quot;4873199027846&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 14,
         &quot;pos_return_id&quot;: 34,
         &quot;product_id&quot;: 34,
-        &quot;qty&quot;: 1,
-        &quot;return_unit_price&quot;: &quot;184.20&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 10,
+        &quot;return_unit_price&quot;: &quot;305.66&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 34,
             &quot;customer_id&quot;: 8,
-            &quot;invRet_date&quot;: &quot;1989-05-31&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-4609&quot;,
-            &quot;return_inv_amout&quot;: &quot;2651.95&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;invRet_date&quot;: &quot;2012-08-21&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-3043&quot;,
+            &quot;return_inv_amout&quot;: &quot;2221.59&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 34,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC558&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/007733?text=fashion+consectetur&quot;,
-            &quot;sub_category_id&quot;: 4,
-            &quot;sale_price&quot;: &quot;3661.36&quot;,
-            &quot;opening_stock_quantity&quot;: 43,
-            &quot;user_id&quot;: 10,
-            &quot;barcode&quot;: &quot;6051836010620&quot;,
+            &quot;title&quot;: &quot;Banarci&quot;,
+            &quot;design_code&quot;: &quot;DC869&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/003344?text=fashion+atque&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;4763.44&quot;,
+            &quot;opening_stock_quantity&quot;: 14,
+            &quot;user_id&quot;: 7,
+            &quot;barcode&quot;: &quot;3422992069105&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 15,
         &quot;pos_return_id&quot;: 35,
         &quot;product_id&quot;: 35,
-        &quot;qty&quot;: 5,
-        &quot;return_unit_price&quot;: &quot;126.65&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 1,
+        &quot;return_unit_price&quot;: &quot;230.27&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 35,
-            &quot;customer_id&quot;: 3,
-            &quot;invRet_date&quot;: &quot;1997-02-10&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-2184&quot;,
-            &quot;return_inv_amout&quot;: &quot;1238.02&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 17,
+            &quot;invRet_date&quot;: &quot;1994-08-18&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-7901&quot;,
+            &quot;return_inv_amout&quot;: &quot;2623.03&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 35,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC396&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/004444?text=fashion+eveniet&quot;,
-            &quot;sub_category_id&quot;: 6,
-            &quot;sale_price&quot;: &quot;4389.53&quot;,
-            &quot;opening_stock_quantity&quot;: 45,
-            &quot;user_id&quot;: 1,
-            &quot;barcode&quot;: &quot;4260559150687&quot;,
+            &quot;design_code&quot;: &quot;DC499&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aaaa?text=fashion+autem&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;1728.84&quot;,
+            &quot;opening_stock_quantity&quot;: 11,
+            &quot;user_id&quot;: 4,
+            &quot;barcode&quot;: &quot;7950893361357&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 16,
         &quot;pos_return_id&quot;: 36,
         &quot;product_id&quot;: 36,
-        &quot;qty&quot;: 3,
-        &quot;return_unit_price&quot;: &quot;72.90&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 2,
+        &quot;return_unit_price&quot;: &quot;323.62&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 36,
-            &quot;customer_id&quot;: 2,
-            &quot;invRet_date&quot;: &quot;1990-12-31&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-9411&quot;,
-            &quot;return_inv_amout&quot;: &quot;4338.42&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 8,
+            &quot;invRet_date&quot;: &quot;1979-10-31&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-7956&quot;,
+            &quot;return_inv_amout&quot;: &quot;2123.72&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 36,
-            &quot;title&quot;: &quot;Maxi&quot;,
-            &quot;design_code&quot;: &quot;DC848&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00dd44?text=fashion+non&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;3270.26&quot;,
-            &quot;opening_stock_quantity&quot;: 34,
-            &quot;user_id&quot;: 8,
-            &quot;barcode&quot;: &quot;8127530119742&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC974&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00cc77?text=fashion+veritatis&quot;,
+            &quot;sub_category_id&quot;: 6,
+            &quot;sale_price&quot;: &quot;1399.96&quot;,
+            &quot;opening_stock_quantity&quot;: 18,
+            &quot;user_id&quot;: 10,
+            &quot;barcode&quot;: &quot;9420839624030&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 17,
         &quot;pos_return_id&quot;: 37,
         &quot;product_id&quot;: 37,
-        &quot;qty&quot;: 10,
-        &quot;return_unit_price&quot;: &quot;61.77&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 9,
+        &quot;return_unit_price&quot;: &quot;80.67&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 37,
-            &quot;customer_id&quot;: 11,
-            &quot;invRet_date&quot;: &quot;1977-02-10&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-7044&quot;,
-            &quot;return_inv_amout&quot;: &quot;1129.58&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 12,
+            &quot;invRet_date&quot;: &quot;1988-10-06&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-8584&quot;,
+            &quot;return_inv_amout&quot;: &quot;4672.02&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 37,
-            &quot;title&quot;: &quot;Long Shirt&quot;,
-            &quot;design_code&quot;: &quot;DC525&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/009922?text=fashion+temporibus&quot;,
-            &quot;sub_category_id&quot;: 1,
-            &quot;sale_price&quot;: &quot;1257.88&quot;,
-            &quot;opening_stock_quantity&quot;: 10,
-            &quot;user_id&quot;: 8,
-            &quot;barcode&quot;: &quot;5776928264705&quot;,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC834&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa33?text=fashion+delectus&quot;,
+            &quot;sub_category_id&quot;: 8,
+            &quot;sale_price&quot;: &quot;1449.32&quot;,
+            &quot;opening_stock_quantity&quot;: 42,
+            &quot;user_id&quot;: 2,
+            &quot;barcode&quot;: &quot;3332153858892&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 18,
         &quot;pos_return_id&quot;: 38,
         &quot;product_id&quot;: 38,
-        &quot;qty&quot;: 8,
-        &quot;return_unit_price&quot;: &quot;148.84&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 6,
+        &quot;return_unit_price&quot;: &quot;433.94&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 38,
-            &quot;customer_id&quot;: 2,
-            &quot;invRet_date&quot;: &quot;1993-12-10&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-2409&quot;,
-            &quot;return_inv_amout&quot;: &quot;3834.31&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 16,
+            &quot;invRet_date&quot;: &quot;2001-09-21&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-3109&quot;,
+            &quot;return_inv_amout&quot;: &quot;2727.28&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 38,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC432&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/001122?text=fashion+ratione&quot;,
-            &quot;sub_category_id&quot;: 7,
-            &quot;sale_price&quot;: &quot;3193.04&quot;,
-            &quot;opening_stock_quantity&quot;: 43,
-            &quot;user_id&quot;: 5,
-            &quot;barcode&quot;: &quot;3017159351744&quot;,
+            &quot;title&quot;: &quot;Anarkali&quot;,
+            &quot;design_code&quot;: &quot;DC175&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddee?text=fashion+non&quot;,
+            &quot;sub_category_id&quot;: 2,
+            &quot;sale_price&quot;: &quot;4298.01&quot;,
+            &quot;opening_stock_quantity&quot;: 13,
+            &quot;user_id&quot;: 4,
+            &quot;barcode&quot;: &quot;2695807664999&quot;,
             &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 19,
         &quot;pos_return_id&quot;: 39,
         &quot;product_id&quot;: 39,
-        &quot;qty&quot;: 1,
-        &quot;return_unit_price&quot;: &quot;394.98&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 9,
+        &quot;return_unit_price&quot;: &quot;195.29&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 39,
-            &quot;customer_id&quot;: 10,
-            &quot;invRet_date&quot;: &quot;1970-07-28&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-9439&quot;,
-            &quot;return_inv_amout&quot;: &quot;3125.97&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 6,
+            &quot;invRet_date&quot;: &quot;2020-10-14&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-1219&quot;,
+            &quot;return_inv_amout&quot;: &quot;3519.80&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 39,
             &quot;title&quot;: &quot;Anarkali&quot;,
-            &quot;design_code&quot;: &quot;DC971&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00aa66?text=fashion+ut&quot;,
-            &quot;sub_category_id&quot;: 2,
-            &quot;sale_price&quot;: &quot;2525.53&quot;,
-            &quot;opening_stock_quantity&quot;: 19,
-            &quot;user_id&quot;: 6,
-            &quot;barcode&quot;: &quot;4794241326871&quot;,
+            &quot;design_code&quot;: &quot;DC172&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00cc33?text=fashion+quibusdam&quot;,
+            &quot;sub_category_id&quot;: 9,
+            &quot;sale_price&quot;: &quot;4084.61&quot;,
+            &quot;opening_stock_quantity&quot;: 13,
+            &quot;user_id&quot;: 3,
+            &quot;barcode&quot;: &quot;6242820483661&quot;,
             &quot;status&quot;: &quot;Inactive&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     },
     {
         &quot;id&quot;: 20,
         &quot;pos_return_id&quot;: 40,
         &quot;product_id&quot;: 40,
-        &quot;qty&quot;: 2,
-        &quot;return_unit_price&quot;: &quot;182.36&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+        &quot;qty&quot;: 3,
+        &quot;return_unit_price&quot;: &quot;64.51&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
         &quot;pos_return&quot;: {
             &quot;id&quot;: 40,
-            &quot;customer_id&quot;: 17,
-            &quot;invRet_date&quot;: &quot;2005-04-23&quot;,
-            &quot;pos_inv_no&quot;: &quot;POS-4791&quot;,
-            &quot;return_inv_amout&quot;: &quot;131.15&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;customer_id&quot;: 15,
+            &quot;invRet_date&quot;: &quot;1985-08-16&quot;,
+            &quot;pos_inv_no&quot;: &quot;POS-1640&quot;,
+            &quot;return_inv_amout&quot;: &quot;1154.96&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         },
         &quot;product&quot;: {
             &quot;id&quot;: 40,
-            &quot;title&quot;: &quot;Banarci&quot;,
-            &quot;design_code&quot;: &quot;DC787&quot;,
-            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ddff?text=fashion+eligendi&quot;,
-            &quot;sub_category_id&quot;: 5,
-            &quot;sale_price&quot;: &quot;4146.78&quot;,
-            &quot;opening_stock_quantity&quot;: 43,
-            &quot;user_id&quot;: 3,
-            &quot;barcode&quot;: &quot;3120852845585&quot;,
-            &quot;status&quot;: &quot;Active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;
+            &quot;title&quot;: &quot;Maxi&quot;,
+            &quot;design_code&quot;: &quot;DC218&quot;,
+            &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/0022ff?text=fashion+nisi&quot;,
+            &quot;sub_category_id&quot;: 8,
+            &quot;sale_price&quot;: &quot;3987.45&quot;,
+            &quot;opening_stock_quantity&quot;: 27,
+            &quot;user_id&quot;: 8,
+            &quot;barcode&quot;: &quot;5666788484828&quot;,
+            &quot;status&quot;: &quot;Inactive&quot;,
+            &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
         }
     }
 ]</code>
@@ -22582,32 +22923,32 @@ access-control-allow-origin: *
     &quot;id&quot;: 1,
     &quot;pos_return_id&quot;: 21,
     &quot;product_id&quot;: 21,
-    &quot;qty&quot;: 6,
-    &quot;return_unit_price&quot;: &quot;62.24&quot;,
-    &quot;created_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-29T16:13:57.000000Z&quot;,
+    &quot;qty&quot;: 4,
+    &quot;return_unit_price&quot;: &quot;217.93&quot;,
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
     &quot;pos_return&quot;: {
         &quot;id&quot;: 21,
-        &quot;customer_id&quot;: 13,
-        &quot;invRet_date&quot;: &quot;2008-11-09&quot;,
+        &quot;customer_id&quot;: 4,
+        &quot;invRet_date&quot;: &quot;2015-10-02&quot;,
         &quot;pos_inv_no&quot;: &quot;POS-3986&quot;,
-        &quot;return_inv_amout&quot;: &quot;4214.33&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+        &quot;return_inv_amout&quot;: &quot;2465.64&quot;,
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     &quot;product&quot;: {
         &quot;id&quot;: 21,
-        &quot;title&quot;: &quot;Long Shirt&quot;,
-        &quot;design_code&quot;: &quot;DC844&quot;,
-        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/00ffee?text=fashion+eius&quot;,
+        &quot;title&quot;: &quot;Anarkali&quot;,
+        &quot;design_code&quot;: &quot;DC864&quot;,
+        &quot;image_path&quot;: &quot;https://via.placeholder.com/640x480.png/008855?text=fashion+fugit&quot;,
         &quot;sub_category_id&quot;: 5,
-        &quot;sale_price&quot;: &quot;1389.88&quot;,
-        &quot;opening_stock_quantity&quot;: 25,
-        &quot;user_id&quot;: 9,
-        &quot;barcode&quot;: &quot;3549834607834&quot;,
+        &quot;sale_price&quot;: &quot;1507.42&quot;,
+        &quot;opening_stock_quantity&quot;: 44,
+        &quot;user_id&quot;: 12,
+        &quot;barcode&quot;: &quot;3807646000268&quot;,
         &quot;status&quot;: &quot;Active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-29T16:13:56.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     }
 }</code>
  </pre>
@@ -23052,64 +23393,64 @@ access-control-allow-origin: *
         &quot;id&quot;: 1,
         &quot;title&quot;: &quot;Capital &amp; Reserves&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 2,
         &quot;title&quot;: &quot;Long Term Loans&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 3,
         &quot;title&quot;: &quot;Deferred Liabilities&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 4,
         &quot;title&quot;: &quot;Current Liabilities&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 5,
         &quot;title&quot;: &quot;Fix Assets&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 6,
         &quot;title&quot;: &quot;Long Term Assets&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 7,
         &quot;title&quot;: &quot;Current Assets&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 8,
         &quot;title&quot;: &quot;Revenues&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     },
     {
         &quot;id&quot;: 9,
         &quot;title&quot;: &quot;Admin Expenses&quot;,
         &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
+        &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
     }
 ]</code>
  </pre>
@@ -23381,8 +23722,8 @@ access-control-allow-origin: *
     &quot;id&quot;: 1,
     &quot;title&quot;: &quot;Capital &amp; Reserves&quot;,
     &quot;status&quot;: &quot;active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;
+    &quot;created_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2025-09-30T10:31:48.000000Z&quot;
 }</code>
  </pre>
     </span>
@@ -23487,7 +23828,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"title\": \"b\",
-    \"status\": \"inactive\"
+    \"status\": \"active\"
 }"
 </code></pre></div>
 
@@ -23504,7 +23845,7 @@ const headers = {
 
 let body = {
     "title": "b",
-    "status": "inactive"
+    "status": "active"
 };
 
 fetch(url, {
@@ -23620,10 +23961,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-coa-mains--id-"
-               value="inactive"
+               value="active"
                data-component="body">
     <br>
-<p>Example: <code>inactive</code></p>
+<p>Example: <code>active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -23797,788 +24138,7 @@ content-type: application/json
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">[
-    {
-        &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Paid-Up Capitals (Share Holders)&quot;,
-        &quot;coa_main_id&quot;: 1,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Capital &amp; Reserves&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 2,
-        &quot;title&quot;: &quot;Revenues &ndash; Reserves&quot;,
-        &quot;coa_main_id&quot;: 1,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Capital &amp; Reserves&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 3,
-        &quot;title&quot;: &quot;From Directors&quot;,
-        &quot;coa_main_id&quot;: 2,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Long Term Loans&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 4,
-        &quot;title&quot;: &quot;From Bank&quot;,
-        &quot;coa_main_id&quot;: 2,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Long Term Loans&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 5,
-        &quot;title&quot;: &quot;From Associated Company&quot;,
-        &quot;coa_main_id&quot;: 2,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Long Term Loans&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 6,
-        &quot;title&quot;: &quot;Deferred Taxation&quot;,
-        &quot;coa_main_id&quot;: 3,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Deferred Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 7,
-        &quot;title&quot;: &quot;Employee&#039;s Retirement Benefits&quot;,
-        &quot;coa_main_id&quot;: 3,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Deferred Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 8,
-        &quot;title&quot;: &quot;Bank Borrowing&quot;,
-        &quot;coa_main_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Current Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 9,
-        &quot;title&quot;: &quot;Trade Creditors for Supplies (A/c Payable)&quot;,
-        &quot;coa_main_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Current Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 10,
-        &quot;title&quot;: &quot;Trade Creditors for Sale Bases (A/c Payable)&quot;,
-        &quot;coa_main_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Current Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 11,
-        &quot;title&quot;: &quot;Trade Creditors for Services (A/c Payable)&quot;,
-        &quot;coa_main_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Current Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 12,
-        &quot;title&quot;: &quot;Accrued Liabilities&quot;,
-        &quot;coa_main_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Current Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 13,
-        &quot;title&quot;: &quot;Provision for Taxation&quot;,
-        &quot;coa_main_id&quot;: 4,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Current Liabilities&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 14,
-        &quot;title&quot;: &quot;Assets Owned (Fix Operating)&quot;,
-        &quot;coa_main_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Fix Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 15,
-        &quot;title&quot;: &quot;Assets Leased (Fix Operating)&quot;,
-        &quot;coa_main_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Fix Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 16,
-        &quot;title&quot;: &quot;Electric Installation&quot;,
-        &quot;coa_main_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Fix Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 17,
-        &quot;title&quot;: &quot;Computers and Accessories&quot;,
-        &quot;coa_main_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Fix Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 18,
-        &quot;title&quot;: &quot;Furniture and Fixtures&quot;,
-        &quot;coa_main_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Fix Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 19,
-        &quot;title&quot;: &quot;Other Assets&quot;,
-        &quot;coa_main_id&quot;: 5,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 5,
-            &quot;title&quot;: &quot;Fix Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 20,
-        &quot;title&quot;: &quot;Long Term Deposits&quot;,
-        &quot;coa_main_id&quot;: 6,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 6,
-            &quot;title&quot;: &quot;Long Term Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 21,
-        &quot;title&quot;: &quot;Cash Accounts&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 22,
-        &quot;title&quot;: &quot;Bank Accounts&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 23,
-        &quot;title&quot;: &quot;Short Term Advances&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 24,
-        &quot;title&quot;: &quot;Advances To Employees&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 25,
-        &quot;title&quot;: &quot;Advance Income Tax&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 26,
-        &quot;title&quot;: &quot;Stock in Trade&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 27,
-        &quot;title&quot;: &quot;Trade Debtors&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 28,
-        &quot;title&quot;: &quot;Account Receivables&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 29,
-        &quot;title&quot;: &quot;Refund&quot;,
-        &quot;coa_main_id&quot;: 7,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 7,
-            &quot;title&quot;: &quot;Current Assets&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 30,
-        &quot;title&quot;: &quot;Sales&quot;,
-        &quot;coa_main_id&quot;: 8,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Revenues&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 31,
-        &quot;title&quot;: &quot;Cost of Sales&quot;,
-        &quot;coa_main_id&quot;: 8,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 8,
-            &quot;title&quot;: &quot;Revenues&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 32,
-        &quot;title&quot;: &quot;Utility Expense&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 33,
-        &quot;title&quot;: &quot;Rent Office&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 34,
-        &quot;title&quot;: &quot;Entertainment Expense&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 35,
-        &quot;title&quot;: &quot;Directors Remuneration&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 36,
-        &quot;title&quot;: &quot;Staff Salary and Benefits&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 37,
-        &quot;title&quot;: &quot;Rates and Taxes&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 38,
-        &quot;title&quot;: &quot;Communication Expenses&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 39,
-        &quot;title&quot;: &quot;Printing and Stationary&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 40,
-        &quot;title&quot;: &quot;Vehicle Running Expenses &ndash; POL&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 41,
-        &quot;title&quot;: &quot;Vehicle Repair and Maintenance&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 42,
-        &quot;title&quot;: &quot;Postage and Courier&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 43,
-        &quot;title&quot;: &quot;Legal and Professional Charges&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 44,
-        &quot;title&quot;: &quot;Travelling and Conveyance&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 45,
-        &quot;title&quot;: &quot;Miscellaneous Expenses&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 46,
-        &quot;title&quot;: &quot;Bank Charges&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 47,
-        &quot;title&quot;: &quot;Advertisement And Publicity&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 48,
-        &quot;title&quot;: &quot;Fee &amp; Subscription&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 49,
-        &quot;title&quot;: &quot;Cleaning &amp; Sanitation&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 50,
-        &quot;title&quot;: &quot;Charity &amp; Welfare&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 51,
-        &quot;title&quot;: &quot;Website Expenses&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    },
-    {
-        &quot;id&quot;: 52,
-        &quot;title&quot;: &quot;Internet Expenses&quot;,
-        &quot;coa_main_id&quot;: 9,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-        &quot;coa_main&quot;: {
-            &quot;id&quot;: 9,
-            &quot;title&quot;: &quot;Admin Expenses&quot;,
-            &quot;status&quot;: &quot;active&quot;,
-            &quot;created_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-30T05:55:23.000000Z&quot;
-        }
-    }
-]</code>
+<code class="language-json" style="max-height: 300px;">[]</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-coa-subs" hidden>
@@ -24822,14 +24382,14 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/coa-subs/1" \
+    --get "http://localhost/api/coa-subs/16" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/coa-subs/1"
+    "http://localhost/api/coa-subs/16"
 );
 
 const headers = {
@@ -24846,7 +24406,7 @@ fetch(url, {
 
 <span id="example-responses-GETapi-coa-subs--id-">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (404):</p>
         </blockquote>
                 <details class="annotation">
             <summary style="cursor: pointer;">
@@ -24858,19 +24418,7 @@ access-control-allow-origin: *
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;title&quot;: &quot;Paid-Up Capitals (Share Holders)&quot;,
-    &quot;coa_main_id&quot;: 1,
-    &quot;status&quot;: &quot;active&quot;,
-    &quot;created_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2025-09-30T06:08:34.000000Z&quot;,
-    &quot;coa_main&quot;: {
-        &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Capital &amp; Reserves&quot;,
-        &quot;status&quot;: &quot;active&quot;,
-        &quot;created_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2025-09-30T05:55:22.000000Z&quot;
-    }
+    &quot;message&quot;: &quot;No query results for model [App\\Models\\CoaSub] 16&quot;
 }</code>
  </pre>
     </span>
@@ -24950,10 +24498,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-coa-subs--id-"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the coa sub. Example: <code>1</code></p>
+<p>The ID of the coa sub. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -24970,20 +24518,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/coa-subs/1" \
+    "http://localhost/api/coa-subs/16" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"title\": \"b\",
     \"coa_main_id\": \"architecto\",
-    \"status\": \"inactive\"
+    \"status\": \"active\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/coa-subs/1"
+    "http://localhost/api/coa-subs/16"
 );
 
 const headers = {
@@ -24994,7 +24542,7 @@ const headers = {
 let body = {
     "title": "b",
     "coa_main_id": "architecto",
-    "status": "inactive"
+    "status": "active"
 };
 
 fetch(url, {
@@ -25087,10 +24635,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="PUTapi-coa-subs--id-"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the coa sub. Example: <code>1</code></p>
+<p>The ID of the coa sub. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -25121,10 +24669,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-coa-subs--id-"
-               value="inactive"
+               value="active"
                data-component="body">
     <br>
-<p>Example: <code>inactive</code></p>
+<p>Example: <code>active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -25143,14 +24691,14 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/coa-subs/1" \
+    "http://localhost/api/coa-subs/16" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/coa-subs/1"
+    "http://localhost/api/coa-subs/16"
 );
 
 const headers = {
@@ -25243,10 +24791,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-coa-subs--id-"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the coa sub. Example: <code>1</code></p>
+<p>The ID of the coa sub. Example: <code>16</code></p>
             </div>
                     </form>
 
