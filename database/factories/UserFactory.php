@@ -1,11 +1,10 @@
 <?php
 
-// database/factories/UserFactory.php
 namespace Database\Factories;
 
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -18,22 +17,11 @@ class UserFactory extends Factory
             'cell_no1'          => $this->faker->phoneNumber,
             'cell_no2'          => $this->faker->optional()->phoneNumber,
             'img_path'          => null,
-            'role_id'           => Role::inRandomOrder()->first()->id ?? 1,
+            'role_id'           => optional(Role::inRandomOrder()->first())->id ?? 1,
             'email_verified_at' => now(),
             'password'          => bcrypt('password'),
             'status'            => 'active',
             'remember_token'    => Str::random(10),
-            
-            // 'first_name' => $this->faker->firstName,
-            // 'last_name' => $this->faker->lastName,
-            // 'email' => $this->faker->unique()->safeEmail,
-            // 'cell_no1' => $this->faker->phoneNumber,
-            // 'cell_no2' => $this->faker->optional()->phoneNumber,
-            // 'img_path' => $this->faker->imageUrl(100, 100, 'people'),
-            // 'role_id' => Role::inRandomOrder()->first()?->id ?? Role::factory(),
-            // 'email_verified_at' => now(),
-            // 'password' => Hash::make('password'),
-            // 'status' => $this->faker->randomElement(['active','inactive']),
         ];
     }
 }

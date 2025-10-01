@@ -29,7 +29,8 @@ use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Controllers\Api\MaterialController;
-use App\Http\Controllers\ProductController;
+// use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Api\ProductController as ProductApiController;
 
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseReturnController;
@@ -175,7 +176,14 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::apiResource('customers', CustomerApiController::class);
     Route::apiResource('employees', EmployeeApiController::class);
-    Route::apiResource('vendors', VendorController::class);
+
+    // Route::apiResource('vendors', VendorController::class);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::apiResource('vendors', VendorController::class);
+        Route::apiResource('products', CategoryController::class);
+        Route::apiResource('products', ProductApiController::class);
+    });
+    
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('subcategories', SubCategoryController::class);
     Route::apiResource('sizes', SizeController::class);
@@ -183,8 +191,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('seasons', SeasonController::class);
     Route::apiResource('materials', MaterialController::class);
 
-    Route::get('products', [ProductController::class, 'apiIndex']);
-    Route::post('products', [ProductController::class, 'store']);
+    // Route::get('products', [ProductController::class, 'apiIndex']);
+    // Route::post('products', [ProductController::class, 'store']);
 
     Route::get('purchases', [PurchaseController::class, 'apiIndex']);
     Route::post('purchases', [PurchaseController::class, 'store']);

@@ -28,16 +28,23 @@ class VendorController extends Controller
         return $vendor->load('city');
     }
 
-    public function update(Request $request, Vendor $vendor) {
+    public function update(Request $request, Vendor $vendor)
+    {
         $data = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'cnic' => 'required|string|unique:vendors,cnic,' . $vendor->id,
-            'city_id' => 'required|exists:cities,id',
-            'status' => 'required|in:Active,Inactive',
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'cnic'       => 'required|string|unique:vendors,cnic,' . $vendor->id,
+            'city_id'    => 'required|exists:cities,id',
+            'status'     => 'required|in:Active,Inactive',
         ]);
+
         $vendor->update($data);
-        return $vendor;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vendor updated successfully.',
+            'vendor'  => $vendor->fresh() // ensures we return updated data
+        ]);
     }
 
     public function destroy(Vendor $vendor) {
