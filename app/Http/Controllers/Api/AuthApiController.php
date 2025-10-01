@@ -1,94 +1,76 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;   // ✅ correct Auth facade
 
 class AuthApiController extends Controller
 {
-    /**
-     * Register a new user.
-     */
-    public function register(Request $request)
-    {
-        $request->validate([
-            'first_name'            => 'required|string|max:255',
-            'last_name'             => 'required|string|max:255',
-            'email'                 => 'required|string|email|max:255|unique:users',
-            'cell_no1'              => 'nullable|string|max:20',
-            'cell_no2'              => 'nullable|string|max:20',
-            'img_path'              => 'nullable|string',
-            'role_id'               => 'required|exists:roles,id',
-            'password'              => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = User::create([
-            'first_name'        => $request->first_name,
-            'last_name'         => $request->last_name,
-            'email'             => $request->email,
-            'cell_no1'          => $request->cell_no1,
-            'cell_no2'          => $request->cell_no2,
-            'img_path'          => $request->img_path,
-            'role_id'           => $request->role_id,
-            'password'          => Hash::make($request->password),
-            'status'            => 'active', // default
-        ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'user'  => $user,
-            'token' => $token,
-        ], 201);
-    }
-
-    /**
-     * Login user and return token.
-     */
     public function login(Request $request)
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages([
-                'email' => ['Invalid login credentials.'],
-            ]);
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $user = User::where('email', $request->email)->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $user = Auth::user();
+        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'user'  => $user,
             'token' => $token,
-        ], 200);
-    }
-
-    /**
-     * Logout user (revoke tokens).
-     */
-    public function logout(Request $request)
-    {
-        $request->user()->tokens()->delete();
-
-        return response()->json([
-            'message' => 'Successfully logged out',
+            'user'  => $user
         ]);
     }
 
-    /**
-     * Get current user profile.
-     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+
     public function profile(Request $request)
     {
         return response()->json($request->user());
     }
+
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|email|unique:users,email',
+            'password'   => 'required|string|min:6|confirmed',
+            'cell_no1'   => 'nullable|string',
+            'cell_no2'   => 'nullable|string',
+        ]);
+
+        $user = User::create([
+            'first_name' => $data['first_name'],
+            'last_name'  => $data['last_name'],
+            'email'      => $data['email'],
+            'password'   => Hash::make($data['password']),
+            'cell_no1'   => $data['cell_no1'] ?? null,
+            'cell_no2'   => $data['cell_no2'] ?? null,
+            'role_id'    => 1, // default role
+            'status'     => 'active',
+        ]);
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'User registered successfully',
+            'token'   => $token,
+            'user'    => $user,
+        ], 201);
+    }
+
 }

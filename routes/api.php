@@ -5,15 +5,15 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\AuthApiController as AuthController;
+
+// use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
-use App\Http\Controllers\Api\AuthApiController;
-use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\CityController;
 
@@ -44,28 +44,36 @@ use App\Http\Controllers\Api\PosReturnDetailApiController;
 use App\Http\Controllers\Api\CoaMainApiController;
 use App\Http\Controllers\Api\CoaSubApiController;
 
-
 use App\Http\Controllers\Api\UserApiController;
+use App\Http\Controllers\Api\ProfileController;
 
 
 
 // Test Routes
-// ********************************
-
-
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::get('/profile', [UserApiController::class, 'profile']);
-// });
-
-Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
-    return $request->user();
-});
-
 
 // **** End Test Routes
 
-Route::apiResource('users', UserApiController::class);
 
+
+// Old Reoute for Profile
+// Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
+//     return $request->user();
+// });
+Route::middleware('auth:sanctum')->group(function () {
+    // User CRUD
+    // Route::apiResource('users', UserApiController::class);
+    Route::apiResource('users', UserApiController::class)->names([
+        'index' => 'api.users.index',
+        'store' => 'api.users.store',
+        'show' => 'api.users.show',
+        'update' => 'api.users.update',
+        'destroy' => 'api.users.destroy',
+    ]);
+
+
+    // Profile CRUD
+    Route::apiResource('profiles', ProfileController::class);
+});
 
 
 
@@ -86,49 +94,18 @@ Route::get('/ping', function () {
 });
 
 // Auth routes
-// Route::post('/register', [AuthController::class, 'register']);
-// Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-// Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-//         ->name('login');
-// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-//         ->name('logout');
-// Route::get('/register', [RegisteredUserController::class, 'create'])
-//         ->name('register');
-// Route::post('/register', [RegisteredUserController::class, 'store']);
-
-// Route::post('/register', [AuthController::class, 'register']);
-// Route::post('/login', [AuthApiController::class, 'login']);
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::post('/logout', [AuthApiController::class, 'logout']);
-//     Route::get('/me', [AuthApiController::class, 'me']);
-// });
-
 
 // Public routes
+
 Route::post('/register', [AuthController::class, 'register']);
+// Route::post('register', [AuthApiController::class, 'register']);
 
-// Route::post('/login', [AuthController::class, 'login']);
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
 
-    $user = User::where('email', $request->email)->first();
-
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
-
-    $token = $user->createToken('api-token')->plainTextToken;
-
-    return response()->json([
-        'token' => $token,
-        'user' => $user,
-    ]);
+// Login Routes
+Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('profile', [AuthController::class, 'profile']);
 });
 
 
@@ -140,12 +117,12 @@ Route::post('/login', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // User CRUD
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::put('/users/{user}', [UserController::class, 'update']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy']);
+    // // User CRUD
+    // Route::get('/users', [UserApiController::class, 'index']);
+    // Route::post('/users', [UserApiController::class, 'store']);
+    // Route::get('/users/{user}', [UserApiController::class, 'show']);
+    // Route::put('/users/{user}', [UserApiController::class, 'update']);
+    // Route::delete('/users/{user}', [UserApiController::class, 'destroy']);
 });
 
 
@@ -158,24 +135,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
 });
 
-// User routes
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::put('/users/{user}', [UserController::class, 'update']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy']);
-});
+// // User routes
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('/users', [UserController::class, 'index']);
+//     Route::post('/users', [UserController::class, 'store']);
+//     Route::get('/users/{user}', [UserController::class, 'show']);
+//     Route::put('/users/{user}', [UserController::class, 'update']);
+//     Route::delete('/users/{user}', [UserController::class, 'destroy']);
+// });
 
 
 
 // Routes OK
-    Route::apiResource('countries', CountryController::class);
+    Route::apiResource('countries', CountryApiController::class);
     Route::apiResource('states', StateController::class);
     Route::apiResource('cities', CityController::class);
     
     Route::apiResource('customers', CustomerApiController::class);
     Route::apiResource('employees', EmployeeApiController::class);
+
 
     // Route::apiResource('vendors', VendorController::class);
     Route::middleware('auth:sanctum')->group(function () {

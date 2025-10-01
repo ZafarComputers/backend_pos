@@ -14,7 +14,7 @@ use App\Models\Country;
  * Handles API operations for the Country resource.
  * Last updated: September 27, 2025.
  */
-class CountryController extends Controller
+class CountryApiController extends Controller
 {
     /**
      * Display a paginated listing of countries.

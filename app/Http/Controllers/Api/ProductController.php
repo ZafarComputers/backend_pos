@@ -17,11 +17,11 @@ class ProductController extends Controller
     {
         $perPage = (int) $request->query('per_page', 10);
 
-        $products = Product::with(['subCategory', 'user'])
+        $products = Product::with(['subCategory', 'user', 'vendor'])
             ->orderBy('id', 'desc')
             ->paginate($perPage);
 
-        // Returns a paginated resource collection (includes pagination meta)
+        // Paginated resource collection
         return ProductResource::collection($products);
     }
 
@@ -31,20 +31,21 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'design_code' => 'nullable|string|max:255',
-            'image_path' => 'nullable|string|max:1024',
-            'sub_category_id' => 'required|exists:sub_categories,id',
-            'sale_price' => 'required|numeric|min:0',
+            'title'                  => 'required|string|max:255',
+            'design_code'            => 'nullable|string|max:255',
+            'image_path'             => 'nullable|string|max:1024',
+            'sub_category_id'        => 'required|exists:sub_categories,id',
+            'sale_price'             => 'required|numeric|min:0',
             'opening_stock_quantity' => 'required|integer|min:0',
-            'user_id' => 'required|exists:users,id',
-            'barcode' => 'nullable|string|max:255',
-            'status' => 'required|in:Active,Inactive',
+            'user_id'                => 'required|exists:users,id',
+            'vendor_id'              => 'required|exists:vendors,id',
+            'barcode'                => 'nullable|string|max:255',
+            'status'                 => 'required|in:Active,Inactive',
         ]);
 
         $product = Product::create($data);
 
-        return (new ProductResource($product->load(['subCategory', 'user'])))
+        return (new ProductResource($product->load(['subCategory', 'user', 'vendor'])))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
     }
@@ -52,9 +53,17 @@ class ProductController extends Controller
     /**
      * GET /api/products/{product}
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        return new ProductResource($product->load(['subCategory', 'user']));
+        $product = Product::with(['subCategory', 'user', 'vendor'])->find($id);
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
+
+        return new ProductResource($product);
     }
 
     /**
@@ -63,30 +72,42 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'design_code' => 'nullable|string|max:255',
-            'image_path' => 'nullable|string|max:1024',
-            'sub_category_id' => 'required|exists:sub_categories,id',
-            'sale_price' => 'required|numeric|min:0',
+            'title'                  => 'required|string|max:255',
+            'design_code'            => 'nullable|string|max:255',
+            'image_path'             => 'nullable|string|max:1024',
+            'sub_category_id'        => 'required|exists:sub_categories,id',
+            'sale_price'             => 'required|numeric|min:0',
             'opening_stock_quantity' => 'required|integer|min:0',
-            'user_id' => 'required|exists:users,id',
-            'barcode' => 'nullable|string|max:255',
-            'status' => 'required|in:Active,Inactive',
+            'user_id'                => 'required|exists:users,id',
+            'vendor_id'              => 'required|exists:vendors,id',
+            'barcode'                => 'nullable|string|max:255',
+            'status'                 => 'required|in:Active,Inactive',
         ]);
 
         $product->update($data);
 
-        return new ProductResource($product->load(['subCategory', 'user']));
+        return new ProductResource($product->load(['subCategory', 'user', 'vendor']));
     }
 
     /**
      * DELETE /api/products/{product}
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
+
         $product->delete();
 
-        // No content
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->json([
+            'message' => 'Product deleted successfully'
+        ]);
     }
+
+
 }

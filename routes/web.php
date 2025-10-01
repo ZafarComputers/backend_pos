@@ -26,14 +26,17 @@ use App\Http\Controllers\PosReturnDetailController;
 use App\Http\Controllers\CoaMainController;
 use App\Http\Controllers\CoaSubController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ProfileController;
 
 
 // Testing Routes
-Route::resource('users', UserController::class);
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
-});
+// Route::middleware('auth')->group(function () {
+//     // Route::resource('users', UserController::class);
+//     // Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
+//     Route::resource('profiles', ProfileController::class);
+// });
 // End Testing Routes
+
 
 
 
@@ -47,55 +50,55 @@ Route::get('/', function () {
 // });
 
 
-// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-// Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
-
-// // Route::get('/dashboard', function () {
-// //     // dd('you are in dashboard');
-// //     return view('dashboard');
-// // })->middleware(['auth'])->name('dashboard');
 
 // Route::get('/dashboard', function () {
 //     // dd('you are in dashboard');
 //     return view('dashboard');
-// })->name('dashboard');
+// })->middleware(['auth'])->name('dashboard');
 
-// Route::resource('roles', RoleController::class);
+Route::get('/dashboard', function () {
+    // dd('you are in dashboard');
+    return view('dashboard');
+})->name('dashboard');
+
+Route::resource('roles', RoleController::class);
 // Route::resource('users', UserController::class);
 
-// Route::resource('countries', CountryController::class);
-// Route::resource('states', StateController::class);
-// Route::resource('cities', CityController::class);
+Route::resource('countries', CountryController::class);
+Route::resource('states', StateController::class);
+Route::resource('cities', CityController::class);
 
-// Route::middleware(['web'])->group(function () {
-//     // Resource routes for web (index, create, store, edit, update, delete)
-//     Route::resource('customers', CustomerController::class);
-// });
+Route::middleware(['web'])->group(function () {
+    // Resource routes for web (index, create, store, edit, update, delete)
+    Route::resource('customers', CustomerController::class);
+});
 
-// Route::resource('employees', EmployeeController::class);
+Route::resource('employees', EmployeeController::class);
 
-// Route::resource('vendors', VendorController::class);
+Route::resource('vendors', VendorController::class);
 
-// Route::resource('categories', CategoryController::class);
-// Route::resource('subcategories', SubCategoryController::class);
+Route::resource('categories', CategoryController::class);
+Route::resource('subcategories', SubCategoryController::class);
 
-// Route::resource('sizes', SizeController::class);
-// Route::resource('colors', ColorController::class);
-// Route::resource('seasons', SeasonController::class);
-// Route::resource('materials', MaterialController::class);
-// Route::resource('products', ProductController::class);
+Route::resource('sizes', SizeController::class);
+Route::resource('colors', ColorController::class);
+Route::resource('seasons', SeasonController::class);
+Route::resource('materials', MaterialController::class);
+Route::resource('products', ProductController::class);
 
-// Route::resource('purchases', PurchaseController::class);
-// Route::resource('purchase_returns', PurchaseReturnController::class);
-// Route::resource('purchase_return_details', PurchaseReturnDetailController::class);
-// Route::resource('pos', PosController::class);
-// Route::resource('pos_details', PosDetailController::class);
-// Route::resource('pos_returns', PosReturnController::class);
+Route::resource('purchases', PurchaseController::class);
+Route::resource('purchase_returns', PurchaseReturnController::class);
+Route::resource('purchase_return_details', PurchaseReturnDetailController::class);
+Route::resource('pos', PosController::class);
+Route::resource('pos_details', PosDetailController::class);
+Route::resource('pos_returns', PosReturnController::class);
 
-// Route::resource('pos_return_details', PosReturnDetailController::class);
-// Route::resource('coa-mains', CoaMainController::class);
-// Route::resource('coa-subs', CoaSubController::class);
+Route::resource('pos_return_details', PosReturnDetailController::class);
+Route::resource('coa-mains', CoaMainController::class);
+Route::resource('coa-subs', CoaSubController::class);
 
 
 

@@ -33,8 +33,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+     // ✅ Profile relationship (One to One)
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    // ✅ Role relationship (Many to One)
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
+
+
+
+
 }

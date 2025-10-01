@@ -4,72 +4,69 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UserApiController extends Controller
 {
     public function index()
     {
-        return response()->json(User::with('role')->get());
+        return UserResource::collection(
+            User::with(['profile', 'role'])->paginate(10)
+        );
     }
 
-
-    // Profile
-    public function profile(Request $request)
+    public function show($id)
     {
-        dd('User Api Profile: ', $request, $request->user());
-        return response()->json([
-            'user' => $request->user()
-        ]);
+        return new UserResource(
+            User::with(['profile', 'role'])->findOrFail($id)
+        );
     }
-
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name'  => 'required',
-            'email'      => 'required|email|unique:users',
-            'password'   => 'required|min:6',
+        $data = $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|email|unique:users,email',
+            'password'   => 'required|string|min:8',
             'role_id'    => 'required|exists:roles,id',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-        $user = User::create($validated);
-
-        return response()->json(['success' => true, 'user' => $user->load('role')], 201);
-    }
-
-    public function show(User $user)
-    {
-        return response()->json($user->load('role'));
-    }
-
-    public function update(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name'  => 'required',
-            'email'      => 'required|email|unique:users,email,' . $user->id,
-            'role_id'    => 'required|exists:roles,id',
-            'password'   => 'nullable|min:6',
+        $user = User::create([
+            ...$data,
+            'password' => bcrypt($data['password']),
         ]);
 
-        if ($request->password) {
-            $validated['password'] = Hash::make($request->password);
-        } else {
-            unset($validated['password']);
+        return new UserResource($user->load(['profile', 'role']));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $data = $request->validate([
+            'first_name' => 'sometimes|string|max:100',
+            'last_name'  => 'sometimes|string|max:100',
+            'email'      => 'sometimes|email|unique:users,email,' . $user->id,
+            'password'   => 'nullable|string|min:8',
+            'role_id'    => 'sometimes|exists:roles,id',
+        ]);
+
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
         }
 
-        $user->update($validated);
+        $user->update($data);
 
-        return response()->json(['success' => true, 'user' => $user->load('role')]);
+        return new UserResource($user->load(['profile', 'role']));
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(['success' => true]);
+
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }
