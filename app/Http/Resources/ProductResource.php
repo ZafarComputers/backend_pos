@@ -20,6 +20,7 @@ class ProductResource extends JsonResource
             'design_code'            => $this->design_code,
             'image_path'             => $this->image_path,
             'sub_category_id'        => $this->sub_category_id,
+            // 'sub_category'           => new SubCategoryResource($this->whenLoaded('subCategory')),
             'sale_price'             => $this->sale_price,
             'opening_stock_quantity' => $this->opening_stock_quantity,
             'vendor_id'              => $this->vendor_id,
