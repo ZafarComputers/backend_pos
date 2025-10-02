@@ -133,7 +133,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/roles/{role}', [RoleController::class, 'show']);
     Route::put('/roles/{role}', [RoleController::class, 'update']);
     Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
-});
+
+        // Variant Routes
+        Route::apiResource('sizes', SizeController::class);
+        Route::apiResource('colors', ColorController::class);
+        Route::apiResource('seasons', SeasonController::class);
+        Route::apiResource('materials', MaterialController::class);
+
+        // Vendor's Route
+        Route::apiResource('vendors', VendorController::class);
+        
+        // Categories n Sub-Categories
+        Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('subcategories', SubCategoryController::class);
+        
+        // Low stock route
+        Route::get('products/low-stock', [ProductApiController::class, 'lowStock']);
+
+        // Prodcut Api Route
+        Route::apiResource('products', ProductApiController::class);
+
+
+
+    // });
 
 // // User routes
 // Route::middleware('auth:sanctum')->group(function () {
@@ -154,20 +176,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('customers', CustomerApiController::class);
     Route::apiResource('employees', EmployeeApiController::class);
 
-
+    
     // Route::apiResource('vendors', VendorController::class);
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::apiResource('vendors', VendorController::class);
-        Route::apiResource('products', CategoryController::class);
-        Route::apiResource('products', ProductApiController::class);
+    // Route::middleware('auth:sanctum')->group(function () {
+
     });
     
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('subcategories', SubCategoryController::class);
-    Route::apiResource('sizes', SizeController::class);
-    Route::apiResource('colors', ColorController::class);
-    Route::apiResource('seasons', SeasonController::class);
-    Route::apiResource('materials', MaterialController::class);
 
     // Route::get('products', [ProductController::class, 'apiIndex']);
     // Route::post('products', [ProductController::class, 'store']);

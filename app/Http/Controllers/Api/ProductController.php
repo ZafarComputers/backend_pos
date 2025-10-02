@@ -81,6 +81,7 @@ class ProductController extends Controller
             'user_id'                => 'required|exists:users,id',
             'vendor_id'              => 'required|exists:vendors,id',
             'barcode'                => 'nullable|string|max:255',
+            'qrcode'                 => 'nullable|string|max:255',
             'status'                 => 'required|in:Active,Inactive',
         ]);
 
@@ -107,6 +108,20 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Product deleted successfully'
         ]);
+    }
+
+    // Low Stock Method
+    public function lowStock(Request $request)
+    {
+        // Default threshold = 10, can override via query ?threshold=5
+        $threshold = $request->query('threshold', 10);
+
+        $products = Product::where('opening_stock_quantity', '<=', $threshold)
+            ->with(['vendor', 'subCategory', 'user'])
+            ->orderBy('opening_stock_quantity', 'asc')
+            ->get();
+
+        return ProductResource::collection($products);
     }
 
 

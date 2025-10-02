@@ -10,13 +10,15 @@ return new class extends Migration {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('barcode')->nullable();   // only once
+            $table->string('qrcode')->nullable();
             $table->string('design_code')->nullable();
             $table->string('image_path')->nullable();
             $table->unsignedBigInteger('sub_category_id');
             $table->decimal('sale_price', 10, 2)->default(0);
             $table->integer('opening_stock_quantity')->default(0);
             $table->unsignedBigInteger('user_id');
-            $table->string('barcode')->nullable();
+            $table->unsignedBigInteger('vendor_id');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
 

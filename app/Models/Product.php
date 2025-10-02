@@ -17,7 +17,9 @@ class Product extends Model
         'sale_price',
         'opening_stock_quantity',
         'user_id',
+        'vendor_id',
         'barcode',
+        'qrcode',
         'status',
     ];
 
