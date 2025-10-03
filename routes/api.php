@@ -15,7 +15,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 
 use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\StateController;
-use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\CityApiController;
 
 use App\Http\Controllers\Api\CustomerApiController;
 
@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Controllers\Api\MaterialController;
-// use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Api\ProductController as ProductApiController;
 
 use App\Http\Controllers\PurchaseController;
@@ -46,19 +46,38 @@ use App\Http\Controllers\Api\CoaSubApiController;
 
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\POSApiController;
 
 
-
-// Test Routes
-
-// **** End Test Routes
-
-
-
-// Old Reoute for Profile
-// Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
-//     return $request->user();
+// Temporary Routes For Clear Cache etc
+// Method 01
+// Route::get('/clear-all', function () {
+//     \Artisan::call('route:clear');
+//     \Artisan::call('config:clear');
+//     \Artisan::call('cache:clear');
+//     \Artisan::call('view:clear');
+//     return "All caches cleared!";
 // });
+
+// // Method 2
+// use Illuminate\Support\Facades\Artisan;
+
+// Route::get('/clear-cache/{key}', function ($key) {
+//     // secret key check
+//     if ($key !== 'MySecretKey123') {
+//         abort(403, 'Unauthorized');
+//     }
+
+//     Artisan::call('optimize:clear');
+//     return response()->json([
+//         'status' => 'success',
+//         'message' => 'Cache cleared successfully!',
+//     ]);
+// });
+// // After it run the command 
+// // https://zafarcomputers.com/clear-cache/MySecretKey123
+
+
 Route::middleware('auth:sanctum')->group(function () {
     // User CRUD
     // Route::apiResource('users', UserApiController::class);
@@ -74,6 +93,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Profile CRUD
     Route::apiResource('profiles', ProfileController::class);
 });
+
+
 
 
 
@@ -147,12 +168,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('subcategories', SubCategoryController::class);
         
-        // Low stock route
-        Route::get('products/low-stock', [ProductApiController::class, 'lowStock']);
-
-        // Prodcut Api Route
-        Route::apiResource('products', ProductApiController::class);
-
+        // // Low stock route
+        // Route::get('products/low-stock', [ProductApiController::class, 'lowStock']);
+        // // Prodcut Api Route
+        // Route::apiResource('products', ProductApiController::class);
+        Route::prefix('products')->group(function () {
+            Route::get('/', [ProductController::class, 'index'])->name('products.index');
+            Route::post('/', [ProductController::class, 'store'])->name('products.store');
+            Route::get('/low-stock', [ProductController::class, 'lowStock'])->name('products.low-stock');
+            Route::get('/{product}', [ProductController::class, 'show'])->name('products.show');
+            Route::put('/{product}', [ProductController::class, 'update'])->name('products.update');
+            Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+        });
 
 
     // });
@@ -171,7 +198,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Routes OK
     Route::apiResource('countries', CountryApiController::class);
     Route::apiResource('states', StateController::class);
-    Route::apiResource('cities', CityController::class);
+    Route::apiResource('cities', CityApiController::class);
     
     Route::apiResource('customers', CustomerApiController::class);
     Route::apiResource('employees', EmployeeApiController::class);
@@ -229,3 +256,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('coa-mains', CoaMainApiController::class);
     Route::apiResource('coa-subs', CoaSubApiController::class);
+
+
+
+Route::prefix('pos')->group(function () {
+    // Show all products or by category
+    Route::get('/products', [POSController::class, 'products'])->name('pos.products');
+
+    // Cart (selected products in POS)
+    Route::get('/cart', [POSController::class, 'cart'])->name('pos.cart');
+    Route::post('/cart/add', [POSController::class, 'addToCart'])->name('pos.cart.add');
+    Route::post('/cart/update/{productId}', [POSController::class, 'updateCart'])->name('pos.cart.update');
+    Route::delete('/cart/remove/{productId}', [POSController::class, 'removeFromCart'])->name('pos.cart.remove');
+});

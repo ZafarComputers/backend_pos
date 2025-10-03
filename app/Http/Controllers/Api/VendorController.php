@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use App\Http\Resources\VendorResource;  // ✅ add this
 
 class VendorController extends Controller
 {
@@ -19,14 +20,19 @@ class VendorController extends Controller
             'last_name' => 'required|string',
             'cnic' => 'required|string|unique:vendors',
             'city_id' => 'required|exists:cities,id',
+            'address' => 'required|string',
             'status' => 'required|in:Active,Inactive',
         ]);
         return Vendor::create($data);
     }
 
-    public function show(Vendor $vendor) {
-        return $vendor->load('city');
+    public function show(Vendor $vendor)
+    {
+        $vendor->load('city.state.country'); // eager load all in one query
+        return new VendorResource($vendor);
+    
     }
+
 
     public function update(Request $request, Vendor $vendor)
     {
@@ -35,6 +41,7 @@ class VendorController extends Controller
             'last_name'  => 'required|string|max:255',
             'cnic'       => 'required|string|unique:vendors,cnic,' . $vendor->id,
             'city_id'    => 'required|exists:cities,id',
+            'address' => 'required|string',
             'status'     => 'required|in:Active,Inactive',
         ]);
 

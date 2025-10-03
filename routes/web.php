@@ -29,18 +29,47 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 
 
-// Testing Routes
-// Route::middleware('auth')->group(function () {
-//     // Route::resource('users', UserController::class);
-//     // Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
-//     Route::resource('profiles', ProfileController::class);
+// *************************** Temport Routes for Hosting
+// Temporary Routes For Clear Cache etc
+// Method 01
+// Route::get('/clear-all', function () {
+//     \Artisan::call('route:clear');
+//     \Artisan::call('config:clear');
+//     \Artisan::call('cache:clear');
+//     \Artisan::call('view:clear');
+//     return "All caches cleared!";
 // });
-// End Testing Routes
+
+// // Method 2
+// use Illuminate\Support\Facades\Artisan;
+
+// Route::get('/clear-cache/{key}', function ($key) {
+//     // secret key check
+//     if ($key !== 'MySecretKey123') {
+//         abort(403, 'Unauthorized');
+//     }
+
+//     Artisan::call('optimize:clear');
+//     return response()->json([
+//         'status' => 'success',
+//         'message' => 'Cache cleared successfully!',
+//     ]);
+// });
+// // After it run the command 
+// // https://zafarcomputers.com/clear-cache/MySecretKey123
+
+// for route checking
+Route::get('route-list', function () {
+    Artisan::call('route:list --json');
+    return response()->json(json_decode(Artisan::output(), true));
+});
+// https://zafarcomputers.com/route-list
+
+// *********** End Temport Routes for Hosting
 
 
 
-
-
+// My Working Routes
 Route::get('/', function () {
     return view('welcome');
 });

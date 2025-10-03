@@ -121,7 +121,14 @@ class ProductController extends Controller
             ->orderBy('opening_stock_quantity', 'asc')
             ->get();
 
-        return ProductResource::collection($products);
+            if ($products->isEmpty()) {
+                    return response()->json([
+                        'message' => 'No low stock products found'
+                    ], 200);
+                }
+
+                return ProductResource::collection($products);
+                // return response()->json($products, 200);
     }
 
 
