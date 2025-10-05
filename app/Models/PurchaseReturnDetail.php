@@ -13,7 +13,9 @@ class PurchaseReturnDetail extends Model
         'purchase_return_id',
         'product_id',
         'qty',
-        'pur_price',
+        'unit_price',
+        'discPer',
+        'discAmount',
     ];
 
     public function purchaseReturn()

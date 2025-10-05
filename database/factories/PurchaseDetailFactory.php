@@ -14,11 +14,12 @@ class PurchaseDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'purchase_id' => Purchase::factory(),
-            'product_id' => Product::inRandomOrder()->value('id'),
+            'purchase_id' => Purchase::factory(), // auto create purchase if not provided
+            'product_id' => Product::factory(),   // auto create product if not provided
             'qty' => $this->faker->numberBetween(1, 10),
-            'unit_price' => $this->faker->randomFloat(2, 100, 500),
+            'unit_price' => $this->faker->randomFloat(2, 100, 1000),
+            'discPer' => $this->faker->randomFloat(2, 0, 10),
+            'discAmount' => $this->faker->randomFloat(2, 0, 200),
         ];
     }
 }
-

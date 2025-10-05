@@ -10,19 +10,14 @@ class PurchaseDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'purchase_id',
-        'product_id',
-        'qty',
-        'unit_price',
+        'purchase_id', 'product_id', 'qty', 'unit_price', 'discPer', 'discAmount'
     ];
 
-    public function purchase()
-    {
+    public function purchase() {
         return $this->belongsTo(Purchase::class);
     }
 
-    public function product()
-    {
+    public function product() {
         return $this->belongsTo(Product::class);
     }
 }

@@ -11,13 +11,20 @@ class PurchaseReturnDetailFactory extends Factory
 {
     protected $model = PurchaseReturnDetail::class;
 
-    public function definition(): array
+    public function definition()
     {
+        $qty = $this->faker->numberBetween(1, 10);
+        $unitPrice = $this->faker->randomFloat(2, 50, 500);
+        $discPer = $this->faker->numberBetween(0, 20);
+        $discAmount = ($unitPrice * $qty) * ($discPer / 100);
+
         return [
-            'purchase_return_id' => PurchaseReturn::inRandomOrder()->value('id'),
-            'product_id' => Product::inRandomOrder()->value('id'),
-            'qty' => $this->faker->numberBetween(1, 10),
-            'pur_price' => $this->faker->randomFloat(2, 100, 2000),
+            'purchase_return_id' => PurchaseReturn::factory(),
+            'product_id' => Product::factory(),
+            'qty' => $qty,
+            'unit_price' => $unitPrice,
+            'discPer' => $discPer,
+            'discAmount' => $discAmount,
         ];
     }
 }

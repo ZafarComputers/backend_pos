@@ -43,4 +43,5 @@ class PurchaseController extends Controller
 
         return redirect()->route('purchases.index')->with('success', 'Purchase created');
     }
+
 }

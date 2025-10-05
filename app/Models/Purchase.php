@@ -10,24 +10,16 @@ class Purchase extends Model
     use HasFactory;
 
     protected $fillable = [
-        'date',
-        'ven_inv_no',
-        'ven_inv_date',
-        'ven_inv_ref',
-        'description',
-        'product_id',
-        'discount_percent',
-        'discount_amt',
-        'inv_amount',
+        'pur_date', 'pur_inv_barcode', 'vendor_id', 'ven_inv_no',
+        'ven_inv_date', 'ven_inv_ref', 'description',
+        'discount_percent', 'discount_amt', 'inv_amount', 'payment_status',
     ];
 
-    public function details()
-    {
+    public function details() {
         return $this->hasMany(PurchaseDetail::class);
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
+    public function vendor() {
+        return $this->belongsTo(Vendor::class);
     }
 }

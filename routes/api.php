@@ -32,9 +32,12 @@ use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Api\ProductController as ProductApiController;
 
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\PurchaseReturnController;
-use App\Http\Controllers\PurchaseReturnDetailController;
+use App\Http\Controllers\Api\PurchaseApiController;
+use App\Http\Controllers\Api\PurchaseDetailApiController;
+
+use App\Http\Controllers\Api\PurchaseReturnApiController;
+use App\Http\Controllers\Api\PurchaseReturnDetailApiController;
+
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\PosDetailController;
 use App\Http\Controllers\PosReturnController;
@@ -207,24 +210,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::apiResource('vendors', VendorController::class);
     // Route::middleware('auth:sanctum')->group(function () {
 
+        // Routes for Purchases and It's Deatil / Purchase Return and it's Detail
+        Route::apiResource('purchases', PurchaseApiController::class);
+        Route::apiResource('purchase-details', PurchaseDetailApiController::class);
+        Route::apiResource('purchase-returns', PurchaseReturnApiController::class);
+        Route::apiResource('purchase-return-details', PurchaseReturnDetailApiController::class);
+
     });
     
-
-    // Route::get('products', [ProductController::class, 'apiIndex']);
-    // Route::post('products', [ProductController::class, 'store']);
-
-    Route::get('purchases', [PurchaseController::class, 'apiIndex']);
-    Route::post('purchases', [PurchaseController::class, 'store']);
-
-    Route::get('purchase_returns', [PurchaseReturnController::class, 'apiIndex']);
-    Route::post('purchase_returns', [PurchaseReturnController::class, 'store']);
-    Route::get('purchase_return_details', [PurchaseReturnDetailController::class, 'apiIndex']);
-    Route::post('purchase_return_details', [PurchaseReturnDetailController::class, 'store']);
-
-    // Route::get('pos', [PosController::class, 'apiIndex']);
-    // Route::post('pos', [PosController::class, 'store']);
-
-    // use App\Http\Controllers\PosController;
 
     // All CRUD API routes for POS
     Route::prefix('pos')->group(function () {

@@ -25,6 +25,15 @@
             <label>Discount Amount</label>
             <input type="number" step="0.01" name="discount_amt" class="form-control">
         </div>
+        <div class="form-group">
+            <label for="payment_status">Payment Status</label>
+            <select name="payment_status" id="payment_status" class="form-control" required>
+                <option value="unpaid" {{ old('payment_status', $purchase->payment_status ?? '') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                <option value="paid" {{ old('payment_status', $purchase->payment_status ?? '') == 'paid' ? 'selected' : '' }}>Paid</option>
+                <option value="overdue" {{ old('payment_status', $purchase->payment_status ?? '') == 'overdue' ? 'selected' : '' }}>Overdue</option>
+            </select>
+        </div>
+
         <button class="btn btn-success">Save</button>
     </form>
 </div>

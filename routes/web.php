@@ -121,6 +121,7 @@ Route::resource('products', ProductController::class);
 Route::resource('purchases', PurchaseController::class);
 Route::resource('purchase_returns', PurchaseReturnController::class);
 Route::resource('purchase_return_details', PurchaseReturnDetailController::class);
+
 Route::resource('pos', PosController::class);
 Route::resource('pos_details', PosDetailController::class);
 Route::resource('pos_returns', PosReturnController::class);
