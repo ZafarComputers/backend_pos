@@ -1,33 +1,36 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>POS Invoices</h2>
-    <a href="{{ route('pos.create') }}" class="btn btn-primary mb-3">New Invoice</a>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Customer</th>
-                <th>Invoice Date</th>
-                <th>Amount</th>
-                <th>Tax</th>
-                <th>Discount %</th>
-                <th>Discount Amt</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($pos as $invoice)
-            <tr>
-                <td>{{ $invoice->customer->name ?? 'N/A' }}</td>
-                <td>{{ $invoice->inv_date }}</td>
-                <td>{{ $invoice->inv_amout }}</td>
-                <td>{{ $invoice->tax }}</td>
-                <td>{{ $invoice->discPer }}</td>
-                <td>{{ $invoice->discount }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    {{ $pos->links() }}
-</div>
+<h1>POS List</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($pos as $p)
+        <tr>
+            <td>{{ $p->id }}</td>
+            <td>{{ $p->customer->name ?? '' }}</td>
+            <td>{{ $p->inv_date }}</td>
+            <td>{{ $p->inv_amount }}</td>
+            <td>
+                <a href="{{ route('pos.show', $p->id) }}">View</a>
+                <a href="{{ route('pos.edit', $p->id) }}">Edit</a>
+                <form action="{{ route('pos.destroy', $p->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+<a href="{{ route('pos.create') }}">Create New</a>
 @endsection

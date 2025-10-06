@@ -16,8 +16,14 @@ class PosReturn extends Model
         'return_inv_amout',
     ];
 
+    public function details()
+    {
+        return $this->hasMany(PosReturnDetail::class, 'pos_return_id');
+    }
+
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
+
 }

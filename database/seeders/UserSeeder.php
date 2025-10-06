@@ -24,16 +24,17 @@ class UserSeeder extends Seeder
             'status' => 'active',
         ]);
 
+
          User::create([
-            'first_name' => 'User',
-            'last_name' => 'User',
-            'email' => 'user@example.com',
+            'first_name' => 'Abdullah',
+            'last_name' => 'Javed',
+            'email' => 'majaved770@gmail.com',
             'cell_no1' => '03001234567',
             'cell_no2' => null,
             'img_path' => null,
-            'role_id' => 1, // Super Admin role ID
+            'role_id' => 2, //  Admin role ID
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
+            'password' => Hash::make('jarmainkill'),
             'status' => 'active',
         ]);
 

@@ -9,6 +9,6 @@ class PurchaseReturnDetailSeeder extends Seeder
 {
     public function run(): void
     {
-        PurchaseReturnDetail::factory()->count(20)->create();
+        PurchaseReturnDetail::factory()->count(30)->create();
     }
 }

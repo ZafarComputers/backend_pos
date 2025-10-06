@@ -2,95 +2,112 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
+use App\Models\Pos;
+use App\Models\PosDetail;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PosResource; // Keep this import for when the file is created
+use Illuminate\Support\Facades\Log;
 
-class POSApiController extends Controller
+
+class PosApiController extends Controller
 {
-    // Get products by category or all
-    public function products(Request $request)
+    public function index()
     {
-        $categoryId = $request->query('category_id'); // optional
-
-        $query = Product::query();
-
-        if ($categoryId) {
-            $query->where('sub_category_id', $categoryId);
-        }
-
-        $products = $query->where('status', 'Active')->get();
-
-        return ProductResource::collection($products);
+        return Pos::with('posDetails')->get();
     }
 
-    // Show current cart
-    public function cart()
+    public function store(Request $request)
     {
-        $cart = Session::get('pos_cart', []);
-        return response()->json($cart);
-    }
-
-    // Add product to cart
-    public function addToCart(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity'   => 'required|integer|min:1'
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'inv_date'    => 'required|date',
+            'inv_amount'  => 'required|numeric',
+            'tax'         => 'nullable|numeric',
+            'discPer'     => 'nullable|numeric',
+            'discount'    => 'nullable|numeric',
+            'details'     => 'required|array|min:1',
+            'details.*.product_id' => 'required|exists:products,id',
+            'details.*.qty'        => 'required|integer|min:1',
+            'details.*.sale_price' => 'required|numeric|min:0',
         ]);
 
-        $cart = Session::get('pos_cart', []);
+        // ✅ Save POS
+        $pos = Pos::create(collect($validated)->except('details')->toArray());
 
-        $product = Product::findOrFail($request->product_id);
+        // ✅ Save details with relation (pos_id auto added)
+        $pos->details()->createMany($validated['details']);
 
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity'] += $request->quantity;
-        } else {
-            $cart[$product->id] = [
-                'id'       => $product->id,
-                'title'    => $product->title,
-                'price'    => $product->sale_price,
-                'quantity' => $request->quantity,
-            ];
-        }
-
-        Session::put('pos_cart', $cart);
-
-        return response()->json(['message' => 'Product added to cart', 'cart' => $cart]);
+        return response()->json($pos->load(['customer', 'details.product']), 201);
     }
 
-    // Update quantity of product in cart
-    public function updateCart(Request $request, $productId)
+    // public function show(Pos $po)
+    public function show($id)
     {
-        $request->validate([
-            'quantity' => 'required|integer|min:1'
+        $pos = Pos::with(['customer', 'posDetails.product'])->find($id);
+        return response()->json($pos);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        \Log::info('Updating POS ID from route: ' . $id);
+
+        // Explicitly find the Pos instance
+        $pos = Pos::findOrFail($id);
+
+        \Log::info('Pos Instance: ', ['id' => $pos->id, 'attributes' => $pos->getAttributes()]);
+
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'inv_date' => 'required|date',
+            'inv_amount' => 'required|numeric',
+            'tax' => 'nullable|numeric',
+            'discPer' => 'nullable|numeric',
+            'discount' => 'nullable|numeric',
+            'details' => 'array',
+            'details.*.product_id' => 'required|exists:products,id',
+            'details.*.qty' => 'required|integer|min:1',
+            'details.*.sale_price' => 'required|numeric',
         ]);
 
-        $cart = Session::get('pos_cart', []);
+        \Log::info('Validated Data: ', $validated);
 
-        if (!isset($cart[$productId])) {
-            return response()->json(['message' => 'Product not found in cart'], 404);
+        $pos->update($request->only(['customer_id', 'inv_date', 'inv_amount', 'tax', 'discPer', 'discount']));
+
+        // Delete existing details
+        $pos->posDetails()->delete();
+
+        // Create new details with explicit pos_id and error handling
+        if (!empty($validated['details'])) {
+            foreach ($validated['details'] as $detail) {
+                \Log::info('Creating PosDetail for pos_id: ' . $pos->id, $detail);
+                try {
+                    PosDetail::create([
+                        'pos_id' => $pos->id,
+                        'product_id' => $detail['product_id'],
+                        'qty' => $detail['qty'],
+                        'sale_price' => $detail['sale_price'],
+                    ]);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to create PosDetail: ' . $e->getMessage());
+                }
+            }
         }
 
-        $cart[$productId]['quantity'] = $request->quantity;
+        \DB::enableQueryLog();
+        $updatedPos = $pos->load('posDetails');
+        \Log::info('SQL Queries: ', \DB::getQueryLog());
 
-        Session::put('pos_cart', $cart);
-
-        return response()->json(['message' => 'Cart updated', 'cart' => $cart]);
+        return new PosResource($updatedPos);
     }
 
-    // Remove product from cart
-    public function removeFromCart($productId)
+
+    public function destroy(Pos $pos)
     {
-        $cart = Session::get('pos_cart', []);
-
-        if (isset($cart[$productId])) {
-            unset($cart[$productId]);
-            Session::put('pos_cart', $cart);
-        }
-
-        return response()->json(['message' => 'Product removed', 'cart' => $cart]);
+        Log::info('Deleting POS ID: ' . $pos->id);
+        $pos->delete();
+        return response()->json(['message' => 'POS record deleted successfully'], 200);
     }
 }

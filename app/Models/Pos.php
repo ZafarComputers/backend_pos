@@ -7,21 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pos extends Model
 {
-    /** @use HasFactory<\Database\Factories\PosFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'customer_id',
-        'inv_date',
-        'inv_amout',
-        'tax',
-        'discPer',
-        'discount',
-    ];
+    protected $fillable = ['customer_id', 'inv_date', 'inv_amount', 'tax', 'discPer', 'discount'];
+
+    // public function posDetails()
+    // {
+    //     return $this->hasMany(PosDetail::class);
+    // }
+
+    // public function posDetails()
+    // {
+    //     // return $this->hasMany(PosDetail::class);
+    //     return $this->hasMany(PosDetail::class, 'pos_id', 'id');
+    // }
+
+    public function posDetails()
+    {
+        return $this->hasMany(PosDetail::class);
+    }
+
+    public function details()
+    {
+        return $this->hasMany(PosDetail::class, 'pos_id', 'id');
+    }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
-    
+
+
 }

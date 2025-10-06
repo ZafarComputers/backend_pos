@@ -2,23 +2,27 @@
 
 namespace Database\Factories;
 
-use App\Models\PosDetail;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Pos;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PosDetail>
+ */
 class PosDetailFactory extends Factory
 {
-    protected $model = PosDetail::class;
-
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
-            'pos_id' => Pos::inRandomOrder()->value('id'),
-            'product_id' => Product::inRandomOrder()->value('id'),
-            'qty' => $this->faker->numberBetween(1, 5),
-            'sale_price' => $this->faker->randomFloat(2, 100, 5000),
+            'pos_id' => Pos::factory(),
+            'product_id' => Product::factory(),
+            'qty' => $this->faker->numberBetween(1, 10),
+            'sale_price' => $this->faker->randomFloat(2, 5, 50),
         ];
     }
 }
-

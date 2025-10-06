@@ -1,29 +1,29 @@
 <?php
 
 namespace Database\Factories;
-
-use App\Models\Pos;
 use App\Models\Customer;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pos>
+ */
 class PosFactory extends Factory
 {
-    protected $model = Pos::class;
-
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
-        $amount = $this->faker->randomFloat(2, 500, 5000);
-        $discPer = $this->faker->randomElement([0, 5, 10]);
-        $discount = ($amount * $discPer) / 100;
-        $tax = $this->faker->randomElement([0, 50, 100]);
-
         return [
-            'customer_id' => Customer::inRandomOrder()->value('id'),
+            'customer_id' => Customer::factory(),
             'inv_date' => $this->faker->date(),
-            'inv_amout' => $amount,
-            'tax' => $tax,
-            'discPer' => $discPer,
-            'discount' => $discount,
+            'inv_amount' => $this->faker->randomFloat(2, 10, 1000),
+            'tax' => $this->faker->randomFloat(2, 0, 100),
+            'disc_per' => $this->faker->randomFloat(2, 0, 20),
+            'discount' => $this->faker->randomFloat(2, 0, 100),
         ];
     }
 }

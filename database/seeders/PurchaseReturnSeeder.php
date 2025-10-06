@@ -12,7 +12,7 @@ class PurchaseReturnSeeder extends Seeder
     {
         PurchaseReturn::factory()
             ->count(10) // 10 purchase returns
-            ->has(PurchaseReturnDetail::factory()->count(3), 'details') // each has 3 details
+            ->has(PurchaseReturnDetail::factory()->count(25), 'details') // each has 3 details
             ->create();
     }
 }

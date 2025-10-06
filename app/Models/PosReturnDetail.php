@@ -18,11 +18,13 @@ class PosReturnDetail extends Model
 
     public function posReturn()
     {
-        return $this->belongsTo(PosReturn::class);
+        return $this->belongsTo(PosReturn::class, 'pos_return_id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
+    
+
 }

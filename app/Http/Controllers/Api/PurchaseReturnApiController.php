@@ -56,13 +56,12 @@ class PurchaseReturnApiController extends Controller
                 'product_id'         => $detail['product_id'],
                 'qty'                => $detail['qty'],
                 'unit_price'              => $detail['unit_price'],
-                // 'subtotal'           => $detail['subtotal'],
             ]);
         }
 
         return response()->json([
             'message' => 'Purchase Return created successfully',
-            'data'    => $purchaseReturn->load('details')
+            'data'    => $purchaseReturn->load('vendor', 'details')
         ], 201);
     }
 
@@ -122,7 +121,7 @@ class PurchaseReturnApiController extends Controller
 
         return response()->json([
             'message' => 'Purchase Return updated successfully',
-            'data'    => $purchaseReturn->load('details')
+            'data'    => $purchaseReturn->load('vendor', 'details')
         ], 200);
     }
 

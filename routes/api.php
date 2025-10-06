@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Controllers\Api\MaterialController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductController as ProductApiController;
 
 use App\Http\Controllers\Api\PurchaseApiController;
@@ -38,18 +38,16 @@ use App\Http\Controllers\Api\PurchaseDetailApiController;
 use App\Http\Controllers\Api\PurchaseReturnApiController;
 use App\Http\Controllers\Api\PurchaseReturnDetailApiController;
 
-use App\Http\Controllers\PosController;
+use App\Http\Controllers\Api\PosApiController;
 use App\Http\Controllers\PosDetailController;
-use App\Http\Controllers\PosReturnController;
+use App\Http\Controllers\Api\PosReturnApiController;
 
 use App\Http\Controllers\Api\PosReturnDetailApiController;
-// use App\Http\Controllers\Api\POS_Return_DetailController;
 use App\Http\Controllers\Api\CoaMainApiController;
 use App\Http\Controllers\Api\CoaSubApiController;
 
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\POSApiController;
 
 
 // Temporary Routes For Clear Cache etc
@@ -221,11 +219,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // All CRUD API routes for POS
     Route::prefix('pos')->group(function () {
-        Route::get('/', [PosController::class, 'apiIndex']);     // List all invoices
-        Route::post('/', [PosController::class, 'store']);       // Create new invoice
-        Route::get('/{id}', [PosController::class, 'show']);     // Show single invoice
-        Route::put('/{id}', [PosController::class, 'update']);   // Update invoice
-        Route::delete('/{id}', [PosController::class, 'destroy']); // Delete invoice
+        Route::get('/', [PosApiController::class, 'index']);     // List all invoices
+        Route::post('/', [PosApiController::class, 'store']);       // Create new invoice
+        Route::get('/{id}', [PosApiController::class, 'show']);     // Show single invoice
+        Route::put('/{id}', [PosApiController::class, 'update']);   // Update invoice
+        Route::delete('/{id}', [PosApiController::class, 'destroy']); // Delete invoice
     });
 
     Route::prefix('pos_details')->group(function () {
@@ -237,11 +235,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('pos_returns')->group(function () {
-        Route::get('/', [PosReturnController::class, 'apiIndex']);
-        Route::post('/', [PosReturnController::class, 'store']);
-        Route::get('/{id}', [PosReturnController::class, 'show']);
-        Route::put('/{id}', [PosReturnController::class, 'update']);
-        Route::delete('/{id}', [PosReturnController::class, 'destroy']);
+        Route::get('/', [PosReturnApiController::class, 'apiIndex']);
+        Route::post('/', [PosReturnApiController::class, 'store']);
+        Route::get('/{id}', [PosReturnApiController::class, 'show']);
+        Route::put('/{id}', [PosReturnApiController::class, 'update']);
+        Route::delete('/{id}', [PosReturnApiController::class, 'destroy']);
     });
 
     Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
@@ -254,11 +252,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::prefix('pos')->group(function () {
     // Show all products or by category
-    Route::get('/products', [POSController::class, 'products'])->name('pos.products');
+    Route::get('/products', [PosApiController::class, 'products'])->name('pos.products');
 
     // Cart (selected products in POS)
-    Route::get('/cart', [POSController::class, 'cart'])->name('pos.cart');
-    Route::post('/cart/add', [POSController::class, 'addToCart'])->name('pos.cart.add');
-    Route::post('/cart/update/{productId}', [POSController::class, 'updateCart'])->name('pos.cart.update');
-    Route::delete('/cart/remove/{productId}', [POSController::class, 'removeFromCart'])->name('pos.cart.remove');
+    Route::get('/cart', [PosApiController::class, 'cart'])->name('pos.cart');
+    Route::post('/cart/add', [PosApiController::class, 'addToCart'])->name('pos.cart.add');
+    Route::post('/cart/update/{productId}', [PosApiController::class, 'updateCart'])->name('pos.cart.update');
+    Route::delete('/cart/remove/{productId}', [PosApiController::class, 'removeFromCart'])->name('pos.cart.remove');
 });

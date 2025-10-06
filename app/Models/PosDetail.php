@@ -16,6 +16,11 @@ class PosDetail extends Model
         'sale_price',
     ];
 
+    // public function pos()
+    // {
+    //     return $this->belongsTo(Pos::class, 'pos_id', 'id');
+    // }
+
     public function pos()
     {
         return $this->belongsTo(Pos::class);
@@ -23,6 +28,8 @@ class PosDetail extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+
+
 }

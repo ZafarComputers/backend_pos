@@ -13,7 +13,7 @@ class PurchaseSeeder extends Seeder
         // create 10 purchases, each with 3 details
         Purchase::factory()
             ->count(10)
-            ->has(PurchaseDetail::factory()->count(3), 'details')
+            ->has(PurchaseDetail::factory()->count(30), 'details')
             ->create([
             'payment_status' => 'unpaid', // or random if we prefer
         ]);

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('pos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->date('inv_date');
-            $table->decimal('inv_amout', 12, 2);
-            $table->decimal('tax', 8, 2)->default(0);
-            $table->decimal('discPer', 5, 2)->default(0);   // discount percent
-            $table->decimal('discount', 12, 2)->default(0); // discount amount
+            $table->decimal('inv_amount', 10, 2);
+            $table->decimal('tax', 10, 2)->default(0);
+            $table->decimal('disc_per', 5, 2)->default(0);
+            $table->decimal('discount', 10, 2)->default(0);
             $table->timestamps();
         });
     }
