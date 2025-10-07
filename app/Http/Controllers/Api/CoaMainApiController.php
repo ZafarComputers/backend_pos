@@ -2,46 +2,100 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\CoaMain;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 class CoaMainApiController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
-        return CoaMain::all();
+        // \Log::info('CoaMainApiController@index called');
+        $coaMains = CoaMain::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => $coaMains
+        ], 200);
+    }
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    // public function store(Request $request): JsonResponse
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'status' => 'required|boolean',
+    //     ]);
+
+    //     $coaMain = CoaMain::create($request->all());
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'CoaMain created successfully.',
+    //         'data' => $coaMain
+    //     ], 201);
+    // }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param CoaMain $coaMain
+     * @return JsonResponse
+     */
+    public function show(CoaMain $coaMain): JsonResponse
+    {
+        return response()->json([
+            'status' => 'success',
+            'data' => $coaMain
+        ], 200);
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'status' => 'required|in:active,inactive',
-        ]);
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param CoaMain $coaMain
+     * @return JsonResponse
+     */
+    // public function update(Request $request, CoaMain $coaMain): JsonResponse
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'status' => 'required|boolean',
+    //     ]);
 
-        return CoaMain::create($validated);
-    }
+    //     $coaMain->update($request->all());
 
-    public function show(CoaMain $coaMain)
-    {
-        return $coaMain;
-    }
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'CoaMain updated successfully.',
+    //         'data' => $coaMain
+    //     ], 200);
+    // }
 
-    public function update(Request $request, CoaMain $coaMain)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'status' => 'required|in:active,inactive',
-        ]);
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param CoaMain $coaMain
+     * @return JsonResponse
+     */
+    // public function destroy(CoaMain $coaMain): JsonResponse
+    // {
+    //     $coaMain->delete();
 
-        $coaMain->update($validated);
-        return $coaMain;
-    }
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'CoaMain deleted successfully.'
+    //     ], 200);
+    // }
 
-    public function destroy(CoaMain $coaMain)
-    {
-        $coaMain->delete();
-        return response()->noContent();
-    }
 }

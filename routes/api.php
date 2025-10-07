@@ -45,9 +45,11 @@ use App\Http\Controllers\Api\PosReturnApiController;
 use App\Http\Controllers\Api\PosReturnDetailApiController;
 use App\Http\Controllers\Api\CoaMainApiController;
 use App\Http\Controllers\Api\CoaSubApiController;
+use App\Http\Controllers\Api\CoaApiController;
 
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\ProfileController;
+
 
 
 // Temporary Routes For Clear Cache etc
@@ -214,6 +216,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('purchase-returns', PurchaseReturnApiController::class);
         Route::apiResource('purchase-return-details', PurchaseReturnDetailApiController::class);
 
+
+        // Account Routes (Coas, coa-Subs, coa_mains)
+        Route::apiResource('coa-mains', CoaMainApiController::class);
+        Route::apiResource('coa_subs', CoaSubApiController::class);
+        Route::apiResource('coas', CoaApiController::class);
+        
+
+
+
     });
     
 
@@ -245,8 +256,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
     // Route::apiResource('pos-return-details', POS_Return_DetailController::class);
 
-    Route::apiResource('coa-mains', CoaMainApiController::class);
-    Route::apiResource('coa-subs', CoaSubApiController::class);
 
 
 

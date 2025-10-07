@@ -22,7 +22,7 @@ class PosFactory extends Factory
             'inv_date' => $this->faker->date(),
             'inv_amount' => $this->faker->randomFloat(2, 10, 1000),
             'tax' => $this->faker->randomFloat(2, 0, 100),
-            'disc_per' => $this->faker->randomFloat(2, 0, 20),
+            'discPer' => $this->faker->randomFloat(2, 0, 20),
             'discount' => $this->faker->randomFloat(2, 0, 100),
         ];
     }

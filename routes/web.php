@@ -27,6 +27,9 @@ use App\Http\Controllers\CoaMainController;
 use App\Http\Controllers\CoaSubController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CoaController;
+
+Route::resource('coa', CoaController::class);
 
 
 // *************************** Temport Routes for Hosting

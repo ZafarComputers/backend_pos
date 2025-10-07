@@ -44,6 +44,8 @@ class DatabaseSeeder extends Seeder
             PosReturnSeeder::class,
             PosReturnDetailSeeder::class,
             CoaMainSeeder::class,
+            CoaSubSeeder::class,
+            CoaSeeder::class,
         ]);
 
 

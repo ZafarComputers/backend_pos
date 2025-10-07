@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('inv_date');
             $table->decimal('inv_amount', 10, 2);
             $table->decimal('tax', 10, 2)->default(0);
-            $table->decimal('disc_per', 5, 2)->default(0);
+            $table->decimal('discPer', 5, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);
             $table->timestamps();
         });
