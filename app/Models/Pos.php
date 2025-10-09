@@ -24,7 +24,8 @@ class Pos extends Model
 
     public function posDetails()
     {
-        return $this->hasMany(PosDetail::class);
+        // return $this->hasMany(PosDetail::class);
+        return $this->hasMany(PosDetail::class, 'pos_id');
     }
 
     public function details()

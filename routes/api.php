@@ -50,6 +50,9 @@ use App\Http\Controllers\Api\CoaApiController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\ProfileController;
 
+// Reprot Controller
+use App\Http\Controllers\Api\SalesRepApiController;
+
 
 
 // Temporary Routes For Clear Cache etc
@@ -222,6 +225,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('coa_subs', CoaSubApiController::class);
         Route::apiResource('coas', CoaApiController::class);
         
+
+        // Sale's Report Routes
+        Route::get('/salesRep', [SalesRepApiController::class, 'getSalesReport']);
+        Route::get('/reports/best-selling-products', [SalesRepApiController::class, 'bestSellingProducts']);
 
 
 

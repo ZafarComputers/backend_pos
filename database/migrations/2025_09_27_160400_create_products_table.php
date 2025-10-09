@@ -16,7 +16,10 @@ return new class extends Migration {
             $table->string('image_path')->nullable();
             $table->unsignedBigInteger('sub_category_id');
             $table->decimal('sale_price', 10, 2)->default(0);
-            $table->integer('opening_stock_quantity')->default(0);
+            $table->integer('opening_stock_quantity')->default(0);  // Only enter Opening Stock
+            $table->integer('stock_in_quantity')->default(0);       // New Purchase stock
+            $table->integer('stock_out_quantity')->default(0);      // Sale's Quantity
+            $table->integer('in_stock_quantity')->default(0);       // Balance Stock: (Calculate @ Product Created and then update on sale/purchase)
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('vendor_id');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');

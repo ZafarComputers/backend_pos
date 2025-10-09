@@ -19,8 +19,10 @@ class PosDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'pos_id' => Pos::factory(),
-            'product_id' => Product::factory(),
+            // 'pos_id' => Pos::factory(),
+            'pos_id' => Pos::inRandomOrder()->value('id'),
+            // 'product_id' => Product::factory(),                      // It generate new products and use them
+            'product_id' => Product::inRandomOrder()->value('id'),      // It takes previously saved Prodcuts
             'qty' => $this->faker->numberBetween(1, 10),
             'sale_price' => $this->faker->randomFloat(2, 5, 50),
         ];

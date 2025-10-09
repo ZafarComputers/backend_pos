@@ -18,7 +18,8 @@ class PosFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id' => Customer::factory(),
+            'customer_id' => Customer::inRandomOrder()->first()->id,
+            // 'customer_id' => Customer::inRandomOrder()->value(id),
             'inv_date' => $this->faker->date(),
             'inv_amount' => $this->faker->randomFloat(2, 10, 1000),
             'tax' => $this->faker->randomFloat(2, 0, 100),

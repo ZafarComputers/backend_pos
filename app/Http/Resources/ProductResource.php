@@ -23,12 +23,19 @@ class ProductResource extends JsonResource
             // 'sub_category'           => new SubCategoryResource($this->whenLoaded('subCategory')),
             'sale_price'             => $this->sale_price,
             'opening_stock_quantity' => $this->opening_stock_quantity,
+            'stock_in_quantity'      => $this->stock_in_quantity, // New Stock
+            'stock_out_quantity'     => $this->stock_out_quantity, // Sold Stock
+            'in_stock_quantity'      => $this->in_stock_quantity,  // In Stock
             'vendor_id'              => $this->vendor_id,
             'vendor'                 => new VendorResource($this->whenLoaded('vendor')),
             'barcode'                => $this->barcode,
             'status'                 => $this->status,
             'created_at'             => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at'             => $this->updated_at?->format('Y-m-d H:i:s'),
+
+            // 🟢 Add these optional fields for "best-selling" use
+            'total_sold'             => $this->when(isset($this->total_sold), (int) $this->total_sold),
+            'total_revenue'          => $this->when(isset($this->total_revenue), round($this->total_revenue, 2)),
         ];
     }
 }

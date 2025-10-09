@@ -14,22 +14,17 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
+        $opening = $this->faker->numberBetween(1, 100);
         return [
             'title' => $this->faker->word,
-            'design_code' => strtoupper($this->faker->bothify('DC###')),
+            'design_code' => strtoupper($this->faker->bothify('DC#####')),
             'image_path' => $this->faker->imageUrl(400, 400, 'product'),
-            'sub_category_id' => SubCategory::factory(),
+            'sub_category_id' => SubCategory::inRandomOrder()->value('id'),     // ID from Already created sub_Category's
             'sale_price' => $this->faker->randomFloat(2, 50, 5000),
-            'opening_stock_quantity' => $this->faker->numberBetween(1, 100),
-
-            // If you already Have User and Vendor then this
+            'opening_stock_quantity' => $opening,
+            'in_stock_quantity'      => $opening, // starts same
             'user_id' => User::inRandomOrder()->first()->id,
             'vendor_id' => Vendor::inRandomOrder()->first()->id,
-
-            // If you You do not have then this code (Yes: I have) 
-            // 'user_id' => User::factory(),
-            // 'vendor_id' => Vendor::factory(),             // ✅ Add vendor factory
-
             'barcode' => $this->faker->ean13,
             'qrcode' => $this->faker->url,               // Optional: add QR code
             'status' => $this->faker->randomElement(['Active', 'Inactive']),

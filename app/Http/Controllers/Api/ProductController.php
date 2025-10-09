@@ -37,6 +37,9 @@ class ProductController extends Controller
             'sub_category_id'        => 'required|exists:sub_categories,id',
             'sale_price'             => 'required|numeric|min:0',
             'opening_stock_quantity' => 'required|integer|min:0',
+            'stock_in_quantity'      => 'required|integer|min:0',
+            'stock_out_quantity'     => 'required|integer|min:0',
+            'in_stock_quantity'      => 'required|integer|min:0',
             'user_id'                => 'required|exists:users,id',
             'vendor_id'              => 'required|exists:vendors,id',
             'barcode'                => 'nullable|string|max:255',
@@ -78,6 +81,9 @@ class ProductController extends Controller
             'sub_category_id'        => 'required|exists:sub_categories,id',
             'sale_price'             => 'required|numeric|min:0',
             'opening_stock_quantity' => 'required|integer|min:0',
+            'stock_in_quantity'      => 'required|integer|min:0',
+            'stock_out_quantity'     => 'required|integer|min:0',
+            'in_stock_quantity'      => 'required|integer|min:0',
             'user_id'                => 'required|exists:users,id',
             'vendor_id'              => 'required|exists:vendors,id',
             'barcode'                => 'nullable|string|max:255',
@@ -128,8 +134,5 @@ class ProductController extends Controller
                 }
 
                 return ProductResource::collection($products);
-                // return response()->json($products, 200);
     }
-
-
 }

@@ -3,9 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\PurchaseDetail;
-use App\Models\Purchase;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Product;
 
 class PurchaseDetailFactory extends Factory
 {
@@ -13,13 +12,17 @@ class PurchaseDetailFactory extends Factory
 
     public function definition(): array
     {
+        $qty       = $this->faker->numberBetween(1, 10);
+        $unitPrice = $this->faker->randomFloat(2, 100, 500);
+        $discPer   = $this->faker->randomFloat(2, 0, 10);
+        $discAmt   = ($unitPrice * $qty * $discPer) / 100;
+
         return [
-            'purchase_id' => Purchase::factory(), // auto create purchase if not provided
-            'product_id' => Product::factory(),   // auto create product if not provided
-            'qty' => $this->faker->numberBetween(1, 10),
-            'unit_price' => $this->faker->randomFloat(2, 100, 1000),
-            'discPer' => $this->faker->randomFloat(2, 0, 10),
-            'discAmount' => $this->faker->randomFloat(2, 0, 200),
+            'product_id'  => Product::inRandomOrder()->value('id'), // ✅ pick existing product
+            'qty'         => $qty,
+            'unit_price'  => $unitPrice,
+            'discPer'     => $discPer,
+            'discAmount'  => $discAmt,
         ];
     }
 }
