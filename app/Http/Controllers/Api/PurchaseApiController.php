@@ -12,7 +12,11 @@ class PurchaseApiController extends Controller
     // GET all purchases with details
     public function index(Request $request)
     {
-        $query = Purchase::with(['vendor', 'details.product']);
+        $query = Purchase::with('vendor', 'details.product', 'details.product.category');
+        // $query = Purchase::with(['vendor:id,first_name,last_name,address', 'details.product']);
+        // $query = Purchase::with(['vendor:id,first_name,last_name', 'details.product'])
+        //     ->select('id', 'vendor_id', 'pur_date', 'inv_amount', 'payment_status'); // only purchase columns you need
+
 
         if ($request->filled('payment_status')) {
             $status = strtolower($request->query('payment_status'));

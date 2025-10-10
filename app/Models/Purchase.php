@@ -19,7 +19,10 @@ class Purchase extends Model
         return $this->hasMany(PurchaseDetail::class);
     }
 
-    public function vendor() {
-        return $this->belongsTo(Vendor::class);
+    // app/Models/Purchase.php
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
     }
+
 }

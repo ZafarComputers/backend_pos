@@ -1,14 +1,27 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
 use App\Http\Controllers\Controller;
+
+// Resources
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SalesReportResource;
+use App\Http\Resources\PurchaseResource;
+
+use App\Http\Resources\Reports\Inventory\InventoryHistoryResources;
+use App\Http\Resources\Reports\Inventory\InventorySoldResources;
+use App\Http\Resources\Reports\Inventory\InvtInhandResources;
+
+
+// Models
 use Illuminate\Http\Request;
 use App\Models\Pos;
 use App\Models\PosDetail;
 use App\Models\Product;
+use App\Models\Purchase;
+
+
+
 
 class SalesRepApiController extends Controller
 {
@@ -70,6 +83,60 @@ class SalesRepApiController extends Controller
 
         // Step 4: Return with resource
         return ProductResource::collection($sortedProducts);
+    }
+
+    // GET all purchases Report with details
+    public function getPurReport(Request $request)
+    {
+        $query = Purchase::with('vendor', 'details.product', 'details.product.category');
+
+        if ($request->filled('payment_status')) {
+            $status = strtolower($request->query('payment_status'));
+
+            // Make sure only valid values are allowed
+            if (in_array($status, ['paid', 'unpaid', 'overdue'])) {
+                $query->where('payment_status', $status);
+            }
+        }
+
+        return PurchaseResource::collection($query->get());
+    }
+
+    // Inventory Reports - (Get Inventory in Hand)
+    public function getInventory(Request $request)
+    {
+        // return response()->json("message: getInventory");
+
+            $inventory = Product::with(['subCategory', 'vendor'])
+            ->where('in_stock_quantity', '!=', 0)
+            ->get();
+
+
+        return InvtInhandResources::collection($inventory);
+        
+
+    }
+
+    // Inventory Reports - (Get Inventory History:=> Opening,in,out,bal )
+    public function getInventoryHistory(Request $request)
+    {
+        // return response()->json("message: getInventoryHistory");
+        $inventoryHistory = Product::with(['subCategory', 'vendor'])->get();
+
+        return InventoryHistoryResources::collection($inventoryHistory);
+
+    }
+
+    // Inventory Reports - (Get Inventory Sold)
+    public function getInventorySold(Request $request)
+    {
+        $inventorySold = Product::with(['subCategory', 'vendor'])
+            ->where('stock_out_quantity', '!=', 0)
+            ->get();
+
+
+        return InventorySoldResources::collection($inventorySold);
+        
     }
 
 }

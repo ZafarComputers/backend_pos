@@ -15,7 +15,7 @@ class PosApiController extends Controller
 {
     public function index()
     {
-        return Pos::with('posDetails')->get();
+        return Pos::with(['customer', 'posDetails'])->get();
     }
 
     public function store(Request $request)

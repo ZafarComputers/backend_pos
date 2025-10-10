@@ -23,8 +23,8 @@ class VendorResource extends JsonResource
             'email'   => $this->email ?? null,
             'phone'   => $this->phone ?? null,
             'status'  => $this->status ?? null,
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
 
             // Include City, State, Country
             'city' => new CityResource($this->whenLoaded('city')),

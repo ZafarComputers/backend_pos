@@ -23,8 +23,8 @@ use App\Http\Controllers\Api\EmployeeApiController;
 
 use App\Http\Controllers\Api\VendorController;
 
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\SubCategoryController;
+use App\Http\Controllers\Api\CategoryApiController;
+use App\Http\Controllers\Api\SubCategoryApiController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\SeasonController;
@@ -171,8 +171,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('vendors', VendorController::class);
         
         // Categories n Sub-Categories
-        Route::apiResource('categories', CategoryController::class);
-        Route::apiResource('subcategories', SubCategoryController::class);
+        Route::apiResource('categories', CategoryApiController::class);
+        Route::apiResource('subcategories', SubCategoryApiController::class);
         
         // // Low stock route
         // Route::get('products/low-stock', [ProductApiController::class, 'lowStock']);
@@ -229,6 +229,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // Sale's Report Routes
         Route::get('/salesRep', [SalesRepApiController::class, 'getSalesReport']);
         Route::get('/reports/best-selling-products', [SalesRepApiController::class, 'bestSellingProducts']);
+        Route::get('/purReport', [SalesRepApiController::class, 'getPurReport']);
+
+        Route::get('/InvtoryReport', [SalesRepApiController::class, 'getInventory']);
+        Route::get('/InvtoryInHistory', [SalesRepApiController::class, 'getInventoryHistory']);
+        Route::get('/InventorySold', [SalesRepApiController::class, 'getInventorySold']);
 
 
 
