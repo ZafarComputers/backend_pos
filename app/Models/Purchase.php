@@ -12,7 +12,7 @@ class Purchase extends Model
     protected $fillable = [
         'pur_date', 'pur_inv_barcode', 'vendor_id', 'ven_inv_no',
         'ven_inv_date', 'ven_inv_ref', 'description',
-        'discount_percent', 'discount_amt', 'inv_amount', 'payment_status',
+        'discount_percent', 'discount_amt', 'inv_amount', 'paid_amount', 'payment_status',
     ];
 
     public function details() {

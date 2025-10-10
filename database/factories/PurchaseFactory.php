@@ -25,6 +25,7 @@ class PurchaseFactory extends Factory
             'discount_percent' => $this->faker->randomFloat(2, 0, 10),
             'discount_amt'     => $this->faker->randomFloat(2, 0, 500),
             'inv_amount'       => $this->faker->randomFloat(2, 1000, 5000),
+            'inv_amount'       => $this->faker->randomFloat(2, 100, 5000),
             'payment_status'   => $this->faker->randomElement(['Paid', 'Unpaid', 'Overdue']),
         ];
     }

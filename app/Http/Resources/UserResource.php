@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Role;
 
 class UserResource extends JsonResource
 {
@@ -14,10 +15,18 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name'  => $this->last_name,
             'email'      => $this->email,
-            'role'       => new RoleResource($this->whenLoaded('role')),
+            // 'cell_no1'   => $this->cell_no1,
+            // 'cell_no2'   => $this->cell_no2,
+
+            // 'role'       => new RoleResource($this->whenLoaded('role'))
+            // 'role_id' => Role::inRandomOrder()->first()->id,
+            'role_id' => $this->role->id,
+            'roleTitle' => $this->role->name,
+            
             'profile'    => new ProfileResource($this->whenLoaded('profile')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'status'     => $this->status,
+            // 'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

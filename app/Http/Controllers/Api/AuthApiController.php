@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;   // ✅ correct Auth facade
+use App\Http\Resources\UserResource;
+
 
 class AuthApiController extends Controller
 {
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required']
         ]);
 
@@ -26,9 +28,34 @@ class AuthApiController extends Controller
 
         return response()->json([
             'token' => $token,
-            'user'  => $user
+            'user'  => new UserResource($user)
         ]);
+
+        // return response()->json([
+        //     'token' => $token,
+        //     'user'  => UserResource::collection(collect([$user]))
+        // ]);
+
     }
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => ['required', 'email'],
+    //         'password' => ['required']
+    //     ]);
+
+    //     if (!Auth::attempt($credentials)) {
+    //         return response()->json(['message' => 'Invalid credentials'], 401);
+    //     }
+
+    //     $user = Auth::user();
+    //     $token = $user->createToken('api-token')->plainTextToken;
+
+    //     return response()->json([
+    //         'token' => $token,
+    //         'user'  => $user
+    //     ]);
+    // }
 
     public function logout(Request $request)
     {

@@ -13,6 +13,8 @@ class Vendor extends Model
     protected $fillable = [
         'first_name',
         'last_name',
+        'email',
+        'phone',
         'cnic',
         'address',
         'city_id',
@@ -23,5 +25,8 @@ class Vendor extends Model
         return $this->belongsTo(City::class);
     }
 
+    public function purchases() {
+        return $this->hasMany(Purchase::class);
+    }
     
 }

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('email');
+            $table->string('phone');
             $table->string('cnic')->unique();
             $table->text('address')->nullable();
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();

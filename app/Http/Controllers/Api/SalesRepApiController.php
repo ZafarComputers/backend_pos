@@ -11,6 +11,10 @@ use App\Http\Resources\PurchaseResource;
 use App\Http\Resources\Reports\Inventory\InventoryHistoryResources;
 use App\Http\Resources\Reports\Inventory\InventorySoldResources;
 use App\Http\Resources\Reports\Inventory\InvtInhandResources;
+use App\Http\Resources\Reports\Vendor\VendorResource;
+use App\Http\Resources\Reports\Vendor\VendorDuesResource;
+
+
 
 
 // Models
@@ -19,6 +23,7 @@ use App\Models\Pos;
 use App\Models\PosDetail;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\Vendor;
 
 
 
@@ -111,10 +116,7 @@ class SalesRepApiController extends Controller
             ->where('in_stock_quantity', '!=', 0)
             ->get();
 
-
         return InvtInhandResources::collection($inventory);
-        
-
     }
 
     // Inventory Reports - (Get Inventory History:=> Opening,in,out,bal )
@@ -124,7 +126,6 @@ class SalesRepApiController extends Controller
         $inventoryHistory = Product::with(['subCategory', 'vendor'])->get();
 
         return InventoryHistoryResources::collection($inventoryHistory);
-
     }
 
     // Inventory Reports - (Get Inventory Sold)
@@ -134,9 +135,35 @@ class SalesRepApiController extends Controller
             ->where('stock_out_quantity', '!=', 0)
             ->get();
 
-
         return InventorySoldResources::collection($inventorySold);
+    }
+
+    // Vendor's Reports
+    public function getVendorPurchases()
+    {
+        $vendors = Vendor::with('purchases.details')->get();
+        return VendorResource::collection($vendors);
+    }
+
+    public function getVendorDues()
+    {
+        // Get all vendors with their purchases
+        $vendors = Vendor::with('purchases')->get();
         
+        
+        // $vendors = Vendor::with(['purchases' => function ($query) use ($request) {
+        //     if ($request->has(['from', 'to'])) {
+        //         $query->whereBetween('purchase_date', [$request->from, $request->to]);
+        //     }
+        // }])->get();
+
+        // // Only vendors who still owe money
+        // $vendors = $vendors->filter(function ($vendor) {
+        //     return $vendor->purchases->sum('total_amount') > $vendor->purchases->sum('paid_amount');
+        // });
+        
+        return VendorDuesResource::collection($vendors);
+
     }
 
 }

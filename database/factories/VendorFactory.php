@@ -14,7 +14,9 @@ class VendorFactory extends Factory
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
+            'email'             => $this->faker->unique()->safeEmail(),
             'cnic' => $this->faker->unique()->numerify('#####-#######-#'),
+            'phone'          => $this->faker->phoneNumber,
             'address' => $this->faker->address(),
             'city_id' => City::inRandomOrder()->value('id'),
             // 'city_id' => City::inRandomOrder()->first()->id ?? City::factory(), // needs import

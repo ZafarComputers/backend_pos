@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
-            ProfileSeeder::class,
+            // ProfileSeeder::class,
             EmployeeSeeder::class,
             CustomerSeeder::class,
             EmployeeSeeder::class,

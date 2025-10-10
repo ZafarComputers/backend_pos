@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('discount_percent', 5, 2)->default(0);
             $table->decimal('discount_amt', 12, 2)->default(0);
             $table->decimal('inv_amount', 12, 2)->default(0);
+            $table->decimal('paid_amount', 12, 2)->default(0);
             
             // ✅ New field
             $table->enum('payment_status', ['paid', 'unpaid', 'overdue'])->default('unpaid');
