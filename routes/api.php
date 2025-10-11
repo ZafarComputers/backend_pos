@@ -43,6 +43,7 @@ use App\Http\Controllers\PosDetailController;
 use App\Http\Controllers\Api\PosReturnApiController;
 
 use App\Http\Controllers\Api\PosReturnDetailApiController;
+use App\Http\Controllers\Api\PosCartController;
 use App\Http\Controllers\Api\CoaMainApiController;
 use App\Http\Controllers\Api\CoaSubApiController;
 use App\Http\Controllers\Api\CoaApiController;
@@ -111,6 +112,13 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('profile', [AuthController::class, 'profile']);
+    Route::post('refresh-token', [AuthController::class, 'refreshToken']);
+    Route::put('update-profile', [AuthController::class, 'updateProfile']);
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+    
+    // Role-based user retrieval
+    Route::get('users-by-role/{roleName}', [AuthController::class, 'getUsersByRole'])
+        ->middleware('role:admin,manager');
 });
 
 
@@ -240,6 +248,16 @@ Route::prefix('pos')->group(function () {
     
     // POS-Return-Detail Routes
     Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
+});
+
+// POS Cart Management Routes
+Route::middleware('auth:sanctum')->prefix('pos-cart')->group(function () {
+    Route::get('/', [PosCartController::class, 'getCart']);
+    Route::post('/add', [PosCartController::class, 'addToCart']);
+    Route::put('/{productId}', [PosCartController::class, 'updateCartItem']);
+    Route::delete('/{productId}', [PosCartController::class, 'removeFromCart']);
+    Route::delete('/', [PosCartController::class, 'clearCart']);
+    Route::post('/discount', [PosCartController::class, 'applyDiscount']);
 });
 // End POS & POS-Detail Routes
 

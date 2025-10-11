@@ -14,19 +14,24 @@ class UserResource extends JsonResource
             'id'         => $this->id,
             'first_name' => $this->first_name,
             'last_name'  => $this->last_name,
+            'full_name'  => $this->first_name . ' ' . $this->last_name,
             'email'      => $this->email,
-            // 'cell_no1'   => $this->cell_no1,
-            // 'cell_no2'   => $this->cell_no2,
-
-            // 'role'       => new RoleResource($this->whenLoaded('role'))
-            // 'role_id' => Role::inRandomOrder()->first()->id,
-            'role_id' => $this->role->id,
-            'roleTitle' => $this->role->name,
-            
-            'profile'    => new ProfileResource($this->whenLoaded('profile')),
+            'cell_no1'   => $this->cell_no1,
+            'cell_no2'   => $this->cell_no2,
+            'img_path'   => $this->img_path,
             'status'     => $this->status,
-            // 'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'role' => [
+                'id'   => $this->whenLoaded('role', function () {
+                    return $this->role->id;
+                }),
+                'name' => $this->whenLoaded('role', function () {
+                    return $this->role->name;
+                }),
+            ],
+            'profile'    => new ProfileResource($this->whenLoaded('profile')),
+            'email_verified_at' => $this->email_verified_at?->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];
     }
 }
