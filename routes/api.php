@@ -231,14 +231,14 @@ Route::prefix('posDtl')->group(function () {
 
 // POS-Return's Routes
 Route::prefix('posReturn')->group(function () {
-Route::get('/', [PosReturnApiController::class, 'apiIndex']);
-Route::post('/', [PosReturnApiController::class, 'store']);
-Route::get('/{id}', [PosReturnApiController::class, 'show']);
-Route::put('/{id}', [PosReturnApiController::class, 'update']);
-Route::delete('/{id}', [PosReturnApiController::class, 'destroy']);
+    Route::get('/', [PosReturnApiController::class, 'index']);
+    Route::post('/', [PosReturnApiController::class, 'store']);
+    Route::get('/{id}', [PosReturnApiController::class, 'show']);
+    Route::put('/{id}', [PosReturnApiController::class, 'update']);
+    Route::delete('/{id}', [PosReturnApiController::class, 'destroy']);
 
-// POS-Return-Detail Routes
-Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
+    // POS-Return-Detail Routes
+    Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
 });
 
 // POS-Cart Routes (Not Finalize)

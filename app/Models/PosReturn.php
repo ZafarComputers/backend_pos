@@ -11,19 +11,27 @@ class PosReturn extends Model
 
     protected $fillable = [
         'customer_id',
+        'vendor_id',
         'invRet_date',
-        'pos_inv_no',
+        'pos_id',
         'return_inv_amout',
     ];
 
-    public function details()
-    {
-        return $this->hasMany(PosReturnDetail::class, 'pos_return_id');
-    }
+    // ✅ Relations
 
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    public function pos()
+    {
+        return $this->belongsTo(Pos::class, 'pos_id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(PosReturnDetail::class, 'pos_return_id');
+    }
+    
 }

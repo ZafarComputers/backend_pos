@@ -15,7 +15,7 @@ class PosSeeder extends Seeder
     public function run(): void
     {
         Pos::factory(25)->create()->each(function ($pos) {
-            $pos->posDetails()->saveMany(PosDetail::factory(3)->make());
+            $pos->details()->saveMany(PosDetail::factory(3)->make());
         });
     }
 }

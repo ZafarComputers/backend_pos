@@ -15,9 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->date('invRet_date');
-            $table->string('pos_inv_no'); // reference to original POS invoice
+
+            // Replace string 'pos_inv_no' with a foreign key 'pos_id'
+            $table->foreignId('pos_id')
+                ->constrained('pos') // or 'pos_invoices' — use your actual table name here
+                ->cascadeOnDelete();
+
             $table->decimal('return_inv_amout', 12, 2);
             $table->timestamps();
+        
         });
     }
 

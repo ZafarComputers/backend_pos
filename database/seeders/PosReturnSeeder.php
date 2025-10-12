@@ -9,6 +9,6 @@ class PosReturnSeeder extends Seeder
 {
     public function run(): void
     {
-        PosReturn::factory()->count(30)->create();
+        PosReturn::factory()->count(15)->create();
     }
 }
