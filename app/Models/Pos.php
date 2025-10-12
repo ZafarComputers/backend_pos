@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PosBankDetail;
 
 class Pos extends Model
 {
@@ -17,14 +18,9 @@ class Pos extends Model
         'discAmount',
         'inv_amount', 
         'paid',
+        'payment_mode', // ✅ new column
     ];
 
-
-    // public function posDetails()
-    // {
-    //     // return $this->hasMany(PosDetail::class);
-    //     return $this->hasMany(PosDetail::class, 'pos_id');
-    // }
 
     public function details()
     {
@@ -34,6 +30,11 @@ class Pos extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    public function bankDetail()
+    {
+        return $this->hasOne(PosBankDetail::class, 'pos_id', 'id');
     }
 
 

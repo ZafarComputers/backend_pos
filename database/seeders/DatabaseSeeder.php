@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             PurchaseReturnSeeder::class,
             PosSeeder::class,
             PosDetailSeeder::class,
+            PosBankDetailSeeder::class,
             PosReturnSeeder::class,
             PosReturnDetailSeeder::class,
             CoaMainSeeder::class,

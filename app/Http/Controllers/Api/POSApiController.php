@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pos;
-use App\Models\PosDetail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PosResource;
 use App\Http\Resources\PosNoDtlResource;
 use Illuminate\Support\Facades\Validator;
+
+use App\Models\Pos;
+use App\Models\PosDetail;
+use App\Models\PosBankDetail;
 
 // use App\Http\Resources\PosDetailResource;
 
@@ -84,7 +86,8 @@ class PosApiController extends Controller
                 'discAmount'     => $discAmount,
                 'inv_amount'     => $finalAmount,
                 'paid'           => $paid,
-                'payment_status' => $payment_status,
+                // 'payment_status' => $payment_status,
+                'payment_mode'  => $request->payment_mode,
             ]);
 
             // create details (pos_id assigned via relation)
@@ -96,6 +99,27 @@ class PosApiController extends Controller
                     'total'      => $detail['qty'] * $detail['sale_price'],
                 ]);
             }
+
+            // 🏦 Save Bank Info if applicable
+            // if ($request->payment_mode === 'Bank') {
+            //     \App\Models\PosBankDetail::create([
+            //         'pos_id'         => $pos->id,
+            //         'bank_name'      => $request->bank_name,
+            //         'account_number' => $request->account_number,
+            //     ]);
+            // }
+
+            if ($request->payment_mode === 'Bank' && isset($request->bank_detail)) {
+                // \App\Models\PosBankDetail::create([
+                PosBankDetail::create([
+                    'pos_id'         => $pos->id,
+                    'bank_name'      => $request->bank_detail['bank_name'] ?? null,
+                    'account_number' => $request->bank_detail['account_number'] ?? null,
+                ]);
+            }
+
+
+
 
             DB::commit();
 
@@ -122,13 +146,33 @@ class PosApiController extends Controller
     /**
      * Display the specified POS.
      */
+    // public function show($id)
+    // {
+    //     $pos = Pos::with(['customer', 'details', 'bankDetail'])
+    //             ->findOrFail($id);
+
+    //     return new PosResource($pos);
+    // }
     public function show($id)
     {
-        $pos = Pos::with(['customer', 'details'])
-                ->findOrFail($id);
+        try {
+            // Load POS with all necessary relations
+            $pos = Pos::with(['details.product', 'customer', 'bankDetail'])->findOrFail($id);
 
-        return new PosResource($pos);
+            return response()->json([
+                'status'  => true,
+                'message' => 'POS record fetched successfully.',
+                'data'    => new PosResource($pos),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to fetch POS record.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
+
    
 
 
@@ -138,17 +182,21 @@ class PosApiController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'inv_date' => 'required|date',
-            'customer_id' => 'required|exists:customers,id',
-            'tax' => 'numeric|min:0',
-            'discPer' => 'numeric|min:0',
-            'discAmount' => 'numeric|min:0',
-            'inv_amount' => 'required|numeric|min:0',
-            'paid' => 'required|numeric|min:0',
-            'details' => 'required|array',
+            'inv_date'       => 'required|date',
+            'customer_id'    => 'required|exists:customers,id',
+            'tax'            => 'nullable|numeric|min:0',
+            'discPer'        => 'nullable|numeric|min:0',
+            'discAmount'     => 'nullable|numeric|min:0',
+            'inv_amount'     => 'nullable|numeric|min:0',
+            'paid'           => 'nullable|numeric|min:0',
+            'details'        => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
-            'details.*.qty' => 'required|numeric|min:1',
+            'details.*.qty'        => 'required|numeric|min:1',
             'details.*.sale_price' => 'required|numeric|min:0',
+            'payment_mode'   => 'required|in:Cash,Credit,Bank',
+            // Optional bank info (only required if payment_mode == Bank)
+            'bank_name'      => 'required_if:payment_mode,Bank|string|max:255',
+            'account_number' => 'required_if:payment_mode,Bank|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -171,19 +219,19 @@ class PosApiController extends Controller
             $pos->update([
                 'inv_date'       => $request->inv_date,
                 'customer_id'    => $request->customer_id,
-                'tax'            => $request->tax,
-                'discPer'        => $request->discPer,
-                'discAmount'     => $request->discAmount,
-                'inv_amount'     => $request->inv_amount,
-                'paid'           => $request->paid,
+                'tax'            => $request->tax ?? 0,
+                'discPer'        => $request->discPer ?? 0,
+                'discAmount'     => $request->discAmount ?? 0,
+                'inv_amount'     => $request->inv_amount ?? $total_amount,
+                'paid'           => $request->paid ?? 0,
+                'payment_mode'   => $request->payment_mode,
             ]);
 
-            // Delete old details and re-insert updated ones
+            // 🔄 Delete old details and re-insert updated ones
             $pos->details()->delete();
 
             foreach ($request->details as $detail) {
-                PosDetail::create([
-                    'pos_id'     => $pos->id,
+                $pos->details()->create([
                     'product_id' => $detail['product_id'],
                     'qty'        => $detail['qty'],
                     'sale_price' => $detail['sale_price'],
@@ -191,15 +239,31 @@ class PosApiController extends Controller
                 ]);
             }
 
+            // 🏦 Handle Bank Info
+            if ($request->payment_mode === 'Bank') {
+                // Update if exists, else create
+                PosBankDetail::updateOrCreate(
+                    ['pos_id' => $pos->id],
+                    [
+                        'bank_name'      => $request->bank_name,
+                        'account_number' => $request->account_number,
+                    ]
+                );
+            } else {
+                // If changed from Bank → other mode, remove previous bank record
+                $pos->bankDetail()->delete();
+            }
+
             DB::commit();
 
             // Reload relations before returning
-            $pos->load(['details.product', 'customer']);
+            $pos->load(['details.product', 'customer', 'bankDetail']);
 
             return response()->json([
                 'status'  => true,
                 'message' => 'POS updated successfully.',
-                'data'    => new PosResource($pos)
+                'data'    => new PosResource($pos),
+                // 'data'    => new PosNoDtlResource($pos),
             ], 200);
 
         } catch (\Exception $e) {
@@ -212,6 +276,7 @@ class PosApiController extends Controller
             ], 500);
         }
     }
+
 
 
     /**

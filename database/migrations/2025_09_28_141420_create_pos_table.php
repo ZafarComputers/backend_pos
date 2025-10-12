@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('discAmount', 10, 2)->default(0);
             $table->decimal('inv_amount', 10, 2)->default(0);
             $table->decimal('paid', 10, 2)->default(0);
+            $table->enum('payment_mode', ['Cash', 'Credit', 'Bank'])->default('Cash');
             $table->timestamps();
         });
     }

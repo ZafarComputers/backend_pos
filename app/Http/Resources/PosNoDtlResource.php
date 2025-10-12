@@ -7,19 +7,32 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PosNoDtlResource extends JsonResource
 {
     public function toArray($request)
-    {
-        return [
-            'Inv_id' => $this->id,
-            'InvDate' => $this->inv_date,
-            'customer_name' => $this->customer_id,
-            'customer_name' => $this->customer->name,
-            'inv_amount' => $this->inv_amount,
-            'paid_amount' => $this->paid,
-            // 'details' => PosDetailResource::collection($this->whenLoaded('details')),
-         
-            // 'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
-
+    {        
+        // Start with basic fields
+        $data = [
+            'inv_id'           => $this->id,
+            'inv_date'     => $this->inv_date,
+            'customer_id'  => $this->customer_id,
+            'customer_name'=> optional($this->customer)->name,
+            // 'tax'          => $this->tax,
+            // 'discPer'      => $this->discPer,
+            // 'discAmount'   => $this->discAmount,
+            'inv_amount'   => $this->inv_amount,
+            'paid_amount'         => $this->paid,
+            'payment_mode' => $this->payment_mode,
+            // 'created_at'   => $this->created_at,
+            // 'updated_at'   => $this->updated_at,
         ];
+
+        // Add bank info only when payment mode is 'Bank'
+        if ($this->payment_mode === 'Bank' && $this->bankDetail) {
+            $data['bank_detail'] = [
+                'bank_name'      => $this->bankDetail->bank_name,
+                'account_number' => $this->bankDetail->account_number,
+            ];
+        }
+
+        return $data;
+
     }
 }
