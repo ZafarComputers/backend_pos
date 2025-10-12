@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnDetail;
+
 use App\Http\Resources\PurchaseReturnResource;
-use Illuminate\Http\Request;
 
 class PurchaseReturnApiController extends Controller
 {
@@ -17,7 +19,7 @@ class PurchaseReturnApiController extends Controller
     {
         $purchaseReturns = PurchaseReturn::with(['vendor', 'purchase', 'details.product'])->get();
 
-        return response()->json($purchaseReturns);
+        return PurchaseReturnResource::collection($purchaseReturns);
     }
 
     /**
@@ -26,104 +28,109 @@ class PurchaseReturnApiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'purchase_id'   => 'required|exists:purchases,id',
-            'vendor_id'     => 'required|exists:vendors,id',
-            'return_inv_no' => 'required|string|unique:purchase_returns,return_inv_no',
-            'return_date'   => 'required|date',
-            'reason'        => 'nullable|string',
-            'total_amount'  => 'required|numeric',
-            'details'       => 'required|array|min:1',
+            'vendor_id' => 'required|exists:vendors,id',
+            'purchase_id' => 'nullable|exists:purchases,id',
+            'return_date' => 'required|date',
+            'reason' => 'nullable|string',
+            'discount_percent' => 'nullable|numeric|min:0',
+            'details' => 'required|array',
             'details.*.product_id' => 'required|exists:products,id',
-            'details.*.qty'   => 'required|integer|min:1',
-            'details.*.unit_price'      => 'required|numeric|min:0',
-            // 'details.*.subtotal'   => 'required|numeric|min:0',
+            'details.*.qty' => 'required|numeric|min:1',
+            'details.*.unit_price' => 'required|numeric|min:0',
+            'details.*.discAmount' => 'nullable|numeric|min:0',
         ]);
 
-        // Create Purchase Return
-        $purchaseReturn = PurchaseReturn::create([
-            'purchase_id'   => $validated['purchase_id'],
-            'vendor_id'     => $validated['vendor_id'],
-            'return_inv_no' => $validated['return_inv_no'],
-            'return_date'   => $validated['return_date'],
-            'reason'        => $validated['reason'] ?? null,
-            'total_amount'  => $validated['total_amount'],
-        ]);
-
-        // Save Purchase Return Details
+        // ✅ Calculate total amount
+        $return_amount = 0;
         foreach ($validated['details'] as $detail) {
-            PurchaseReturnDetail::create([
-                'purchase_return_id' => $purchaseReturn->id,
-                'product_id'         => $detail['product_id'],
-                'qty'                => $detail['qty'],
-                'unit_price'              => $detail['unit_price'],
+            $lineAmount = ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0);
+            $return_amount += $lineAmount;
+        }
+
+        // ✅ Auto-generate return invoice number
+        $returnNo = 'PR-' . str_pad(PurchaseReturn::count() + 1, 4, '0', STR_PAD_LEFT);
+
+        // ✅ Create the Purchase Return
+        $purchaseReturn = PurchaseReturn::create([
+            'vendor_id' => $validated['vendor_id'],
+            'purchase_id' => $validated['purchase_id'] ?? null,
+            'return_inv_no' => $returnNo,
+            'return_date' => $validated['return_date'],
+            'reason' => $validated['reason'] ?? null,
+            'discount_percent' => $validated['discount_percent'] ?? 0,
+            'return_amount' => $return_amount,
+        ]);
+
+        // ✅ Create related details
+        foreach ($validated['details'] as $detail) {
+            $purchaseReturn->details()->create([
+                'product_id' => $detail['product_id'],
+                'qty' => $detail['qty'],
+                'unit_price' => $detail['unit_price'],
+                'discAmount' => $detail['discAmount'] ?? 0,
+                'amount' => ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0),
             ]);
         }
 
-        return response()->json([
-            'message' => 'Purchase Return created successfully',
-            'data'    => $purchaseReturn->load('vendor', 'details')
-        ], 201);
+        // ✅ Return using resource
+        return new PurchaseReturnResource($purchaseReturn->load(['vendor', 'details.product']));
     }
 
-    
-    /**
-     * Show single purchase return
-     */
+
     public function show(PurchaseReturn $purchaseReturn)
     {
         $purchaseReturn->load(['vendor', 'purchase', 'details.product']);
 
-        return response()->json($purchaseReturn);
+        return new PurchaseReturnResource($purchaseReturn);
     }
 
-    /**
-     * Update purchase return
-     */
+
+
     public function update(Request $request, PurchaseReturn $purchaseReturn)
     {
-        $validated = $request->validate([
-            'purchase_id'   => 'required|exists:purchases,id',
-            'vendor_id'     => 'required|exists:vendors,id',
-            'return_inv_no' => 'required|string|unique:purchase_returns,return_inv_no,' . $purchaseReturn->id,
-            'return_date'   => 'required|date',
-            'reason'        => 'nullable|string',
-            'total_amount'  => 'required|numeric',
-            'details'       => 'required|array|min:1',
-            'details.*.product_id' => 'required|exists:products,id',
-            'details.*.qty'   => 'required|integer|min:1',
-            'details.*.unit_price'      => 'required|numeric|min:0',
-            // 'details.*.subtotal'   => 'required|numeric|min:0',
+        // 🟩 Step 1: Validate incoming data
+        $data = $request->validate([
+            'vendor_id'     => 'sometimes|exists:vendors,id',
+            'purchase_id'   => 'sometimes|exists:purchases,id',
+            'return_date'   => 'sometimes|date',
+            'description'   => 'nullable|string',
+            'details'       => 'sometimes|array|min:1',
+            'details.*.id'  => 'sometimes|exists:purchase_return_details,id',
+            'details.*.product_id' => 'required_with:details|exists:products,id',
+            'details.*.qty'        => 'required_with:details|numeric|min:1',
+            'details.*.unit_price' => 'required_with:details|numeric|min:0',
+            'details.*.discAmount' => 'nullable|numeric|min:0',
         ]);
 
-        // Update Purchase Return
-        $purchaseReturn->update([
-            'purchase_id'   => $validated['purchase_id'],
-            'vendor_id'     => $validated['vendor_id'],
-            'return_inv_no' => $validated['return_inv_no'],
-            'return_date'   => $validated['return_date'],
-            'reason'        => $validated['reason'] ?? null,
-            'total_amount'  => $validated['total_amount'],
-        ]);
+        // 🟩 Step 2: Update main purchase return record
+        $purchaseReturn->update($data);
 
-        // Delete old details first
-        $purchaseReturn->details()->delete();
+        // 🟩 Step 3: Update return details (if provided)
+        if (!empty($data['details'])) {
+            // Delete existing details if you want to replace them
+            $purchaseReturn->details()->delete();
 
-        // Insert new details
-        foreach ($validated['details'] as $detail) {
-            PurchaseReturnDetail::create([
-                'purchase_return_id' => $purchaseReturn->id,
-                'product_id'         => $detail['product_id'],
-                'qty'           => $detail['qty'],
-                'unit_price'              => $detail['unit_price'],
-                // 'subtotal'           => $detail['subtotal'],
+            $totalAmount = 0;
+            foreach ($data['details'] as $item) {
+                $lineAmount = ($item['qty'] * $item['unit_price']) - ($item['discAmount'] ?? 0);
+                $totalAmount += $lineAmount;
+
+                $purchaseReturn->details()->create($item);
+            }
+
+            // Update total return amount
+            $purchaseReturn->update([
+                'total_return' => number_format($totalAmount, 2, '.', ''),
             ]);
         }
 
-        return response()->json([
-            'message' => 'Purchase Return updated successfully',
-            'data'    => $purchaseReturn->load('vendor', 'details')
-        ], 200);
+        // 🟩 Step 4: Return updated resource with all relations loaded
+        return new PurchaseReturnResource(
+            $purchaseReturn->load(['vendor', 'purchase', 'details.product'])
+        );
+    
     }
+
 
 
     /**

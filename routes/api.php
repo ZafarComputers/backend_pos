@@ -218,37 +218,43 @@ Route::prefix('pos')->group(function () {
     Route::get('/{id}', [PosApiController::class, 'show']);     // Show single invoice
     Route::put('/{id}', [PosApiController::class, 'update']);   // Update invoice
     Route::delete('/{id}', [PosApiController::class, 'destroy']); // Delete invoice
+});
 
-    // POS-Cart Routes (Not Finalize)
-    Route::prefix('pos')->group(function () {
-        // Show all products or by category
-        // Route::get('/products', [PosApiController::class, 'products'])->name('pos.products');
-
-        // Cart (selected products in POS)
-        // Route::get('/cart', [PosApiController::class, 'cart'])->name('pos.cart');
-        // Route::post('/cart/add', [PosApiController::class, 'addToCart'])->name('pos.cart.add');
-        // Route::post('/cart/update/{productId}', [PosApiController::class, 'updateCart'])->name('pos.cart.update');
-        // Route::delete('/cart/remove/{productId}', [PosApiController::class, 'removeFromCart'])->name('pos.cart.remove');
-    });
-
-
-    // POS-Detail Routes
+// POS-Detail Routes
+Route::prefix('posDtl')->group(function () {
     Route::get('/', [PosDetailController::class, 'apiIndex']);
     Route::post('/', [PosDetailController::class, 'store']);
     Route::get('/{id}', [PosDetailController::class, 'show']);
     Route::put('/{id}', [PosDetailController::class, 'update']);
     Route::delete('/{id}', [PosDetailController::class, 'destroy']);
-
-    // POS-Return's Routes
-    Route::get('/', [PosReturnApiController::class, 'apiIndex']);
-    Route::post('/', [PosReturnApiController::class, 'store']);
-    Route::get('/{id}', [PosReturnApiController::class, 'show']);
-    Route::put('/{id}', [PosReturnApiController::class, 'update']);
-    Route::delete('/{id}', [PosReturnApiController::class, 'destroy']);
-    
-    // POS-Return-Detail Routes
-    Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
 });
+
+// POS-Return's Routes
+Route::prefix('posReturn')->group(function () {
+Route::get('/', [PosReturnApiController::class, 'apiIndex']);
+Route::post('/', [PosReturnApiController::class, 'store']);
+Route::get('/{id}', [PosReturnApiController::class, 'show']);
+Route::put('/{id}', [PosReturnApiController::class, 'update']);
+Route::delete('/{id}', [PosReturnApiController::class, 'destroy']);
+
+// POS-Return-Detail Routes
+Route::apiResource('pos_return_details', PosReturnDetailApiController::class);
+});
+
+// POS-Cart Routes (Not Finalize)
+// Route::prefix('pos')->group(function () {
+        // Show all products or by category
+        // Route::get('/products', [PosApiController::class, 'products'])->name('pos.products');
+    
+        // Cart (selected products in POS)
+        // Route::get('/cart', [PosApiController::class, 'cart'])->name('pos.cart');
+        // Route::post('/cart/add', [PosApiController::class, 'addToCart'])->name('pos.cart.add');
+        // Route::post('/cart/update/{productId}', [PosApiController::class, 'updateCart'])->name('pos.cart.update');
+        // Route::delete('/cart/remove/{productId}', [PosApiController::class, 'removeFromCart'])->name('pos.cart.remove');
+    // });
+    
+    
+    
 
 // POS Cart Management Routes
 Route::middleware('auth:sanctum')->prefix('pos-cart')->group(function () {

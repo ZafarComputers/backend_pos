@@ -142,4 +142,35 @@ class AuthApiController extends Controller
         return $this->success(UserResource::collection($users), 'Users retrieved successfully');
     }
 
+    public function register(Request $request)
+    {
+        // ✅ Validate input
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role_id'    => 'required|exists:roles,id', // ✅ validate role exists
+        ]);
+
+        // ✅ Create user
+        $user = User::create([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id'    => $data['role_id'], // ✅ set here
+        ]);
+
+        // ✅ Create token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // ✅ Return success response
+        return response()->json([
+            'token' => $token,
+            'user'  => new UserResource($user),
+        ]);
+    }
+
+
 }

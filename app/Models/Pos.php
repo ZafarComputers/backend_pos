@@ -9,24 +9,22 @@ class Pos extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'inv_date', 'inv_amount', 'tax', 'discPer', 'discount'];
+    protected $fillable = [
+        'inv_date', 
+        'customer_id', 
+        'tax', 
+        'discPer', 
+        'discAmount',
+        'inv_amount', 
+        'paid',
+    ];
 
-    // public function posDetails()
-    // {
-    //     return $this->hasMany(PosDetail::class);
-    // }
 
     // public function posDetails()
     // {
     //     // return $this->hasMany(PosDetail::class);
-    //     return $this->hasMany(PosDetail::class, 'pos_id', 'id');
+    //     return $this->hasMany(PosDetail::class, 'pos_id');
     // }
-
-    public function posDetails()
-    {
-        // return $this->hasMany(PosDetail::class);
-        return $this->hasMany(PosDetail::class, 'pos_id');
-    }
 
     public function details()
     {

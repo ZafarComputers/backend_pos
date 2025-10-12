@@ -11,13 +11,15 @@ class PurchaseReturnDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'purchase_return_id' => $this->purchase_return_id,
+            // 'purchase_return_id' => $this->purchase_return_id,
             'product_id' => $this->product_id,
+            'product_id' => $this->product->title,
+ 
+            // 'product' => $this->whenLoaded('product'),
             'qty' => $this->qty,
             'unit_price' => $this->unit_price,
             'discPer' => $this->discPer,
             'discAmount' => $this->discAmount,
-            'product' => $this->whenLoaded('product'),
         ];
     }
 }
