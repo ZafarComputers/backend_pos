@@ -18,6 +18,8 @@ class VendorController extends Controller
         $data = $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
+            'email' => 'string|max:100',
+            'phone' => 'string|max:25',
             'cnic' => 'required|string|unique:vendors',
             'city_id' => 'required|exists:cities,id',
             'address' => 'required|string',

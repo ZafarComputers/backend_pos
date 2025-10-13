@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthApiController as AuthController;
 
 // use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Api\RoleApiController;
+use App\Http\Controllers\Api\PermissionApiController;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -126,11 +127,17 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     
     // Roles
-    Route::get('/roles', [RoleController::class, 'index']);
-    Route::post('/roles', [RoleController::class, 'store']);
-    Route::get('/roles/{role}', [RoleController::class, 'show']);
-    Route::put('/roles/{role}', [RoleController::class, 'update']);
-    Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
+    // Route::get('/roles', [RoleController::class, 'index']);
+    // Route::post('/roles', [RoleController::class, 'store']);
+    // Route::get('/roles/{role}', [RoleController::class, 'show']);
+    // Route::put('/roles/{role}', [RoleController::class, 'update']);
+    // Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
+    Route::apiResource('roles', RoleApiController::class);
+    Route::apiResource('permissions', PermissionApiController::class);
+
+    // assign permissions to role
+    Route::post('roles/{role}/assign-permissions', [RoleApiController::class, 'assignPermission']);
+
 
     // User CRUD
     Route::apiResource('users', UserApiController::class)->names([

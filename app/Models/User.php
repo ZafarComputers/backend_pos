@@ -41,11 +41,35 @@ class User extends Authenticatable
     }
 
     // ✅ Role relationship (Many to One)
-    public function role()
+    // public function role()
+    // {
+    //     return $this->belongsTo(Role::class);
+    // }
+    public function roles()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsToMany(Role::class);
     }
 
+    public function hasRole($role)
+    {
+        return $this->roles()->where('slug', $role)->exists();
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->roles()
+            ->whereHas('permissions', function ($query) use ($permission) {
+                $query->where('slug', $permission);
+            })->exists();
+    }
+
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
+    //                 ->withTimestamps();
+    // }
+
+    
 
 
 

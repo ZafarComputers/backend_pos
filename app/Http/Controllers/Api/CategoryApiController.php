@@ -75,10 +75,11 @@ class CategoryApiController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        // Validate request
         $validator = Validator::make($request->all(), [
-            'title'     => 'required|string|max:255|unique:categories,title,' . $category->id,
-            'img_path'  => 'nullable|string',
-            'status'    => 'required|in:active,inactive',
+            'title'    => 'required|string|max:255|unique:categories,title,' . $category->id,
+            'img_path' => 'nullable|file|image|max:2048', // Optional file validation
+            'status'   => 'required|in:active,inactive',
         ]);
 
         if ($validator->fails()) {
@@ -88,14 +89,32 @@ class CategoryApiController extends Controller
             ], 422);
         }
 
-        $category->update($validator->validated());
+        $data = $validator->validated();
 
+        // Handle image file if uploaded
+        if ($request->hasFile('img_path')) {
+            $image = $request->file('img_path');
+            $path = $image->store('categories', 'public');
+            $data['img_path'] = $path;
+
+            // Optional: delete old image
+            if ($category->img_path && \Storage::disk('public')->exists($category->img_path)) {
+                \Storage::disk('public')->delete($category->img_path);
+            }
+        }
+
+        // Update the category
+        $category->update($data);
+
+        // Return JSON response using CategoryResource
         return response()->json([
             'success' => true,
             'message' => 'Category updated successfully.',
             'data'    => new CategoryResource($category),
         ]);
     }
+
+
 
     /**
      * Remove the specified category.
