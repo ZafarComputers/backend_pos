@@ -51,6 +51,8 @@ class DatabaseSeeder extends Seeder
             TransactionTypeSeeder::class,
             ExpenseCategorySeeder::class,
             ExpenseSeeder::class,
+            IncomeCategorySeeder::class,
+            IncomeSeeder::class,
         ]);
 
 

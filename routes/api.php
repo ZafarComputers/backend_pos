@@ -59,6 +59,8 @@ use App\Http\Controllers\Api\SalesRepApiController;
 use App\Http\Controllers\Api\TransactionTypeApiController;
 use App\Http\Controllers\Api\ExpenseApiController;
 use App\Http\Controllers\Api\ExpenseCategoryApiController;
+use App\Http\Controllers\Api\IncomeApiController;
+use App\Http\Controllers\Api\IncomeCategoryApiController;
 
 
 
@@ -334,6 +336,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Expenses
     Route::apiResource('expense-categories', ExpenseCategoryApiController::class);
     Route::apiResource('expenses', ExpenseApiController::class);
+
+    // Income
+    Route::apiResource('income-categories', IncomeCategoryApiController::class);
+    Route::apiResource('incomes', IncomeApiController::class);
+
 
 });
 
