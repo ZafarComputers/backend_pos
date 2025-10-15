@@ -7,6 +7,9 @@ use App\Http\Resources\SubCategoryResource;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
+
 
 class SubCategoryApiController extends Controller
 {
@@ -29,9 +32,10 @@ class SubCategoryApiController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $validator = Validator::make($request->all(), [
             'title'       => 'required|string|max:255',
-            'img_path'    => 'required|string|max:255',
+            'img_path'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'category_id' => 'required|exists:categories,id',
             'status'      => 'required|in:active,inactive',
         ]);
@@ -45,7 +49,6 @@ class SubCategoryApiController extends Controller
 
         $data = $request->only(['title', 'category_id', 'status']);
 
-        // Handle image upload if file provided
         if ($request->hasFile('img_path')) {
             $data['img_path'] = $request->file('img_path')->store('subcategories', 'public');
         }
@@ -58,6 +61,7 @@ class SubCategoryApiController extends Controller
             'data'    => new SubCategoryResource($subCategory),
         ], 201);
     }
+
 
     /**
      * Display the specified subcategory.
@@ -134,31 +138,30 @@ class SubCategoryApiController extends Controller
         ], 200);
     }
 
-    // /**
-    //  * Remove the specified subcategory from storage.
-    //  */
-    // public function destroy(SubCategory $subCategory)
-    // {
-    //     $subCategory->delete();
-
-    //     return response()->json([
-    //         'status'  => true,
-    //         'message' => 'Subcategory deleted successfully.',
-    //     ]);
-    // }
-
     /**
      * Remove the specified subcategory from storage.
      */
-    public function destroy(SubCategory $subCategory)
+    public function destroy($id)
     {
-        $subCategory->delete();
+        $subCategory = SubCategory::find($id);
+
+        if (!$subCategory) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Subcategory not found or already deleted.',
+            ], 404);
+        }
+
+        $deleted = $subCategory->delete();
 
         return response()->json([
-            'status'  => true,
-            'message' => 'Subcategory deleted successfully.',
-        ], 200);
+            'status'  => $deleted,
+            'message' => $deleted
+                ? 'Subcategory deleted successfully.'
+                : 'Failed to delete subcategory.',
+        ]);
     }
+
 
 
 }

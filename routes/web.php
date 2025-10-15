@@ -28,6 +28,11 @@ use App\Http\Controllers\CoaSubController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CoaController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ExpenseCategoryController;
+
+Route::resource('expense-categories', ExpenseCategoryController::class);
+Route::resource('expenses', ExpenseController::class);
 
 Route::resource('coa', CoaController::class);
 

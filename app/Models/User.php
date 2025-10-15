@@ -45,15 +45,24 @@ class User extends Authenticatable
     // {
     //     return $this->belongsTo(Role::class);
     // }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
     }
 
-    public function hasRole($role)
-    {
-        return $this->roles()->where('slug', $role)->exists();
-    }
+    // public function roles()
+    // {
+        //     return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
+        //                 ->withTimestamps();
+        // }
+        
+        
+        public function hasRole($role)
+        {
+            return $this->roles()->where('slug', $role)->exists();
+        }
+        
 
     public function hasPermission($permission)
     {
@@ -62,14 +71,6 @@ class User extends Authenticatable
                 $query->where('slug', $permission);
             })->exists();
     }
-
-    // public function roles()
-    // {
-    //     return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
-    //                 ->withTimestamps();
-    // }
-
-    
 
 
 

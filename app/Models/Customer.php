@@ -33,4 +33,12 @@ class Customer extends Model
     {
         return $this->belongsTo(City::class);
     }
-}
+
+    public function invoices()
+    {
+        return $this->hasMany(Pos::class, 'customer_id', 'id');
+    }
+
+
+
+    }

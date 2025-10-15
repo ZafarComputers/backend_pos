@@ -56,6 +56,12 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SalesRepApiController;
 
 
+use App\Http\Controllers\Api\TransactionTypeApiController;
+use App\Http\Controllers\Api\ExpenseApiController;
+use App\Http\Controllers\Api\ExpenseCategoryApiController;
+
+
+
 
 // Temporary Routes For Clear Cache etc
 // Method 01
@@ -202,6 +208,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Employee's Routes
     Route::apiResource('employees', EmployeeApiController::class);
 
+    
+
+
 });
 // End General Setting's Routes
    
@@ -282,6 +291,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('coa-mains', CoaMainApiController::class);
     Route::apiResource('coa_subs', CoaSubApiController::class);
     Route::apiResource('coas', CoaApiController::class);
+
+    Route::apiResource('transaction-types', TransactionTypeApiController::class);
+
 });
 // End Account's Routes
    
@@ -305,6 +317,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vendorReport', [SalesRepApiController::class, 'getVendorPurchases']);
     Route::get('/vendorDuesReport', [SalesRepApiController::class, 'getVendorDues']);
 
+    // Customer's Reports
+    Route::get('reports/customers/invoices', [SalesRepApiController::class, 'allCustomerInvoices']);
+    Route::get('reports/customers/dues', [SalesRepApiController::class, 'allCustomerDues']);
+
     
 
 });
@@ -313,5 +329,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+// Finance & Accounting Routes
+Route::middleware('auth:sanctum')->group(function () {
+    // Expenses
+    Route::apiResource('expense-categories', ExpenseCategoryApiController::class);
+    Route::apiResource('expenses', ExpenseApiController::class);
+
+});
 
 // Public routes

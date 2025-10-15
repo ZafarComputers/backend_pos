@@ -12,14 +12,14 @@ class UserApiController extends Controller
     public function index()
     {
         return UserResource::collection(
-            User::with(['profile', 'role'])->paginate(10)
+            User::with(['profile', 'roles'])->paginate(10)
         );
     }
 
     public function show($id)
     {
         return new UserResource(
-            User::with(['profile', 'role'])->findOrFail($id)
+            User::with(['profile', 'roles'])->findOrFail($id)
         );
     }
 
@@ -30,7 +30,7 @@ class UserApiController extends Controller
             'last_name'  => 'required|string|max:100',
             'email'      => 'required|email|unique:users,email',
             'password'   => 'required|string|min:8',
-            'role_id'    => 'required|exists:roles,id',
+            // 'role_id'    => 'required|exists:roles,id',
         ]);
 
         $user = User::create([
@@ -38,7 +38,7 @@ class UserApiController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-        return new UserResource($user->load(['profile', 'role']));
+        return new UserResource($user->load(['profile', 'roles']));
     }
 
     public function update(Request $request, $id)
@@ -50,7 +50,7 @@ class UserApiController extends Controller
             'last_name'  => 'sometimes|string|max:100',
             'email'      => 'sometimes|email|unique:users,email,' . $user->id,
             'password'   => 'nullable|string|min:8',
-            'role_id'    => 'sometimes|exists:roles,id',
+            // 'role_id'    => 'sometimes|exists:roles,id',
         ]);
 
         if (!empty($data['password'])) {
@@ -59,7 +59,7 @@ class UserApiController extends Controller
 
         $user->update($data);
 
-        return new UserResource($user->load(['profile', 'role']));
+        return new UserResource($user->load(['profile', 'roles']));
     }
 
     public function destroy($id)

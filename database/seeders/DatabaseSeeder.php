@@ -48,6 +48,9 @@ class DatabaseSeeder extends Seeder
             CoaMainSeeder::class,
             CoaSubSeeder::class,
             CoaSeeder::class,
+            TransactionTypeSeeder::class,
+            ExpenseCategorySeeder::class,
+            ExpenseSeeder::class,
         ]);
 
 

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\DB;
+
+
 // Resources
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SalesReportResource;
@@ -24,6 +27,7 @@ use App\Models\PosDetail;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Vendor;
+use App\Models\Customer;
 
 
 
@@ -165,5 +169,43 @@ class SalesRepApiController extends Controller
         return VendorDuesResource::collection($vendors);
 
     }
+
+    // Customer's Reports 1-2
+    public function allCustomerInvoices()
+    {
+        $customers = Customer::with(['invoices' => function($query) {
+            $query->select('id', 'customer_id', 'inv_date', 'inv_amount', 'paid', 'tax', 'discPer', 'discAmount');
+        }])->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'All Customers Invoice Listing',
+            'data' => $customers
+        ]);
+    }
+
+    public function allCustomerDues()
+    {
+        $dues = Customer::select(
+            'customers.id',
+            'customers.name',
+            DB::raw('COALESCE(SUM(pos.inv_amount),0) as total_invoice'),
+            DB::raw('COALESCE(SUM(pos.paid),0) as total_paid'),
+            DB::raw('COALESCE(SUM(pos.inv_amount - pos.paid),0) as total_due')
+        )
+        ->leftJoin('pos', 'pos.customer_id', '=', 'customers.id')
+        ->groupBy('customers.id', 'customers.name')
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'All Customers Due Report',
+            'data' => $dues
+        ]);
+    }
+
+
+
+
 
 }
