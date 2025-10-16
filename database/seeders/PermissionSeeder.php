@@ -3,23 +3,32 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
 use App\Models\Permission;
+use Illuminate\Support\Str;
 
 class PermissionSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Create some permissions
-        $permissions = Permission::factory(8)->create();
+        $prefixes = [
+            'Inventory',
+            'Sales (POS)',
+            'Purchase',
+            'Finance and Accounts',
+            'Reports',
+            'Users',
+        ];
 
-        // Fetch all existing roles
-        $roles = Role::all();
+        $actions = ['View', 'Create', 'Edit', 'Delete', 'Approve', 'Manage'];
 
-        // Assign random permissions to each role
-        $roles->each(function ($role) use ($permissions) {
-            $randomPermissions = $permissions->random(rand(3, 7))->pluck('id')->toArray();
-            $role->permissions()->sync($randomPermissions);
-        });
+        foreach ($prefixes as $prefix) {
+            foreach ($actions as $action) {
+                $name = "{$prefix}.{$action}";
+                Permission::updateOrCreate(
+                    ['slug' => Str::slug($name, '_')],
+                    ['name' => $name]
+                );
+            }
+        }
     }
 }

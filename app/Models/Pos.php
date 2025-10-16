@@ -18,7 +18,8 @@ class Pos extends Model
         'discAmount',
         'inv_amount', 
         'paid',
-        'payment_mode', // ✅ new column
+        'transaction_type_id', // ✅ new column
+        'payment_mode_id', // ✅ new column
     ];
 
 
@@ -36,6 +37,13 @@ class Pos extends Model
     {
         return $this->hasOne(PosBankDetail::class, 'pos_id', 'id');
     }
+
+    public function paymentMode()
+    {
+        return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
+    }
+
+
 
 
 }

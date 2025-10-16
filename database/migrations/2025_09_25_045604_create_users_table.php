@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('cell_no1')->nullable();
             $table->string('cell_no2')->nullable();
             $table->string('img_path')->nullable();
-            // $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('status', ['active', 'inactive'])->default('active');

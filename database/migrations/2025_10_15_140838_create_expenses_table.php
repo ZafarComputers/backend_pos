@@ -9,16 +9,28 @@ return new class extends Migration {
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('transaction_type_id')->default(9);
+
+            // Foreign keys
+            $table->foreignId('transaction_type_id')
+                  ->default(9) // Default to 'Expenses' in transaction_types
+                  ->constrained('transaction_types')
+                  ->cascadeOnDelete();
+
+            $table->foreignId('expense_category_id')
+                  ->constrained('expense_categories')
+                  ->cascadeOnDelete();
+
+            $table->foreignId('payment_mode_id')
+                  ->constrained('payment_modes')
+                  ->cascadeOnDelete();
+
+            // Expense details
             $table->string('name');
-            $table->unsignedBigInteger('expense_category_id');
             $table->text('description')->nullable();
             $table->date('date');
             $table->decimal('amount', 12, 2);
-            $table->timestamps();
 
-            $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
-            $table->foreign('expense_category_id')->references('id')->on('expense_categories')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

@@ -20,14 +20,15 @@ class UserResource extends JsonResource
             'cell_no2'   => $this->cell_no2,
             'img_path'   => $this->img_path,
             'status'     => $this->status,
-            'role' => [
-                'id'   => $this->whenLoaded('role', function () {
-                    return $this->role->id;
-                }),
-                'name' => $this->whenLoaded('role', function () {
-                    return $this->role->name;
-                }),
-            ],
+            'role_id'   => $this->role_id,
+            // 'role' => [
+            //     'id'   => $this->whenLoaded('role', function () {
+            //         return $this->role->id;
+            //     }),
+            //     'name' => $this->whenLoaded('role', function () {
+            //         return $this->role->name;
+            //     }),
+            // ],
             'profile'    => new ProfileResource($this->whenLoaded('profile')),
             'email_verified_at' => $this->email_verified_at?->format('Y-m-d H:i:s'),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),

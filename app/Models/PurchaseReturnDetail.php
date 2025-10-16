@@ -14,10 +14,13 @@ class PurchaseReturnDetail extends Model
         'product_id',
         'qty',
         'unit_price',
-        'discPer',
         'discAmount',
+        'amount',
+        'discPer',
+        
     ];
 
+    // Relationships
     public function purchaseReturn()
     {
         return $this->belongsTo(PurchaseReturn::class);

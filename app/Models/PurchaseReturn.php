@@ -10,31 +10,28 @@ class PurchaseReturn extends Model
     use HasFactory;
 
     protected $fillable = [
-        'return_date',
-        'return_inv_no',
         'vendor_id',
+        'purchase_id',
+        'return_inv_no',
+        'return_date',
         'reason',
         'discount_percent',
-        'discount_amt',
         'return_amount',
-        'payment_status',
     ];
+
+    // Relationships
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
 
     public function details()
     {
         return $this->hasMany(PurchaseReturnDetail::class);
     }
-
-    // Add this relationship
-    public function vendor()
-    {
-        return $this->belongsTo(Vendor::class, 'vendor_id');
-    }
-
-    // If you also want purchase relation
-    public function purchase()
-    {
-        return $this->belongsTo(Purchase::class, 'purchase_id');
-    }
-    
 }

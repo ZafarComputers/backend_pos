@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('pos', function (Blueprint $table) {
@@ -20,14 +17,19 @@ return new class extends Migration
             $table->decimal('discAmount', 10, 2)->default(0);
             $table->decimal('inv_amount', 10, 2)->default(0);
             $table->decimal('paid', 10, 2)->default(0);
-            $table->enum('payment_mode', ['Cash', 'Credit', 'Bank'])->default('Cash');
             $table->timestamps();
+
+            // Foreign keys
+            $table->foreignId('transaction_type_id')
+                  ->constrained('transaction_types')
+                  ->cascadeOnDelete();
+
+            $table->foreignId('payment_mode_id')
+                  ->constrained('payment_modes')
+                  ->cascadeOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('pos');

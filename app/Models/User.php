@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
         'first_name',
@@ -18,7 +19,6 @@ class User extends Authenticatable
         'cell_no1',
         'cell_no2',
         'img_path',
-        'role_id',
         'email_verified_at',
         'password',
         'status',
@@ -40,37 +40,27 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    // ✅ Role relationship (Many to One)
-    // public function role()
-    // {
-    //     return $this->belongsTo(Role::class);
-    // }
-
     public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+{
+    return $this->belongsToMany(Role::class, 'role_user');
+}
 
-    // public function roles()
-    // {
-        //     return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
-        //                 ->withTimestamps();
-        // }
-        
-        
-        public function hasRole($role)
-        {
-            return $this->roles()->where('slug', $role)->exists();
-        }
-        
-
-    public function hasPermission($permission)
-    {
-        return $this->roles()
-            ->whereHas('permissions', function ($query) use ($permission) {
-                $query->where('slug', $permission);
-            })->exists();
+public function hasRole($role)
+{
+    if (is_array($role)) {
+        return $this->roles()->whereIn('name', $role)->exists();
     }
+    return $this->roles()->where('name', $role)->exists();
+}
+
+public function hasPermission($permission)
+{
+    return $this->roles()
+        ->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })
+        ->exists();
+}
 
 
 

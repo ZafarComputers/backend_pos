@@ -16,7 +16,7 @@ use App\Http\Resources\Reports\Inventory\InventorySoldResources;
 use App\Http\Resources\Reports\Inventory\InvtInhandResources;
 use App\Http\Resources\Reports\Vendor\VendorResource;
 use App\Http\Resources\Reports\Vendor\VendorDuesResource;
-
+use App\Http\Resources\Reports\Expenses\ExpenseReportResource;
 
 
 
@@ -28,6 +28,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Vendor;
 use App\Models\Customer;
+use App\Models\Expense;
 
 
 
@@ -204,8 +205,32 @@ class SalesRepApiController extends Controller
         ]);
     }
 
+     /**
+     * Generate an expense report.
+     *
+     * This returns a simplified list of expenses for reporting purposes.
+     */
+    public function expenseReport(Request $request)
+    {
+        // Optional filters (like date range or category)
+        $query = Expense::with('category');
 
+        if ($request->has('from_date') && $request->has('to_date')) {
+            $query->whereBetween('date', [$request->from_date, $request->to_date]);
+        }
 
+        if ($request->has('category_id')) {
+            $query->where('expense_category_id', $request->category_id);
+        }
+
+        $expenses = $query->latest()->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Expense report generated successfully.',
+            'data' => ExpenseReportResource::collection($expenses),
+        ]);
+    }
 
 
 }

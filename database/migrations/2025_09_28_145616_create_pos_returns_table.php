@@ -20,11 +20,21 @@ return new class extends Migration
             $table->foreignId('pos_id')
                 ->constrained('pos') // or 'pos_invoices' — use your actual table name here
                 ->cascadeOnDelete();
-
+            $table->string('reason')->nullable();
             $table->decimal('return_inv_amout', 12, 2);
             $table->timestamps();
         
+
+            // Foreign keys
+            $table->foreignId('transaction_type_id')
+                  ->constrained('transaction_types')
+                  ->cascadeOnDelete();
+
+            $table->foreignId('payment_mode_id')
+                  ->constrained('payment_modes')
+                  ->cascadeOnDelete();
         });
+
     }
 
     /**

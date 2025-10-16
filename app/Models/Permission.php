@@ -12,14 +12,10 @@ class Permission extends Model
 
     protected $fillable = ['name', 'slug'];
 
-    // public function roles()
-    // {
-    //     return $this->belongsToMany(Role::class);
-    // }
-
+    
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_permission', 'permission_id', 'role_id')
-                    ->withTimestamps();
+        return $this->belongsToMany(Role::class, 'permission_role')
+            ->withTimestamps();
     }
 }

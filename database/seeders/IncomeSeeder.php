@@ -10,12 +10,12 @@ class IncomeSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ensure some Income Categories exist first
+        // Ensure some categories exist first
         if (IncomeCategory::count() === 0) {
-            IncomeCategory::factory()->count(5)->create();
+            IncomeCategory::factory(5)->create();
         }
 
-        // // Now create Incomes using the factory
-        // Income::factory()->count(10)->create();
+        // Now create 20 income records
+        Income::factory(20)->create();
     }
 }

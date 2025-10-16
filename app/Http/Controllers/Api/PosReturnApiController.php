@@ -36,7 +36,7 @@ class PosReturnApiController extends Controller
             'invRet_date' => 'required|date',
             'pos_id'      => 'required|exists:pos,id',
             'return_inv_amout' => 'required|numeric|min:0',
-
+            'reason' => 'nullable|string',
             'details'     => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty'        => 'required|integer|min:1',
@@ -106,6 +106,7 @@ class PosReturnApiController extends Controller
             'invRet_date' => 'required|date',
             'return_inv_amout' => 'required|numeric',
             'details' => 'required|array|min:1',
+            'reason' => 'nullable|string',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty' => 'required|integer|min:1',
             'details.*.return_unit_price' => 'required|numeric|min:0',

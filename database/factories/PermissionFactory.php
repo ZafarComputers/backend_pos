@@ -12,10 +12,29 @@ class PermissionFactory extends Factory
 {
     public function definition(): array
     {
-        $name = ucfirst($this->faker->unique()->words(2, true)); // e.g., "Manage Users"
+        // Define allowed prefixes
+        $prefixes = [
+            'Inventory',
+            'Sales (POS)',
+            'Purchase',
+            'Finance and Accounts',
+            'Reports',
+            'Users',
+        ];
+
+        // Common actions for permissions
+        $actions = ['View', 'Create', 'Edit', 'Delete', 'Approve', 'Manage'];
+
+        // Randomly pick a prefix and action
+        $prefix = $this->faker->randomElement($prefixes);
+        $action = $this->faker->randomElement($actions);
+
+        // Combine them (e.g., Inventory.View)
+        $name = "{$prefix}.{$action}";
+
         return [
             'name' => $name,
-            'slug' => Str::slug($name),
+            'slug' => Str::slug($name, '_'), // e.g. inventory_view
         ];
     }
 }

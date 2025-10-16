@@ -9,19 +9,15 @@ use Illuminate\Http\Request;
 
 class PurchaseApiController extends Controller
 {
-    // GET all purchases with details
+    /**
+     * Display a listing of purchases.
+     */
     public function index(Request $request)
     {
-        $query = Purchase::with('vendor', 'details.product', 'details.product.category');
-        // $query = Purchase::with(['vendor:id,first_name,last_name,address', 'details.product']);
-        // $query = Purchase::with(['vendor:id,first_name,last_name', 'details.product'])
-        //     ->select('id', 'vendor_id', 'pur_date', 'inv_amount', 'payment_status'); // only purchase columns you need
-
+        $query = Purchase::with(['vendor', 'details.product', 'details.product.category', 'paymentMode']);
 
         if ($request->filled('payment_status')) {
             $status = strtolower($request->query('payment_status'));
-
-            // Make sure only valid values are allowed
             if (in_array($status, ['paid', 'unpaid', 'overdue'])) {
                 $query->where('payment_status', $status);
             }
@@ -30,8 +26,9 @@ class PurchaseApiController extends Controller
         return PurchaseResource::collection($query->get());
     }
 
-
-    // Store a new purchase
+    /**
+     * Store a newly created purchase.
+     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -42,24 +39,28 @@ class PurchaseApiController extends Controller
             'ven_inv_date' => 'nullable|date',
             'ven_inv_ref' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'discount_percent' => 'nullable|numeric',
-            'discount_amt' => 'nullable|numeric',
+            'discount_percent' => 'nullable|numeric|min:0',
+            'discount_amt' => 'nullable|numeric|min:0',
             'payment_status' => 'required|in:paid,unpaid,overdue',
 
-            // ✅ add validation for details
-            'details' => 'required|array',
+            // ✅ Must be provided
+            'payment_mode_id' => 'required|exists:payment_modes,id',
+            'transaction_type_id' => 'required|exists:transaction_types,id',
+
+            // ✅ Details validation
+            'details' => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty' => 'required|numeric|min:1',
             'details.*.unit_price' => 'required|numeric|min:0',
             'details.*.discAmount' => 'nullable|numeric|min:0',
         ]);
 
-        // ✅ Calculate total invoice amount before save
+        // ✅ Calculate total amount
         $totalAmount = collect($data['details'])->sum(function ($detail) {
             return ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0);
         });
 
-        // ✅ Create the purchase
+        // ✅ Create Purchase
         $purchase = Purchase::create([
             'pur_date' => $data['pur_date'],
             'pur_inv_barcode' => $data['pur_inv_barcode'],
@@ -72,9 +73,11 @@ class PurchaseApiController extends Controller
             'discount_amt' => $data['discount_amt'] ?? 0,
             'inv_amount' => $totalAmount,
             'payment_status' => $data['payment_status'],
+            'transaction_type_id' => $data['transaction_type_id'],
+            'payment_mode_id' => $data['payment_mode_id'],
         ]);
 
-        // ✅ Store purchase details
+        // ✅ Save details
         foreach ($data['details'] as $detail) {
             $purchase->details()->create([
                 'product_id' => $detail['product_id'],
@@ -85,21 +88,29 @@ class PurchaseApiController extends Controller
             ]);
         }
 
-        // ✅ Return resource with relations loaded
-        return new PurchaseResource($purchase->load(['vendor', 'details.product']));
+        return new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode']));
     }
 
-
-    // Show single purchase
+    /**
+     * Display the specified purchase.
+     */
     public function show(Purchase $purchase)
     {
-        // return new PurchaseResource($purchase->load('details'));
-        return new PurchaseResource($purchase->load('details.product'));
+        return new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode']));
     }
 
-    // Update purchase
+    /**
+     * Update the specified purchase.
+     */
     public function update(Request $request, Purchase $purchase)
     {
+
+        // $purchase = Purchase::find($id);
+        // if (!$purchase) {
+        //     return response()->json(['status' => false, 'message' => 'Purchase not found.'], 404);
+        // }
+
+        
         $data = $request->validate([
             'pur_date' => 'required|date',
             'pur_inv_barcode' => 'required|string|max:255',
@@ -108,26 +119,39 @@ class PurchaseApiController extends Controller
             'ven_inv_date' => 'nullable|date',
             'ven_inv_ref' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'discount_percent' => 'nullable|numeric',
-            'discount_amt' => 'nullable|numeric',
-            'inv_amount' => 'required|numeric',
+            'discount_percent' => 'nullable|numeric|min:0',
+            'discount_amt' => 'nullable|numeric|min:0',
             'payment_status' => 'required|in:paid,unpaid,overdue',
+            'payment_mode_id' => 'required|exists:payment_modes,id',
+            'transaction_type_id' => 'required|exists:transaction_types,id',
 
-            // ✅ Add validation for details
-            'details' => 'required|array',
+            // ✅ Details validation
+            'details' => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty' => 'required|numeric|min:1',
             'details.*.unit_price' => 'required|numeric|min:0',
             'details.*.discAmount' => 'nullable|numeric|min:0',
         ]);
 
-        // ✅ Step 1: Update main purchase
-        $purchase->update($data);
+        // ✅ Update main purchase
+        $purchase->update([
+            'pur_date' => $data['pur_date'],
+            'pur_inv_barcode' => $data['pur_inv_barcode'],
+            'vendor_id' => $data['vendor_id'],
+            'ven_inv_no' => $data['ven_inv_no'] ?? null,
+            'ven_inv_date' => $data['ven_inv_date'] ?? null,
+            'ven_inv_ref' => $data['ven_inv_ref'] ?? null,
+            'description' => $data['description'] ?? null,
+            'discount_percent' => $data['discount_percent'] ?? 0,
+            'discount_amt' => $data['discount_amt'] ?? 0,
+            'payment_status' => $data['payment_status'],
+            'payment_mode_id' => $data['payment_mode_id'],
+            'transaction_type_id' => $data['transaction_type_id'],
+        ]);
 
-        // ✅ Step 2: Delete existing details (or you can update selectively)
+        // ✅ Delete old details & reinsert
         $purchase->details()->delete();
 
-        // ✅ Step 3: Recreate details
         foreach ($data['details'] as $detail) {
             $purchase->details()->create([
                 'product_id' => $detail['product_id'],
@@ -138,22 +162,26 @@ class PurchaseApiController extends Controller
             ]);
         }
 
-        // ✅ Step 4: Recalculate total
+        // ✅ Recalculate total
         $totalAmount = collect($data['details'])->sum(function ($detail) {
             return ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0);
         });
         $purchase->update(['inv_amount' => $totalAmount]);
 
-        // ✅ Step 5: Return Resource
-        return new PurchaseResource($purchase->load(['vendor', 'details.product']));
+        return new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode']));
     }
 
-
-    // Delete purchase
+    /**
+     * Remove the specified purchase.
+     */
     public function destroy(Purchase $purchase)
     {
+        $purchase->details()->delete();
         $purchase->delete();
 
-        return response()->json(['message' => 'Purchase deleted successfully']);
+        return response()->json([
+            'status' => true,
+            'message' => 'Purchase deleted successfully.'
+        ]);
     }
 }

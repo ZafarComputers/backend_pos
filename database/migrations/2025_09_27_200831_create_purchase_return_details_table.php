@@ -4,20 +4,30 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('purchase_return_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('purchase_return_id');
-            $table->unsignedBigInteger('product_id');
-            $table->integer('qty');
-            $table->decimal('unit_price', 12, 2);
-            $table->decimal('discPer', 8, 2)->default(0);
-            $table->decimal('discAmount', 12, 2)->default(0);
-            $table->timestamps();
 
-            $table->foreign('purchase_return_id')->references('id')->on('purchase_returns')->onDelete('cascade');
+            // Purchase return link
+            $table->foreignId('purchase_return_id')
+                ->constrained('purchase_returns', 'id', 'fk_prd_return')
+                ->cascadeOnDelete();
+
+            // Product link
+            $table->foreignId('product_id')
+                ->constrained('products', 'id', 'fk_prd_product')
+                ->cascadeOnDelete();
+
+            $table->decimal('qty', 10, 2);
+            $table->decimal('unit_price', 15, 2);
+            $table->decimal('discAmount', 15, 2)->default(0);
+            $table->decimal('amount', 15, 2)->default(0);
+            $table->decimal('discPer', 8, 2)->default(0);
+            
+            $table->timestamps();
         });
     }
 

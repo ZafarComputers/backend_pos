@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Purchase;
-use App\Models\PurchaseDetail;
 use App\Models\Product;
 use App\Models\Vendor;
+use App\Models\Purchase;
+use App\Models\PurchaseDetail;
+use App\Models\PaymentMode;
+use App\Models\TransactionType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PurchaseFactory extends Factory
@@ -15,8 +17,15 @@ class PurchaseFactory extends Factory
     public function definition(): array
     {
         return [
+            'transaction_type_id' => TransactionType::where('code', 'PT')->value('id')
+                ?? TransactionType::inRandomOrder()->value('id')
+                ?? TransactionType::factory(),
+
+            'payment_mode_id' => PaymentMode::inRandomOrder()->value('id')
+                ?? PaymentMode::factory(),
+
             'pur_date'         => $this->faker->date(),
-            'vendor_id'        => Vendor::inRandomOrder()->value('id'),
+            'vendor_id'        => Vendor::inRandomOrder()->value('id') ?? Vendor::factory(),
             'ven_inv_no'       => $this->faker->bothify('INV###'),
             'ven_inv_date'     => $this->faker->date(),
             'ven_inv_ref'      => $this->faker->lexify('REF???'),
@@ -24,37 +33,34 @@ class PurchaseFactory extends Factory
             'description'      => $this->faker->sentence(),
             'discount_percent' => $this->faker->randomFloat(2, 0, 10),
             'discount_amt'     => $this->faker->randomFloat(2, 0, 500),
-            'inv_amount'       => 0, // placeholder
-            'paid_amount'      => 0, // placeholder
+            'inv_amount'       => 0, // placeholder until details added
+            'paid_amount'      => 0, // placeholder until details added
         ];
     }
 
     public function configure()
     {
         return $this->afterCreating(function (Purchase $purchase) {
-            // 🧹 Ensure total resets per invoice
             $totalAmount = 0;
 
-            // 🧩 Limit to 1–4 random products only
+            // Get 1–4 random products to attach to this purchase
             $productIds = Product::inRandomOrder()
                 ->limit(rand(1, 4))
                 ->pluck('id');
 
             foreach ($productIds as $productId) {
-                // ✅ Create detail manually — not calling nested factories
                 $detail = PurchaseDetail::factory()->make([
                     'purchase_id' => $purchase->id,
                     'product_id'  => $productId,
                 ]);
 
-                // Save manually so we don’t trigger its own internal loop
                 $detail->save();
 
-                // Calculate line total
-                $lineAmount = ($detail->qty * $detail->unit_price) - $detail->discAmount;
-                $totalAmount += $lineAmount;
+                // Compute each line total
+                $lineTotal = ($detail->qty * $detail->unit_price) - $detail->discAmount;
+                $totalAmount += $lineTotal;
 
-                // Update product stock
+                // Update stock for each purchased product
                 $product = Product::find($productId);
                 if ($product) {
                     $product->increment('stock_in_quantity', $detail->qty);
@@ -62,7 +68,7 @@ class PurchaseFactory extends Factory
                 }
             }
 
-            // ✅ Now update invoice totals (this invoice only)
+            // Update totals on purchase record
             $purchase->update([
                 'inv_amount'  => number_format($totalAmount, 2, '.', ''),
                 'paid_amount' => number_format($totalAmount, 2, '.', ''),

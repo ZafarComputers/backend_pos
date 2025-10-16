@@ -91,7 +91,8 @@ class PurchaseReturnApiController extends Controller
         // 🟩 Step 1: Validate incoming data
         $data = $request->validate([
             'vendor_id'     => 'sometimes|exists:vendors,id',
-            'purchase_id'   => 'sometimes|exists:purchases,id',
+            'purchase_id' => 'nullable|exists:purchases,id',
+            // 'purchase_id'   => 'sometimes|exists:purchases,id',
             'return_date'   => 'sometimes|date',
             'description'   => 'nullable|string',
             'details'       => 'sometimes|array|min:1',

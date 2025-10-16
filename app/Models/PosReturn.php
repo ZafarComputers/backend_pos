@@ -14,7 +14,10 @@ class PosReturn extends Model
         'vendor_id',
         'invRet_date',
         'pos_id',
+        'reason',
         'return_inv_amout',
+        'transaction_type_id', // ✅ new column
+        'payment_mode_id', // ✅ new column
     ];
 
     // ✅ Relations
@@ -34,4 +37,10 @@ class PosReturn extends Model
         return $this->hasMany(PosReturnDetail::class, 'pos_return_id');
     }
     
+    public function paymentMode()
+    {
+        return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
+    }
+
+
 }

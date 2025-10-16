@@ -19,8 +19,14 @@ class TransactionTypeSeeder extends Seeder
             ['transType' => 'Debtors', 'code' => 'DR'],
             ['transType' => 'Creditors', 'code' => 'CR'],
             ['transType' => 'Expenses', 'code' => 'EXP'],
+            ['transType' => 'Income', 'code' => 'INC'],
         ];
 
-        TransactionType::insert($types);
+        foreach ($types as $type) {
+            TransactionType::updateOrCreate(
+                ['code' => $type['code']], // match by unique 'code'
+                ['transType' => $type['transType']]
+            );
+        }
     }
 }

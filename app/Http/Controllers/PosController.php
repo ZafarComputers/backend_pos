@@ -39,12 +39,13 @@ class PosController extends Controller
             'tax' => 'numeric',
             'disc_per' => 'numeric',
             'discount' => 'numeric',
+            'reason' => 'nullable|string',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty' => 'required|integer|min:1',
             'details.*.sale_price' => 'required|numeric',
         ]);
 
-        $pos = Pos::create($request->only(['customer_id', 'inv_date', 'inv_amount', 'tax', 'disc_per', 'discount']));
+        $pos = Pos::create($request->only(['customer_id', 'inv_date', 'inv_amount', 'tax', 'disc_per', 'reason', 'discount']));
 
         foreach ($validated['details'] as $detail) {
             $pos->posDetails()->create($detail);
@@ -83,6 +84,7 @@ class PosController extends Controller
             'inv_date' => 'required|date',
             'inv_amount' => 'required|numeric',
             'tax' => 'numeric',
+            'reason' => 'nullable|string',
             'disc_per' => 'numeric',
             'discount' => 'numeric',
             'details.*.product_id' => 'required|exists:products,id',
@@ -90,7 +92,7 @@ class PosController extends Controller
             'details.*.sale_price' => 'required|numeric',
         ]);
 
-        $pos->update($request->only(['customer_id', 'inv_date', 'inv_amount', 'tax', 'disc_per', 'discount']));
+        $pos->update($request->only(['customer_id', 'inv_date', 'inv_amount', 'tax', 'disc_per', 'reason', 'discount']));
 
         $pos->posDetails()->delete();
         foreach ($validated['details'] as $detail) {

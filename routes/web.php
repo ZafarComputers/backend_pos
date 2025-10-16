@@ -30,6 +30,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CoaController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\TransactionController;
+
+Route::resource('transactions', TransactionController::class);
+
+Route::resource('banks', BankController::class);
 
 Route::resource('expense-categories', ExpenseCategoryController::class);
 Route::resource('expenses', ExpenseController::class);

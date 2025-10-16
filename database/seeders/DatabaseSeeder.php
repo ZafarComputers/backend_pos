@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            PaymentModeSeeder::class,
             CountrySeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
@@ -53,6 +54,8 @@ class DatabaseSeeder extends Seeder
             ExpenseSeeder::class,
             IncomeCategorySeeder::class,
             IncomeSeeder::class,
+            BankSeeder::class,
+            TransactionSeeder::class,
         ]);
 
 

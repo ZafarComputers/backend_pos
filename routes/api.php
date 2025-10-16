@@ -54,6 +54,7 @@ use App\Http\Controllers\Api\ProfileController;
 
 // Reprot Controller
 use App\Http\Controllers\Api\SalesRepApiController;
+use App\Http\Controllers\Api\TransactionApiController;
 
 
 use App\Http\Controllers\Api\TransactionTypeApiController;
@@ -61,6 +62,8 @@ use App\Http\Controllers\Api\ExpenseApiController;
 use App\Http\Controllers\Api\ExpenseCategoryApiController;
 use App\Http\Controllers\Api\IncomeApiController;
 use App\Http\Controllers\Api\IncomeCategoryApiController;
+use App\Http\Controllers\Api\BankApiController;
+use App\Http\Controllers\Api\FinanceAccounts\FinaceAccountApiController;
 
 
 
@@ -323,6 +326,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('reports/customers/invoices', [SalesRepApiController::class, 'allCustomerInvoices']);
     Route::get('reports/customers/dues', [SalesRepApiController::class, 'allCustomerDues']);
 
+    // Expense Report
+    Route::get('/expenses/report', [SalesRepApiController::class, 'expenseReport']);
+
     
 
 });
@@ -340,6 +346,19 @@ Route::middleware('auth:sanctum')->group(function () {
     // Income
     Route::apiResource('income-categories', IncomeCategoryApiController::class);
     Route::apiResource('incomes', IncomeApiController::class);
+
+    // Bank
+    Route::apiResource('banks', BankApiController::class);
+
+
+    // Transacton Test Route
+    Route::get('/transactions2', [TransactionApiController::class, 'index2']);
+    Route::get('/cashflow2', [TransactionApiController::class, 'cashFlow2']);
+    Route::apiResource('transactions', TransactionApiController::class);
+
+
+    // Cash Flow Report Route
+    Route::get('/cashflow', [FinaceAccountApiController::class, 'cashFlow']);
 
 
 });

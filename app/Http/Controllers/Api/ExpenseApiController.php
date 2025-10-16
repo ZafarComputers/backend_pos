@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 
@@ -13,12 +14,12 @@ class ExpenseApiController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::with('category', 'transactionType')->latest()->get();
+        $expenses = Expense::with(['category', 'transactionType'])->latest()->get();
 
         return response()->json([
             'status' => true,
             'message' => 'Expenses retrieved successfully.',
-            'data' => $expenses,
+            'data' => ExpenseResource::collection($expenses),
         ]);
     }
 
@@ -42,7 +43,7 @@ class ExpenseApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Expense created successfully.',
-            'data' => $expense->load('category'),
+            'data' => new ExpenseResource($expense->load(['category', 'transactionType'])),
         ], 201);
     }
 
@@ -51,12 +52,12 @@ class ExpenseApiController extends Controller
      */
     public function show(Expense $expense)
     {
-        $expense->load('category', 'transactionType');
+        $expense->load(['category', 'transactionType']);
 
         return response()->json([
             'status' => true,
             'message' => 'Expense retrieved successfully.',
-            'data' => $expense,
+            'data' => new ExpenseResource($expense),
         ]);
     }
 
@@ -78,7 +79,7 @@ class ExpenseApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Expense updated successfully.',
-            'data' => $expense->load('category'),
+            'data' => new ExpenseResource($expense->load(['category', 'transactionType'])),
         ]);
     }
 
