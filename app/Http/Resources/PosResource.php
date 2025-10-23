@@ -10,13 +10,18 @@ class PosResource extends JsonResource
     {
           // Start with basic fields
         $data = [
-            'inv_id'           => $this->id,
+            'inv_id'       => $this->id,
             'inv_date'     => $this->inv_date,
             'customer_id'  => $this->customer_id,
             'customer_name'=> optional($this->customer)->name,
             'inv_amount'   => $this->inv_amount,
-            'paid_amount'         => $this->paid,
-            'payment_mode' => $this->payment_mode,
+            'paid_amount'  => $this->paid,
+            'payment_mode'  => match ($this->payment_mode_id) {
+                1 => 'Cash',
+                2 => 'Bank',
+                default => 'Credit',
+            },
+            // 'note'         => $this->note,
         ];
         
         // Add bank info only when payment mode is 'Bank'

@@ -15,6 +15,7 @@ use App\Http\Resources\PosNoDtlResource;
 
 // Models
 use App\Models\Pos;
+use App\Models\Product;
 use App\Models\Transaction;
 
 class PosApiController extends Controller
@@ -34,15 +35,18 @@ class PosApiController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'inv_date'            => 'required|date',
-            'customer_id'         => 'required|exists:customers,id',
-            'tax'                 => 'nullable|numeric|min:0',
-            'discPer'             => 'nullable|numeric|min:0',
-            'discAmount'          => 'nullable|numeric|min:0',
-            'paid'                => 'nullable|numeric|min:0',
-            'transaction_type_id' => 'nullable|exists:transaction_types,id',
-            'payment_mode_id'     => 'required|exists:payment_modes,id',
-            'details'             => 'required|array|min:1',
+            'inv_date'             => 'required|date',
+            'payment_mode_id'      => 'required|exists:payment_modes,id',
+            'transaction_type_id'  => 'nullable|exists:transaction_types,id',
+            'customer_id'          => 'required|exists:customers,id',
+            'coa_id'               => 'nullable|exists:coas,id',
+            'coaRef_id'            => 'nullable|exists:coas,id',
+            'bank_acc_id'          => 'nullable|exists:coas,id',
+            'tax'                  => 'nullable|numeric|min:0',
+            'discPer'              => 'nullable|numeric|min:0',
+            'discAmount'           => 'nullable|numeric|min:0',
+            'paid'                 => 'nullable|numeric|min:0',
+            'details'              => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty'        => 'required|numeric|min:1',
             'details.*.sale_price' => 'required|numeric|min:0',
@@ -55,7 +59,7 @@ class PosApiController extends Controller
         DB::beginTransaction();
 
         try {
-            // ✅ Calculate total amounts
+            // ✅ Calculate totals
             $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['sale_price']);
             $discAmount = $request->discAmount ?? 0;
             $tax = $request->tax ?? 0;
@@ -82,7 +86,7 @@ class PosApiController extends Controller
                 'payment_status'      => $payment_status,
             ]);
 
-            // ✅ Store details
+            // ✅ Store details & update product stock
             foreach ($request->details as $detail) {
                 $pos->details()->create([
                     'product_id' => $detail['product_id'],
@@ -90,33 +94,35 @@ class PosApiController extends Controller
                     'sale_price' => $detail['sale_price'],
                     'total'      => $detail['qty'] * $detail['sale_price'],
                 ]);
+
+                // 🔹 Update product stock
+                $product = Product::find($detail['product_id']);
+                if ($product) {
+                    $product->increment('stock_out_quantity', $detail['qty']);
+                    $product->decrement('in_stock_quantity', $detail['qty']);
+                }
             }
 
             // ✅ Transaction entries
             $userId = Auth::id() ?? 1;
             $transTypeId = $request->transaction_type_id ?? 2; // Sale
-            $coaSales = 4; // Example: Sales Account
-            $coaRefId = match ($request->payment_mode_id) {
+            $coaSales = 7; // Sales Account
+            $paymentModeId = (int) $request->payment_mode_id;
+
+            // Determine COA based on payment mode
+            $coaRefId = match ($paymentModeId) {
                 1 => 3, // Cash
-                2 => 4, // Bank
+                2 => $request->bank_acc_id, // Bank
                 3 => $request->customer_id, // Credit
-                default => throw new \UnhandledMatchError("Invalid payment mode."),
+                default => throw new \Exception("Invalid payment mode selected."),
             };
 
-            // Debit entry
-            Transaction::create([
-                'date' => $request->inv_date,
-                'invRef_id' => $pos->id,
-                'transaction_types_id' => $transTypeId,
-                'coas_id' => $coaRefId,
-                'coaRef_id' => $coaSales,
-                'users_id' => $userId,
-                'description' => 'POS Sale: INV-' . $pos->id,
-                'debit' => $finalAmount,
-                'credit' => 0,
-            ]);
+            if (empty($coaRefId) || !is_numeric($coaRefId)) {
+                throw new \Exception('Invalid COA reference detected.');
+            }
 
-            // Credit entry
+            // ✅ Create transaction entries
+            // Credit Sale Account
             Transaction::create([
                 'date' => $request->inv_date,
                 'invRef_id' => $pos->id,
@@ -128,6 +134,64 @@ class PosApiController extends Controller
                 'debit' => 0,
                 'credit' => $finalAmount,
             ]);
+
+            // ✅ Debit logic based on payment
+            if ($payment_status === 'Paid') {
+                // Fully paid — debit full amount to Cash/Bank
+                Transaction::create([
+                    'date' => $request->inv_date,
+                    'invRef_id' => $pos->id,
+                    'transaction_types_id' => $transTypeId,
+                    'coas_id' => $coaRefId,
+                    'coaRef_id' => $coaSales,
+                    'users_id' => $userId,
+                    'description' => 'POS Sale (Full Payment): INV-' . $pos->id,
+                    'debit' => $finalAmount,
+                    'credit' => 0,
+                ]);
+            } elseif ($payment_status === 'Partial') {
+                // Partial payment — split debit between cash/bank and customer
+                $balance = $finalAmount - $paid;
+
+                // Debit paid amount to Cash/Bank
+                Transaction::create([
+                    'date' => $request->inv_date,
+                    'invRef_id' => $pos->id,
+                    'transaction_types_id' => $transTypeId,
+                    'coas_id' => $coaRefId,
+                    'coaRef_id' => $coaSales,
+                    'users_id' => $userId,
+                    'description' => 'POS Sale (Partial Payment Received): INV-' . $pos->id,
+                    'debit' => $paid,
+                    'credit' => 0,
+                ]);
+
+                // Debit remaining balance to Customer Account
+                Transaction::create([
+                    'date' => $request->inv_date,
+                    'invRef_id' => $pos->id,
+                    'transaction_types_id' => $transTypeId,
+                    'coas_id' => $request->customer_id,
+                    'coaRef_id' => $coaSales,
+                    'users_id' => $userId,
+                    'description' => 'POS Sale (Balance Due): INV-' . $pos->id,
+                    'debit' => $balance,
+                    'credit' => 0,
+                ]);
+            } else {
+                // Unpaid — debit total to Customer
+                Transaction::create([
+                    'date' => $request->inv_date,
+                    'invRef_id' => $pos->id,
+                    'transaction_types_id' => $transTypeId,
+                    'coas_id' => $request->customer_id,
+                    'coaRef_id' => $coaSales,
+                    'users_id' => $userId,
+                    'description' => 'POS Sale (On Credit): INV-' . $pos->id,
+                    'debit' => $finalAmount,
+                    'credit' => 0,
+                ]);
+            }
 
             DB::commit();
 
@@ -143,6 +207,8 @@ class PosApiController extends Controller
             return response()->json(['status' => false, 'message' => 'Failed to create POS', 'error' => $e->getMessage()], 500);
         }
     }
+
+
 
     /**
      * Show a single POS.
@@ -164,15 +230,21 @@ class PosApiController extends Controller
     /**
      * Update POS with transactions.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Pos $pos)
     {
         $validator = Validator::make($request->all(), [
-            'inv_date'        => 'required|date',
-            'customer_id'     => 'required|exists:customers,id',
-            'tax'             => 'nullable|numeric|min:0',
-            'discAmount'      => 'nullable|numeric|min:0',
-            'payment_mode_id' => 'required|exists:payment_modes,id',
-            'details'         => 'required|array|min:1',
+            'inv_date'             => 'required|date',
+            'payment_mode_id'      => 'required|exists:payment_modes,id',
+            'transaction_type_id'  => 'nullable|exists:transaction_types,id',
+            'customer_id'          => 'required|exists:customers,id',
+            'coa_id'               => 'nullable|exists:coas,id',
+            'coaRef_id'            => 'nullable|exists:coas,id',
+            'bank_acc_id'          => 'nullable|exists:coas,id',
+            'tax'                  => 'nullable|numeric|min:0',
+            'discPer'              => 'nullable|numeric|min:0',
+            'discAmount'           => 'nullable|numeric|min:0',
+            'paid'                 => 'nullable|numeric|min:0',
+            'details'              => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty'        => 'required|numeric|min:1',
             'details.*.sale_price' => 'required|numeric|min:0',
@@ -185,66 +257,149 @@ class PosApiController extends Controller
         DB::beginTransaction();
 
         try {
-            $pos = Pos::findOrFail($id);
-
+            // ✅ Recalculate amounts
             $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['sale_price']);
             $discAmount = $request->discAmount ?? 0;
             $tax = $request->tax ?? 0;
             $finalAmount = $subtotal - $discAmount + $tax;
+            $paid = (float) ($request->paid ?? 0);
 
-            // ✅ Update POS
-            $pos->update([
-                'inv_date' => $request->inv_date,
-                'customer_id' => $request->customer_id,
-                'tax' => $tax,
-                'discAmount' => $discAmount,
-                'inv_amount' => $finalAmount,
-                'payment_mode_id' => $request->payment_mode_id,
-            ]);
-
-            // ✅ Refresh details
-            $pos->details()->delete();
-            foreach ($request->details as $detail) {
-                $pos->details()->create($detail);
-            }
-
-            // ✅ Refresh transactions
-            Transaction::where('invRef_id', $pos->id)->delete();
-
-            $userId = Auth::id() ?? 1;
-            $transTypeId = $request->transaction_type_id ?? 2;
-            $coaSales = 4;
-            $coaRefId = match ($request->payment_mode_id) {
-                1 => 3,
-                2 => 4,
-                3 => $request->customer_id,
-                default => throw new \UnhandledMatchError("Invalid payment mode."),
+            $payment_status = match (true) {
+                $paid >= $finalAmount => 'Paid',
+                $paid <= 0 => 'Unpaid',
+                default => 'Partial',
             };
 
-            Transaction::insert([
-                [
+            // ✅ Revert previous stock (add back quantities to stock)
+            foreach ($pos->details as $oldDetail) {
+                $product = Product::find($oldDetail->product_id);
+                if ($product) {
+                    $product->decrement('stock_out_quantity', $oldDetail->qty);
+                    $product->increment('in_stock_quantity', $oldDetail->qty);
+                }
+            }
+
+            // ✅ Delete old details
+            $pos->details()->delete();
+
+            // ✅ Update POS record
+            $pos->update([
+                'inv_date'            => $request->inv_date,
+                'customer_id'         => $request->customer_id,
+                'tax'                 => $tax,
+                'discPer'             => $request->discPer ?? 0,
+                'discAmount'          => $discAmount,
+                'inv_amount'          => $finalAmount,
+                'paid'                => $paid,
+                'payment_mode_id'     => $request->payment_mode_id,
+                'transaction_type_id' => $request->transaction_type_id,
+                'payment_status'      => $payment_status,
+            ]);
+
+            // ✅ Insert new details and adjust stock
+            foreach ($request->details as $detail) {
+                $pos->details()->create([
+                    'product_id' => $detail['product_id'],
+                    'qty'        => $detail['qty'],
+                    'sale_price' => $detail['sale_price'],
+                    'total'      => $detail['qty'] * $detail['sale_price'],
+                ]);
+
+                // Update stock
+                $product = Product::find($detail['product_id']);
+                if ($product) {
+                    $product->increment('stock_out_quantity', $detail['qty']);
+                    $product->decrement('in_stock_quantity', $detail['qty']);
+                }
+            }
+
+            // ✅ Delete old transaction entries
+            Transaction::where('invRef_id', $pos->id)
+                ->where('transaction_types_id', $pos->transaction_type_id)
+                ->delete();
+
+            // ✅ Recreate new transaction entries
+            $userId = Auth::id() ?? 1;
+            $transTypeId = $request->transaction_type_id ?? 2; // Sale
+            $coaSales = 7; // Sales Account
+            $paymentModeId = (int) $request->payment_mode_id;
+
+            $coaRefId = match ($paymentModeId) {
+                1 => 3, // Cash
+                2 => $request->bank_acc_id, // Bank
+                3 => $request->customer_id, // Credit
+                default => throw new \Exception("Invalid payment mode selected."),
+            };
+
+            if (empty($coaRefId) || !is_numeric($coaRefId)) {
+                throw new \Exception('Invalid COA reference detected.');
+            }
+
+            // Credit sale account
+            Transaction::create([
+                'date' => $request->inv_date,
+                'invRef_id' => $pos->id,
+                'transaction_types_id' => $transTypeId,
+                'coas_id' => $coaSales,
+                'coaRef_id' => $coaRefId,
+                'users_id' => $userId,
+                'description' => 'POS Update: INV-' . $pos->id,
+                'debit' => 0,
+                'credit' => $finalAmount,
+            ]);
+
+            // Debit logic same as store()
+            if ($payment_status === 'Paid') {
+                Transaction::create([
                     'date' => $request->inv_date,
                     'invRef_id' => $pos->id,
                     'transaction_types_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSales,
                     'users_id' => $userId,
-                    'description' => 'Updated POS Sale: INV-' . $pos->id,
+                    'description' => 'POS Update (Full Payment): INV-' . $pos->id,
                     'debit' => $finalAmount,
                     'credit' => 0,
-                ],
-                [
+                ]);
+            } elseif ($payment_status === 'Partial') {
+                $balance = $finalAmount - $paid;
+
+                Transaction::create([
                     'date' => $request->inv_date,
                     'invRef_id' => $pos->id,
                     'transaction_types_id' => $transTypeId,
-                    'coas_id' => $coaSales,
-                    'coaRef_id' => $coaRefId,
+                    'coas_id' => $coaRefId,
+                    'coaRef_id' => $coaSales,
                     'users_id' => $userId,
-                    'description' => 'Updated POS Sale: INV-' . $pos->id,
-                    'debit' => 0,
-                    'credit' => $finalAmount,
-                ]
-            ]);
+                    'description' => 'POS Update (Partial Payment): INV-' . $pos->id,
+                    'debit' => $paid,
+                    'credit' => 0,
+                ]);
+
+                Transaction::create([
+                    'date' => $request->inv_date,
+                    'invRef_id' => $pos->id,
+                    'transaction_types_id' => $transTypeId,
+                    'coas_id' => $request->customer_id,
+                    'coaRef_id' => $coaSales,
+                    'users_id' => $userId,
+                    'description' => 'POS Update (Balance Due): INV-' . $pos->id,
+                    'debit' => $balance,
+                    'credit' => 0,
+                ]);
+            } else {
+                Transaction::create([
+                    'date' => $request->inv_date,
+                    'invRef_id' => $pos->id,
+                    'transaction_types_id' => $transTypeId,
+                    'coas_id' => $request->customer_id,
+                    'coaRef_id' => $coaSales,
+                    'users_id' => $userId,
+                    'description' => 'POS Update (On Credit): INV-' . $pos->id,
+                    'debit' => $finalAmount,
+                    'credit' => 0,
+                ]);
+            }
 
             DB::commit();
 
@@ -257,9 +412,14 @@ class PosApiController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['status' => false, 'message' => 'Failed to update POS', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to update POS',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
+
 
     /**
      * Delete POS and its transactions.

@@ -38,7 +38,7 @@ class CoaSeeder extends Seeder
                 'prefix' => '1',
                 'subs'  => [
                     'Cash Account' => ['Cash in Hand'],
-                    'Bank Account' => ['Bank Account'],
+                    'Bank Account' => ['HBL Bank Account # 00 0000 0000 0000'],
                     'Accounts Receivable' => ['Customer A Account'],
                     'Inventory' => [
                         'Purchase Account',
