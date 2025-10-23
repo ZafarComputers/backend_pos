@@ -10,20 +10,10 @@ class Purchase extends Model
     use HasFactory;
 
     protected $fillable = [
-        'pur_date', 
-        'pur_inv_barcode', 
-        'vendor_id', 
-        'ven_inv_no',
-        'ven_inv_date', 
-        'ven_inv_ref', 
-        'description',
-        'discount_percent', 
-        'discount_amt', 
-        'inv_amount', 
-        'paid_amount', 
-        'payment_status',
-        'transaction_type_id', // ✅ new column
-        'payment_mode_id', // ✅ new column
+        'pur_date', 'pur_inv_barcode', 'vendor_id', 'ven_inv_no',
+        'ven_inv_date', 'ven_inv_ref', 'description',
+        'discount_percent', 'discount_amt', 'inv_amount',
+        'payment_status', 'transaction_type_id', 'payment_mode_id'
 
     ];
 
@@ -45,4 +35,25 @@ class Purchase extends Model
     public function transactionType() {
         return $this->belongsTo(TransactionType::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'invRef_id');
+    }
+
+    protected static function booted()
+    {
+        static::deleted(function ($purchase) {
+            $purchase->transactions()->delete();
+        });
+    }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
+
+
 }

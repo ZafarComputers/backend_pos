@@ -10,17 +10,15 @@ class CoaMainFactory extends Factory
     {
         return [
             'title' => $this->faker->randomElement([
-                'Capital & Reserves',
-                'Long Term Loans',
-                'Deferred Liabilities',
-                'Current Liabilities',
-                'Fix Assets',
-                'Long Term Assets',
+
+                'Capital & Reserves (Equity)',
                 'Current Assets',
+                'Fix Assets',
+                'Current Liabilities',
                 'Revenues',
-                'Admin Expenses'
+                'Administrative Expenses'
             ]),
-            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'status' => $this->faker->randomElement(['Active', 'Inactive']),
         ];
     }
 }

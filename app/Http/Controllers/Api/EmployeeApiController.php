@@ -2,191 +2,149 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Employee;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+// Controllers
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
 
-/**
- * Class EmployeeApiController
- *
- * Handles API operations for the Employee resource.
- * Last updated: 04:46 PM PKT, September 27, 2025.
- */
+//  Resources
+use App\Http\Resources\EmployeeResource;
+
+// Models
+use App\Models\Employee;
+
 class EmployeeApiController extends Controller
 {
-    /**
-     * Display a paginated listing of all employees with their cities.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function index(Request $request): JsonResponse
+    public function index()
     {
-        try {
-            $perPage = $request->input('per_page', 10);
-            $employees = Employee::with('city')->paginate($perPage);
-            return response()->json([
-                'success' => true,
-                'data' => $employees->items(),
-                'pagination' => [
-                    'current_page' => $employees->currentPage(),
-                    'per_page' => $employees->perPage(),
-                    'total' => $employees->total(),
-                    'last_page' => $employees->lastPage(),
-                ],
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve employees: ' . $e->getMessage(),
-            ], 500);
-        }
+        return EmployeeResource::collection(Employee::all());
     }
 
-    /**
-     * Store a newly created employee in storage.
-     *
-     * Validates the request data and creates a new employee record.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email',
+            'cnic' => 'required|string|unique:employees,cnic',
+            'cell_no1' => 'string|max:15',
+            'cell_no2' => 'string|max:15',
+            'city_id' => 'required|exists:cities,id',
+            'address' => 'required|string',
+            'status' => 'required|in:Active,Inactive',
+            'role_id' => 'required|exists:roles,id',
+            'status' => 'required|in:Active,Inactive',
+
+            // 'salary' => 'required|numeric|min:0',
+        ]);
+
+        $employee = Employee::create($validated);
+
+        return new EmployeeResource($employee);
+    }
+
+    // Show method with improved error handling   
+    public function show($id): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:employees,email',
-                'position' => 'required|string|max:100',
-                'city_id' => 'required|exists:cities,id',
-                'status' => 'required|in:active,inactive',
-            ]);
+            // Try to find the employee with related data
+            $employee = Employee::with(['role', 'city'])->find($id);
 
-            if ($validator->fails()) {
+            // If not found, return a clear 404 response
+            if (!$employee) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
+                    'message' => 'Employee not found.',
+                ], 404);
             }
 
-            $employee = Employee::create($request->all());
-
+            // Return successful response
             return response()->json([
                 'success' => true,
-                'message' => 'Employee created successfully',
-                'data' => $employee,
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create employee: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    /**
-     * Display the specified employee.
-     *
-     * @param Employee $employee
-     * @return JsonResponse
-     */
-    public function show(Employee $employee): JsonResponse
-    {
-        try {
-            $employee->load('city');
-            return response()->json([
-                'success' => true,
-                'data' => $employee,
+                'message' => 'Employee retrieved successfully.',
+                'data' => new EmployeeResource($employee),
             ], 200);
-        } catch (ModelNotFoundException $e) {
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Database or query error (bad SQL, missing table, etc.)
             return response()->json([
                 'success' => false,
-                'message' => 'Employee not found',
-            ], 404);
+                'message' => 'Database query error: ' . $e->getMessage(),
+            ], 500);
+
         } catch (\Exception $e) {
+            // Catch any unexpected exception
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve employee: ' . $e->getMessage(),
+                'message' => 'An unexpected error occurred: ' . $e->getMessage(),
             ], 500);
         }
     }
 
-    /**
-     * Update the specified employee in storage.
-     *
-     * Validates the request data and updates the employee record.
-     *
-     * @param Request $request
-     * @param Employee $employee
-     * @return JsonResponse
-     */
-    public function update(Request $request, Employee $employee): JsonResponse
+    public function update(Request $request, Employee $employee)
     {
-        try {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:employees,email,' . $employee->id,
-                'position' => 'required|string|max:100',
-                'city_id' => 'required|exists:cities,id',
-                'status' => 'required|in:active,inactive',
-            ]);
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email',
+            // 'cnic' => 'required|unique:employees,cnic,' . $employee->id,
+            'cnic' => [
+                'required',
+                Rule::unique('employees', 'cnic')->ignore($employee->id),
+            ],
+            'cell_no1' => 'string|max:15',
+            'cell_no2' => 'string|max:15',
+            'city_id' => 'required|exists:cities,id',
+            'address' => 'required|string',
+            'status' => 'required|in:Active,Inactive',
+            'role_id' => 'required|exists:roles,id',
+            'status' => 'required|in:Active,Inactive',
+       ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
+        $employee->update($validated);
 
-            $employee->update($request->all());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Employee updated successfully',
-                'data' => $employee,
-            ], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Employee not found',
-            ], 404);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update employee: ' . $e->getMessage(),
-            ], 500);
-        }
+        return new EmployeeResource($employee);
     }
 
-    /**
-     * Remove the specified employee from storage.
-     *
-     * @param Employee $employee
-     * @return JsonResponse
-     */
+
+    // Delete method with enhanced error handling
     public function destroy(Employee $employee): JsonResponse
     {
         try {
+            // If employee not found (in case route model binding fails)
+            if (!$employee) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Employee not found.',
+                ], 404);
+            }
+
+            // Attempt to delete
             $employee->delete();
+
             return response()->json([
                 'success' => true,
-                'message' => 'Employee deleted successfully',
+                'message' => 'Employee deleted successfully.',
             ], 200);
-        } catch (ModelNotFoundException $e) {
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Database-related error (e.g. foreign key constraint)
             return response()->json([
                 'success' => false,
-                'message' => 'Employee not found',
-            ], 404);
+                'message' => 'Unable to delete employee due to related data.',
+                'error' => $e->getMessage(),
+            ], 409); // 409 Conflict
+
         } catch (\Exception $e) {
+            // Any other unexpected error
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete employee: ' . $e->getMessage(),
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
+
+
 }

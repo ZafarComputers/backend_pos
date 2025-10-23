@@ -22,4 +22,11 @@ class PosBankDetail extends Model
     {
         return $this->belongsTo(Pos::class, 'pos_id', 'id');
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

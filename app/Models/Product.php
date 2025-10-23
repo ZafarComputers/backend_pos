@@ -97,4 +97,11 @@ class Product extends Model
             'in_stock'      => $inStock,
         ];
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

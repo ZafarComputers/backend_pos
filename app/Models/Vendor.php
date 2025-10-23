@@ -29,4 +29,10 @@ class Vendor extends Model
         return $this->hasMany(Purchase::class);
     }
     
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }   
+
+    
 }

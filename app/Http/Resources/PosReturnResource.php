@@ -17,6 +17,7 @@ class PosReturnResource extends JsonResource
             'id' => $this->id,
             'invRet_date' => $this->invRet_date,
             'return_inv_amout' => $this->return_inv_amout,
+            'Description' => $this->reason,
 
             'pos_id' => $this->pos_id,
             // 'pos_invoice' => $this->pos ? $this->pos->inv_no ?? null : null,

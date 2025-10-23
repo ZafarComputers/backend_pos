@@ -12,7 +12,7 @@ class SubCategory extends Model
 
      protected $fillable = [
         'title',
-        'img_path',
+        'img_path',     // may be null
         'category_id',
         'status',
     ];
@@ -21,5 +21,11 @@ class SubCategory extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
     
 }

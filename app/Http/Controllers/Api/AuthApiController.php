@@ -39,6 +39,7 @@ class AuthApiController extends Controller
         // ]);
 
     }
+    
     // public function login(Request $request)
     // {
     //     $credentials = $request->validate([

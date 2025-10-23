@@ -21,11 +21,14 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id')->nullable();
             $table->string('cell_no1', 20);
             $table->string('cell_no2', 20)->nullable();
+            // $table->string('role_id', 3);
             $table->string('image_path')->nullable();
+            $table->unsignedBigInteger('role_id')->nullable(); // designation
             $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
 
             $table->foreign('city_id')->references('id')->on('cities')->nullOnDelete();
+            $table->foreign('role_id')->references('id')->on('roles')->nullOnDelete();
         });
     }
 

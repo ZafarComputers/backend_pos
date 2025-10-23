@@ -13,28 +13,35 @@ return new class extends Migration
     {
         Schema::create('pos_returns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
-            $table->date('invRet_date');
 
-            // Replace string 'pos_inv_no' with a foreign key 'pos_id'
-            $table->foreignId('pos_id')
-                ->constrained('pos') // or 'pos_invoices' — use your actual table name here
+            // Basic relationships
+            $table->foreignId('customer_id')
+                ->constrained()
                 ->cascadeOnDelete();
-            $table->string('reason')->nullable();
-            $table->decimal('return_inv_amout', 12, 2);
-            $table->timestamps();
-        
 
-            // Foreign keys
+            $table->foreignId('pos_id')
+                ->constrained('pos') // adjust if your main POS table name differs
+                ->cascadeOnDelete();
+
+            // Transactional info
+            $table->date('invRet_date');
+            $table->string('reason')->nullable();
+            $table->decimal('return_inv_amout', 15, 2)->default(0);
+
+            // Accounting references
             $table->foreignId('transaction_type_id')
-                  ->constrained('transaction_types')
-                  ->cascadeOnDelete();
+                ->nullable() // ✅ allow null to avoid insert errors
+                ->default(4) // ✅ default to "Sale Return Transaction" (optional)
+                ->constrained('transaction_types')
+                ->cascadeOnDelete();
 
             $table->foreignId('payment_mode_id')
-                  ->constrained('payment_modes')
-                  ->cascadeOnDelete();
-        });
+                ->nullable() // ✅ optional
+                ->constrained('payment_modes')
+                ->cascadeOnDelete();
 
+            $table->timestamps();
+        });
     }
 
     /**

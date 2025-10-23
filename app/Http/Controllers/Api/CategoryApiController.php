@@ -3,19 +3,23 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+
+// Resources
+use App\Http\Resources\CategoryResource;
+
+// Models
+use App\Models\Category;
 
 class CategoryApiController extends Controller
 {
     /**
      * Display a listing of categories.
      */
-    public function index(Request $request)
+    public function index(Request $request) 
     {
-        // dd('You are here: ', $request);
         $withSubcategories = $request->boolean('with_subcategories', false);
 
         $categories = Category::when($withSubcategories, function ($query) {
@@ -29,14 +33,31 @@ class CategoryApiController extends Controller
         ]);
     }
 
+
+
+    // for Category Image retrieval
+    public function getImage($filename)
+    {
+        // filename now can include folder e.g. "category/cat01.jpeg"
+        $path = storage_path('app/' . $filename);
+
+        if (!file_exists($path)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        return response()->file($path);
+    }
+
+
     /**
      * Store a newly created category.
-     */
+    */
     public function store(Request $request)
     {
+        // dd($request->all(), $request->file('img_path'));
         $validator = Validator::make($request->all(), [
             'title'     => 'required|string|max:255|unique:categories,title',
-            'img_path'  => 'nullable|string',
+            'img_path'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status'    => 'required|in:active,inactive',
         ]);
 
@@ -47,7 +68,24 @@ class CategoryApiController extends Controller
             ], 422);
         }
 
-        $category = Category::create($validator->validated());
+        $data = $validator->validated();
+
+        // Handle image upload if provided
+        if ($request->hasFile('img_path')) {
+            $image = $request->file('img_path');
+            $filename = time() . '_' . $image->getClientOriginalName();
+
+            // Store in storage/app/category
+            // $path = $image->storeAs('category', $filename); 
+            // $data['img_path'] = $path; // save relative path
+            $path = $image->store('category', 'public');
+            $data['img_path'] = $path; // "category/cat01.jpeg"
+        }
+
+
+
+
+        $category = Category::create($data);
 
         return response()->json([
             'success' => true,
@@ -55,6 +93,8 @@ class CategoryApiController extends Controller
             'data'    => new CategoryResource($category),
         ], 201);
     }
+
+
 
     /**
      * Display the specified category.

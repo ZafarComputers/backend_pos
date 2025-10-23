@@ -24,4 +24,11 @@ class Bank extends Model
     {
         return $this->belongsTo(TransactionType::class, 'transaction_type_id');
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

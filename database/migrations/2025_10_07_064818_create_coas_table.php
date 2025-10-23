@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coas', function (Blueprint $table) {
+       Schema::create('coas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('coa_sub_id')->constrained()->onDelete('cascade');
+            $table->string('code')->unique();
             $table->string('title');
-            $table->foreignId('coa_sub_id')->constrained('coa_subs')->onDelete('cascade');
+            $table->enum('type', ['asset', 'liability', 'capital', 'income', 'expense']);
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
+
     }
 
     /**

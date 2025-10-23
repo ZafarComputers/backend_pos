@@ -1,57 +1,101 @@
 <?php
 
-
 namespace App\Http\Controllers\Api;
+// Controllers
 use App\Http\Controllers\Controller;
-
-
-use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+// Resources
+use App\Http\Resources\RoleResource;
+
+// Models
+use App\Models\Role;
+use App\Models\Permission;
 
 class RoleApiController extends Controller
 {
     public function index()
     {
-        return response()->json(Role::with('permissions')->get());
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|unique:roles,name',
-            'slug' => 'required|string|unique:roles,slug',
-        ]);
-
-        $role = Role::create($data);
-        return response()->json(['status' => true, 'role' => $role]);
+        $roles = Role::with('permissions')->get();
+        return RoleResource::collection($roles);
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Role list retrieved successfully.',
+        //     'data' => $roles
+        // ]);
     }
 
     public function show(Role $role)
     {
-        return response()->json($role->load('permissions'));
+        $role->load('permissions');
+        return new RoleResource($role);
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Role details retrieved successfully.',
+        //     'data' => $role
+        // ]);
+
+    }
+
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'slug' => 'required|string|unique:roles,slug',
+            'description' => 'nullable|string',
+        ]);
+
+        $role = Role::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role created successfully.',
+            'data' => $role
+        ]);
     }
 
     public function update(Request $request, Role $role)
     {
-        $data = $request->validate([
-            'name' => 'required|string|unique:roles,name,' . $role->id,
-            'slug' => 'required|string|unique:roles,slug,' . $role->id,
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:100',
+            'slug' => 'sometimes|string|unique:roles,slug,' . $role->id,
+            'description' => 'nullable|string',
         ]);
 
-        $role->update($data);
-        return response()->json(['status' => true, 'role' => $role]);
+        $role->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role updated successfully.',
+            'data' => $role
+        ]);
     }
 
     public function destroy(Role $role)
     {
         $role->delete();
-        return response()->json(['status' => true, 'message' => 'Role deleted']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role deleted successfully.'
+        ]);
     }
 
-    public function assignPermission(Request $request, Role $role)
+    public function assignPermissions(Request $request, Role $role)
     {
-        $request->validate(['permission_ids' => 'required|array']);
-        $role->permissions()->sync($request->permission_ids);
-        return response()->json(['status' => true, 'message' => 'Permissions assigned']);
+        $validated = $request->validate([
+            'permission_ids' => 'required|array',
+            'permission_ids.*' => 'exists:permissions,id',
+        ]);
+
+        $role->permissions()->sync($validated['permission_ids']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permissions assigned successfully.',
+            'data' => $role->load('permissions')
+        ]);
     }
 }

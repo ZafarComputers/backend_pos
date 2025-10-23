@@ -10,21 +10,21 @@ class CoaMainSeeder extends Seeder
     public function run(): void
     {
         $titles = [
-            'Capital & Reserves',
-            'Long Term Loans',
-            'Deferred Liabilities',
-            'Current Liabilities',
-            'Fix Assets',
-            'Long Term Assets',
+
+            'Capital & Reserves (Equity)',
             'Current Assets',
+            'Fix Assets',
+            'Current Liabilities',
             'Revenues',
-            'Admin Expenses'
+            'Administrative Expenses'
+
         ];
 
         foreach ($titles as $title) {
             CoaMain::create([
                 'title' => $title,
-                'status' => 'active'
+                'status' => 'Active'
+
             ]);
         }
     }

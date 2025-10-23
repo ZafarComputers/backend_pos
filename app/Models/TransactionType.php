@@ -13,4 +13,11 @@ class TransactionType extends Model
         'transType',
         'code',
     ];
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

@@ -14,4 +14,11 @@ class Season extends Model
         'title',
         'status',
     ];
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

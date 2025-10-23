@@ -24,6 +24,11 @@ class Customer extends Model
         'cell_no2',
         'image_path',
         'status',
+
+        // Gurunter Person's Info
+        'cnic2', 
+        'name2',
+        'cell_no3'
     ];
 
     /**
@@ -39,6 +44,9 @@ class Customer extends Model
         return $this->hasMany(Pos::class, 'customer_id', 'id');
     }
 
-
-
+    public function isActive()
+    {
+        return $this->status === 'Active';  
     }
+
+}

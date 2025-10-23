@@ -36,4 +36,11 @@ class PaymentMode extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

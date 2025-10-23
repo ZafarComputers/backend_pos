@@ -17,8 +17,8 @@ class UserResource extends JsonResource
             'full_name'  => $this->first_name . ' ' . $this->last_name,
             'email'      => $this->email,
             'cell_no1'   => $this->cell_no1,
-            'cell_no2'   => $this->cell_no2,
-            'img_path'   => $this->img_path,
+            'cell_no2'   => $this->cell_no2 ?? "N/A",
+            'img_path'   => $this->img_path ?? "N/A",
             'status'     => $this->status,
             'role_id'   => $this->role_id,
             // 'role' => [

@@ -15,5 +15,11 @@ class Size extends Model
         'status',
     ];
 
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
     
 }

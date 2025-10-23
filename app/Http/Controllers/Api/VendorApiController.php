@@ -1,17 +1,22 @@
 <?php
 
-// app/Http/Controllers/Api/VendorController.php
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Vendor;
 use Illuminate\Http\Request;
-use App\Http\Resources\VendorResource;  // ✅ add this
 
-class VendorController extends Controller
+// Resources
+use App\Http\Resources\VendorResource;  
+
+// Models
+use App\Models\Vendor;
+
+class VendorApiController extends Controller
 {
     public function index() {
-        return Vendor::with('city')->get();
+        $vendors = Vendor::with('city.state.country')->get();
+        return VendorResource::collection($vendors);
+        // return Vendor::with('city')->get();
     }
 
     public function store(Request $request) {

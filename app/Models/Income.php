@@ -33,5 +33,11 @@ class Income extends Model
         return $this->belongsTo(IncomeCategory::class, 'income_category_id');
     }
 
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+    
+
 
 }

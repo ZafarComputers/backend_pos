@@ -10,12 +10,20 @@ class Permission extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'slug', 'description'];
 
     
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'permission_role')
-            ->withTimestamps();
+        return $this->belongsToMany(Role::class, 'role_permission');
+        // return $this->belongsToMany(Role::class, 'permission_role')
+        //     ->withTimestamps();
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

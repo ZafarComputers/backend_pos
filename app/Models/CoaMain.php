@@ -2,31 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CoaMain extends Model
 {
-    use HasFactory;
+    protected $fillable = ['code', 'title', 'type', 'status'];
 
-    protected $fillable = [
-        'title',
-        'status',
-    ];
-
-    /**
-     * Each main COA can have many sub COAs.
-     */
-    public function subs()
+    public function coaSubs()
     {
-        return $this->hasMany(CoaSub::class, 'coa_main_id');
+        return $this->hasMany(CoaSub::class);
     }
 
     /**
      * Get all COA (child accounts) through CoaSubs.
-     */
+    */
     public function coas()
     {
         return $this->hasManyThrough(Coa::class, CoaSub::class, 'coa_main_id', 'coa_sub_id');
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+    
+    
 }

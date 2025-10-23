@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthApiController as AuthController;
 
-// use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\PermissionApiController;
 
@@ -21,8 +20,9 @@ use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\CustomerApiController;
 
 use App\Http\Controllers\Api\EmployeeApiController;
+use App\Http\Controllers\Api\AttendanceApiController;
 
-use App\Http\Controllers\Api\VendorController;
+use App\Http\Controllers\Api\VendorApiController;
 
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\SubCategoryApiController;
@@ -45,9 +45,21 @@ use App\Http\Controllers\Api\PosReturnApiController;
 
 use App\Http\Controllers\Api\PosReturnDetailApiController;
 use App\Http\Controllers\Api\PosCartController;
-use App\Http\Controllers\Api\CoaMainApiController;
-use App\Http\Controllers\Api\CoaSubApiController;
-use App\Http\Controllers\Api\CoaApiController;
+
+use App\Http\Controllers\Api\FinanceAccounts\CoaMainApiController;
+use App\Http\Controllers\Api\FinanceAccounts\CoaSubApiController;
+use App\Http\Controllers\Api\FinanceAccounts\CoaApiController;
+use App\Http\Controllers\Api\FinanceAccounts\CoaHierarchyController;
+use App\Http\Controllers\Api\FinanceAccounts\FinanceAccountApiController;
+use App\Http\Controllers\Api\FinanceAccounts\PayInApiController;
+use App\Http\Controllers\Api\FinanceAccounts\PayOutApiController;
+
+// use App\Http\Controllers\Api\FinanceAccounts{
+//     CoaMainApiController,
+//     CoaSubApiController,
+//     CoaApiController
+// };
+
 
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\ProfileController;
@@ -63,7 +75,6 @@ use App\Http\Controllers\Api\ExpenseCategoryApiController;
 use App\Http\Controllers\Api\IncomeApiController;
 use App\Http\Controllers\Api\IncomeCategoryApiController;
 use App\Http\Controllers\Api\BankApiController;
-use App\Http\Controllers\Api\FinanceAccounts\FinaceAccountApiController;
 
 
 
@@ -147,7 +158,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('permissions', PermissionApiController::class);
 
     // assign permissions to role
-    Route::post('roles/{role}/assign-permissions', [RoleApiController::class, 'assignPermission']);
+    Route::post('roles/{role}/assign-permissions', [RoleApiController::class, 'assignPermissions']);
 
 
     // User CRUD
@@ -173,10 +184,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('materials', MaterialController::class);
 
     // Vendor's Route
-    Route::apiResource('vendors', VendorController::class);
+    Route::apiResource('vendors', VendorApiController::class);
     
     // Categories n Sub-Categories
     Route::apiResource('categories', CategoryApiController::class);
+    // Route::get('/category-image/{filename}', [CategoryApiController::class, 'getImage']);
+    
     Route::apiResource('subcategories', SubCategoryApiController::class);
     
     // Prodcut Api Route
@@ -190,6 +203,15 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 });
+
+// Route::get('category-image/{filename}', [CategoryApiController::class, 'getImage'])
+        // ->name('api.category.image');
+
+Route::get('category-image/{filename}', [CategoryApiController::class, 'getImage'])
+    ->where('filename', '.*') // allow slashes in path
+    ->name('api.category.image');
+
+
 // End Inventory's Routes
 
    
@@ -212,9 +234,25 @@ Route::middleware('auth:sanctum')->group(function () {
    
     // Employee's Routes
     Route::apiResource('employees', EmployeeApiController::class);
+    // Route::apiResource('attendances', AttendanceApiController::class);
+    // Route::apiResource('employees/{{$employee}}/attendances', AttendanceApiController::class);
 
+    // ✅ must be BEFORE apiResource line
+    // Route::get('employees/attendances', [AttendanceApiController::class, 'all']);
+    Route::get('attendances/all', [AttendanceApiController::class, 'all']);
     
 
+    // Keep your resource routes below
+    Route::apiResource('employees.attendances', AttendanceApiController::class);
+
+
+    // Route::prefix('employees')->group(function () {
+    //     Route::get('attendances', [AttendanceApiController::class, 'all']);
+    //     Route::get('{employee}/attendances', [AttendanceApiController::class, 'index']);
+    //     Route::post('{employee}/attendances', [AttendanceApiController::class, 'store']);
+    //     Route::put('{employee}/attendances/{attendance}', [AttendanceApiController::class, 'update']);
+    //     Route::delete('{employee}/attendances/{attendance}', [AttendanceApiController::class, 'destroy']);
+    // });
 
 });
 // End General Setting's Routes
@@ -236,6 +274,7 @@ Route::prefix('pos')->group(function () {
     // PoS Routes
     Route::get('/', [PosApiController::class, 'index']);     // List all invoices
     Route::post('/', [PosApiController::class, 'store']);       // Create new invoice
+    Route::get('/todaySummary', [PosApiController::class, 'todaySummary']); // todaySummary 
     Route::get('/{id}', [PosApiController::class, 'show']);     // Show single invoice
     Route::put('/{id}', [PosApiController::class, 'update']);   // Update invoice
     Route::delete('/{id}', [PosApiController::class, 'destroy']); // Delete invoice
@@ -296,6 +335,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('coa-mains', CoaMainApiController::class);
     Route::apiResource('coa_subs', CoaSubApiController::class);
     Route::apiResource('coas', CoaApiController::class);
+    Route::get('coa-hierarchy', [CoaHierarchyController::class, 'index']);
 
     Route::apiResource('transaction-types', TransactionTypeApiController::class);
 
@@ -340,12 +380,15 @@ Route::middleware('auth:sanctum')->group(function () {
 // Finance & Accounting Routes
 Route::middleware('auth:sanctum')->group(function () {
     // Expenses
-    Route::apiResource('expense-categories', ExpenseCategoryApiController::class);
-    Route::apiResource('expenses', ExpenseApiController::class);
+    // Route::apiResource('expense-categories', ExpenseCategoryApiController::class);
+    // Route::apiResource('expenses', ExpenseApiController::class);
+    Route::apiResource('expenses', PayOutApiController::class);
+
 
     // Income
-    Route::apiResource('income-categories', IncomeCategoryApiController::class);
-    Route::apiResource('incomes', IncomeApiController::class);
+    // Route::apiResource('income-categories', IncomeCategoryApiController::class);
+    // Route::apiResource('incomes', IncomeApiController::class);
+    Route::apiResource('incomes', PayInApiController::class);
 
     // Bank
     Route::apiResource('banks', BankApiController::class);
@@ -358,7 +401,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // Cash Flow Report Route
-    Route::get('/cashflow', [FinaceAccountApiController::class, 'cashFlow']);
+    Route::get('/cashflow', [FinanceAccountApiController::class, 'cashFlow']);
+    Route::get('/accountStatement', [FinanceAccountApiController::class, 'accountStatement']);
+    Route::get('/accountStatement/{id}', [FinanceAccountApiController::class, 'accountStatementById']);
+    Route::get('/accountStatement/{accountId}', [FinanceAccountApiController::class, 'accountStatementByDate']);
+
+
 
 
 });

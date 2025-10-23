@@ -32,5 +32,12 @@ class PosDetail extends Model
         // return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
+
     
 }

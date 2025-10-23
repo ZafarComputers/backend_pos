@@ -3,33 +3,172 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Coa;
+
+use App\Models\CoaMain;
 use App\Models\CoaSub;
+use App\Models\Coa;
+
 
 class CoaSeeder extends Seeder
 {
     public function run(): void
     {
-        $data = [
-            ['coa_sub' => 'Paid-Up Capitals (Share Holders)', 'titles' => ['Mr. Test', 'Mr. Test2']],
-            ['coa_sub' => 'Revenues – Reserves', 'titles' => ['Profit & Loss A/C (O/Bal.)']],
-            ['coa_sub' => 'Trade Creditors for Services (A/c Payable)', 'titles' => ['TCS Courier Service', 'Naya Tel']],
-            ['coa_sub' => 'Accrued Liabilities', 'titles' => ['Petty Cash', 'Salaries Payable', 'Office Rent Payable']],
-            ['coa_sub' => 'Bank Accounts', 'titles' => ['ABC Bank A/C #: 00000000000']],
-            ['coa_sub' => 'Sales', 'titles' => ['Cash Sale', 'Credit Sales']],
-            ['coa_sub' => 'Cost of Sales', 'titles' => ['Purchases (Cash)', 'Purchases (Credit)', 'Salaries & Wages']],
-            ['coa_sub' => 'Utility Expense', 'titles' => ['Electricity Bill (00 00000 0000000)']],
-            ['coa_sub' => 'Entertainment Expense', 'titles' => ['Kitchen Exp.', 'Refreshment Account']],
+
+        /**
+         * Each CoaMain group is assigned a type and prefix
+         * for hierarchical accounting codes.
+         */
+        $coaData = [
+            [
+                'title' => 'Capital and Reserves',
+                'type'  => 'capital',
+                'prefix' => '3',
+                'subs'  => [
+                    'Paid up Capital / Share Holders' => [
+                        'Zafar Iqbal',
+                    ],
+                    'Retained Earnings' => [
+                        'Profit and Loss Account',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Current Assets',
+                'type'  => 'asset',
+                'prefix' => '1',
+                'subs'  => [
+                    'Cash Account' => ['Cash in Hand'],
+                    'Bank Account' => ['Bank Account'],
+                    'Accounts Receivable' => ['Customer A Account'],
+                    'Inventory' => [
+                        'Purchase Account',
+                        'Sales Account',
+                        'Purchase Return Account',
+                        'Sales Return Account',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Fixed Assets',
+                'type'  => 'asset',
+                'prefix' => '1',
+                'subs'  => [
+                    'Office Equipment' => ['Office Equipment Account'],
+                    'Furniture and Fixtures' => [
+                        'Furniture and Fixtures Account',
+                        'Computers and Accessories Account',
+                        'Electrical Appliances Account',
+                        'Electronic Devices Account',
+                    ],
+                    'Vehicles' => ['Vehicle Account'],
+                    'Building and Land' => [
+                        'Building Account',
+                        'Land Account',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Current Liabilities',
+                'type'  => 'liability',
+                'prefix' => '2',
+                'subs'  => [
+                    'Accounts Payable' => ['Vendor A Account'],
+                    'Bank Loans' => ['Bank Loan Account'],
+                    'Loans from Directors' => ['Director Loan Account'],
+                    'Other Current Liabilities' => ['Tax Payable Account'],
+                    'Accrued Expenses' => ['Utilities Payable Account'],
+                    'Utility Payable' => [
+                        'Electricity Payable Account',
+                        'Gas Payable Account',
+                        'Water Payable Account',
+                        'Internet Payable Account',
+                        'Telephone Payable Account',
+                    ],
+                    'Salary and Wages Payable' => ['Staff Salary Payable Account'],
+                ],
+            ],
+            [
+                'title' => 'Revenues',
+                'type'  => 'income',
+                'prefix' => '4',
+                'subs'  => [
+                    'Sales Revenue' => [
+                        'Product Sales Account',
+                        'Service Sales Account',
+                    ],
+                    'Other Revenues' => [
+                        'Interest Income Account',
+                        'Rental Income Account',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Expenses',
+                'type'  => 'expense',
+                'prefix' => '5',
+                'subs'  => [
+                    'Operating Expenses' => [
+                        'Rent Expense Account',
+                        'Utilities Expense Account',
+                        'Office Supplies Expense Account',
+                        'Maintenance and Repairs Expense Account',
+                    ],
+                    'Administrative Expenses' => [
+                        'Salaries Expense Account',
+                        'Insurance Expense Account',
+                        'Depreciation Expense Account',
+                    ],
+                    'Selling Expenses' => [
+                        'Advertising Expense Account',
+                        'Sales Commissions Expense Account',
+                    ],
+                ],
+            ],
         ];
 
-        foreach ($data as $group) {
-            $coaSub = CoaSub::firstOrCreate(['title' => $group['coa_sub']]);
-            foreach ($group['titles'] as $title) {
-                Coa::create([
-                    'title' => $title,
-                    'coa_sub_id' => $coaSub->id,
-                    'status' => 'Active',
+        // --- Generate Codes & Insert Data ---
+        foreach ($coaData as $mainIndex => $mainGroup) {
+            $mainCode = $mainGroup['prefix'] . str_pad(($mainIndex + 1), 3, '0', STR_PAD_LEFT);
+
+            $main = CoaMain::create([
+                'code'   => $mainCode,
+                'title'  => $mainGroup['title'],
+                'type'   => $mainGroup['type'],
+                'status' => 'active',
+            ]);
+
+            $subCounter = 1;
+            foreach ($mainGroup['subs'] as $subTitle => $accounts) {
+                $subCode = $mainGroup['prefix']
+                    . str_pad(($mainIndex + 1), 2, '0', STR_PAD_LEFT)
+                    . str_pad($subCounter, 2, '0', STR_PAD_LEFT);
+
+                $sub = $main->coaSubs()->create([
+                    'code'   => $subCode,
+                    'title'  => $subTitle,
+                    'type'   => $mainGroup['type'],
+                    'status' => 'active',
                 ]);
+
+                $accCounter = 1;
+                foreach ($accounts as $accountTitle) {
+                    $accCode = $mainGroup['prefix']
+                        . str_pad(($mainIndex + 1), 1, '0', STR_PAD_LEFT)
+                        . str_pad($subCounter, 2, '0', STR_PAD_LEFT)
+                        . str_pad($accCounter, 2, '0', STR_PAD_LEFT);
+
+                    $sub->coas()->create([
+                        'code'   => $accCode,
+                        'title'  => $accountTitle,
+                        'type'   => $mainGroup['type'],
+                        'status' => 'active',
+                    ]);
+
+                    $accCounter++;
+                }
+
+                $subCounter++;
+
             }
         }
     }

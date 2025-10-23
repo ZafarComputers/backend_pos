@@ -1,61 +1,100 @@
 <?php
 
-// app/Http/Controllers/VendorController.php
 namespace App\Http\Controllers;
 
-use App\Models\Vendor;
-use App\Models\City;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Resources\VendorResource;
+use App\Models\Vendor;
 
 class VendorController extends Controller
 {
-    public function index() {
-        $vendors = Vendor::with('city')->paginate(10);
-        return view('vendors.index', compact('vendors'));
+    /**
+     * Display a listing of vendors
+     */
+    public function index()
+    {
+        $vendors = Vendor::with('city.state.country')->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vendors retrieved successfully.',
+            'data' => VendorResource::collection($vendors),
+        ]);
     }
 
-    public function create() {
-        $cities = City::all();
-        return view('vendors.create', compact('cities'));
-    }
-
-    public function store(Request $request) {
-        $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'cnic' => 'required|string|unique:vendors',
-            'city_id' => 'required|exists:cities,id',
-            'status' => 'required|in:Active,Inactive',
+    /**
+     * Store a newly created vendor
+     */
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'nullable|string|email|max:100',
+            'phone'      => 'nullable|string|max:25',
+            'cnic'       => 'required|string|unique:vendors,cnic',
+            'city_id'    => 'required|exists:cities,id',
+            'address'    => 'required|string|max:255',
+            'status'     => 'required|in:Active,Inactive',
         ]);
 
-        Vendor::create($request->all());
-        return redirect()->route('vendors.index')->with('success', 'Vendor created successfully.');
+        $vendor = Vendor::create($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vendor created successfully.',
+            'data' => new VendorResource($vendor),
+        ], 201);
     }
 
-    public function show(Vendor $vendor) {
-        return view('vendors.show', compact('vendor'));
+    /**
+     * Display the specified vendor
+     */
+    public function show(Vendor $vendor)
+    {
+        $vendor->load('city.state.country');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vendor details retrieved successfully.',
+            'data' => new VendorResource($vendor),
+        ]);
     }
 
-    public function edit(Vendor $vendor) {
-        $cities = City::all();
-        return view('vendors.edit', compact('vendor', 'cities'));
-    }
-
-    public function update(Request $request, Vendor $vendor) {
-        $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'cnic' => 'required|string|unique:vendors,cnic,' . $vendor->id,
-            'city_id' => 'required|exists:cities,id',
-            'status' => 'required|in:Active,Inactive',
+    /**
+     * Update the specified vendor
+     */
+    public function update(Request $request, Vendor $vendor)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'cnic'       => 'required|string|unique:vendors,cnic,' . $vendor->id,
+            'city_id'    => 'required|exists:cities,id',
+            'address'    => 'required|string|max:255',
+            'status'     => 'required|in:Active,Inactive',
         ]);
 
-        $vendor->update($request->all());
-        return redirect()->route('vendors.index')->with('success', 'Vendor updated successfully.');
+        $vendor->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vendor updated successfully.',
+            'data' => new VendorResource($vendor->fresh()),
+        ]);
     }
 
-    public function destroy(Vendor $vendor) {
+    /**
+     * Remove the specified vendor
+     */
+    public function destroy(Vendor $vendor)
+    {
         $vendor->delete();
-        return redirect()->route('vendors.index')->with('success', 'Vendor deleted successfully.');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vendor deleted successfully.',
+        ]);
     }
 }

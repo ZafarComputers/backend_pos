@@ -20,4 +20,16 @@ class ExpenseCategory extends Model
         // return $this->hasMany(Expense::class, 'expense_category_id');
         return $this->hasMany(Expense::class, 'expense_category_id', 'id');
     }
+    
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+    
+    
+    // public function coa()
+    // {
+    //     return $this->belongsTo(Coa::class, 'coas_id');
+    // }
+
 }

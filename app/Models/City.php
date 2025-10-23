@@ -49,4 +49,30 @@ class City extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    // One city has many customers
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    // One city has many vendors
+    public function vendors()
+    {
+        return $this->hasMany(Vendor::class);   
+    }
+
+    // One city has many users
+    public function users()
+    {
+        return $this->hasMany(User::class);   
+    }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }   
+    
+
+
 }

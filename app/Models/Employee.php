@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    /** @use HasFactory<\Database\Factories\EmployeeFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -20,11 +19,36 @@ class Employee extends Model
         'cell_no1',
         'cell_no2',
         'image_path',
+        'role_id',
         'status',
     ];
 
+
+    // Employee has many attendances
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+
+    // Example relationships
     public function city()
     {
         return $this->belongsTo(City::class);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
 }

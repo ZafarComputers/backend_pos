@@ -17,6 +17,7 @@ class PurchaseReturn extends Model
         'reason',
         'discount_percent',
         'return_amount',
+        'payment_mode_id'
     ];
 
     // Relationships
@@ -34,4 +35,16 @@ class PurchaseReturn extends Model
     {
         return $this->hasMany(PurchaseReturnDetail::class);
     }
+
+    public function paymentMode()
+    {
+        return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
+    }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }

@@ -18,6 +18,7 @@ class User extends Authenticatable
         'email',
         'cell_no1',
         'cell_no2',
+        'role_id',
         'img_path',
         'email_verified_at',
         'password',
@@ -41,26 +42,35 @@ class User extends Authenticatable
     }
 
     public function roles()
-{
-    return $this->belongsToMany(Role::class, 'role_user');
-}
-
-public function hasRole($role)
-{
-    if (is_array($role)) {
-        return $this->roles()->whereIn('name', $role)->exists();
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
     }
-    return $this->roles()->where('name', $role)->exists();
-}
 
-public function hasPermission($permission)
-{
-    return $this->roles()
-        ->whereHas('permissions', function ($query) use ($permission) {
-            $query->where('name', $permission);
-        })
-        ->exists();
-}
+    // Access permissions via role
+    public function permissions()
+    {
+        return $this->role->permissions();
+    }
+
+    // public function hasRole($role)
+    // {
+    //     if (is_array($role)) {
+    //         return $this->roles()->whereIn('name', $role)->exists();
+    //     }
+    //     return $this->roles()->where('name', $role)->exists();
+    // }
+
+    // Check permission helper
+    public function hasPermission($slug)
+    {
+        return $this->role && $this->role->permissions->contains('slug', $slug);
+    }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
 
 
 

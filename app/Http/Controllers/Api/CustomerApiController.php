@@ -7,6 +7,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 
 class CustomerApiController extends Controller
 {
@@ -15,7 +16,6 @@ class CustomerApiController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        // dd('api customer controller');
         $perPage = $request->input('per_page', 10);
         $customers = Customer::with('city')->paginate($perPage);
 
@@ -46,6 +46,9 @@ class CustomerApiController extends Controller
             'cell_no2' => 'nullable|string|max:15',
             'image_path' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'cnic2' => 'nullable|string|max:20',
+            'name2' => 'nullable|string|max:255',
+            'cell_no3' => 'nullable|string|max:15',
         ]);
 
         if ($validator->fails()) {
@@ -91,6 +94,9 @@ class CustomerApiController extends Controller
             'cell_no2' => 'nullable|string|max:15',
             'image_path' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'cnic2' => 'nullable|string|max:20',
+            'name2' => 'nullable|string|max:255',
+            'cell_no3' => 'nullable|string|max:15',
         ]);
 
         if ($validator->fails()) {
@@ -115,11 +121,25 @@ class CustomerApiController extends Controller
      */
     public function destroy(Customer $customer): JsonResponse
     {
-        $customer->delete();
+        try {
+            $customer->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Customer deleted successfully',
-        ], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer deleted successfully',
+            ], 200);
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete customer due to related data or database constraints',
+                'error' => $e->getMessage(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred while deleting the customer',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

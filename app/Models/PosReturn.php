@@ -42,5 +42,40 @@ class PosReturn extends Model
         return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
     }
 
+     public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
+
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
+    }
+        
+    public function transactionType()
+    {
+        return $this->belongsTo(TransactionType::class, 'transaction_type_id');
+    }
+
+    // public function transactions()
+    // {
+    //     return $this->morphMany(Transaction::class, 'transactionable');
+    // }
+
+
+    // // // If your system uses direct foreign key (like pos_return_id column in transactions table):
+    // public function transactions()
+    // {
+    //     return $this->hasMany(Transaction::class, 'pos_return_id');
+    // }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
+
 
 }

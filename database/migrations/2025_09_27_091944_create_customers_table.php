@@ -16,16 +16,19 @@ return new class extends Migration {
             $table->string('name', 150);
             $table->string('email', 150)->unique();
             $table->string('address', 255)->nullable();
-
             // FK relation to cities table
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
-
             // Pakistani mobile numbers: 11 digits (03#########)
             $table->string('cell_no1', 11);
             $table->string('cell_no2', 11)->nullable();
-
             $table->string('image_path', 255)->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+
+            // Gurunter Person's Info
+            $table->string('cnic2', 15)->unique();
+            $table->string('name2', 150);
+            $table->string('cell_no3', 11);
+
 
             $table->timestamps();
         });

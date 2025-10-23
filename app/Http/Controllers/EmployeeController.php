@@ -9,7 +9,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with('city')->paginate(10);
+        $employees = Employee::all();
         return view('employees.index', compact('employees'));
     }
 
@@ -20,17 +20,31 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'cnic' => 'required|unique:employees,cnic',
+        $data = $request->validate([
+            'cnic' => 'required|unique:employees',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email|unique:employees,email',
+            'email' => 'required|email|unique:employees',
+            'address' => 'nullable',
+            'city_id' => 'nullable|integer',
             'cell_no1' => 'required',
+            'cell_no2' => 'nullable',
+            'image_path' => 'nullable|image',
+            'role_id' => 'nullable|integer',
+            'status' => 'boolean',
         ]);
 
-        Employee::create($validated);
+        if ($request->hasFile('image_path')) {
+            $data['image_path'] = $request->file('image_path')->store('employees', 'public');
+        }
 
+        Employee::create($data);
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
+    }
+
+    public function show(Employee $employee)
+    {
+        return view('employees.show', compact('employee'));
     }
 
     public function edit(Employee $employee)
@@ -40,16 +54,25 @@ class EmployeeController extends Controller
 
     public function update(Request $request, Employee $employee)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'cnic' => 'required|unique:employees,cnic,' . $employee->id,
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:employees,email,' . $employee->id,
+            'address' => 'nullable',
+            'city_id' => 'nullable|integer',
             'cell_no1' => 'required',
+            'cell_no2' => 'nullable',
+            'image_path' => 'nullable|image',
+            'role_id' => 'nullable|integer',
+            'status' => 'boolean',
         ]);
 
-        $employee->update($validated);
+        if ($request->hasFile('image_path')) {
+            $data['image_path'] = $request->file('image_path')->store('employees', 'public');
+        }
 
+        $employee->update($data);
         return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
     }
 

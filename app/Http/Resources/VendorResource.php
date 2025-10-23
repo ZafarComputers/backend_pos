@@ -20,6 +20,9 @@ class VendorResource extends JsonResource
             'cnic'      => $this->cnic,
             'address' => $this->address ?? null,
             'city_id'   => $this->city_id,
+            'cityName' => $this->city->title ?? null,
+            'stateName' => $this->city->state->title ?? null,
+            'countryName' => $this->city->state->country->title ?? null,
             'email'   => $this->email ?? null,
             'phone'   => $this->phone ?? null,
             'status'  => $this->status ?? null,
@@ -27,7 +30,7 @@ class VendorResource extends JsonResource
             // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
 
             // Include City, State, Country
-            'city' => new CityResource($this->whenLoaded('city')),
+            // 'city' => new CityResource($this->whenLoaded('city')),
         ];
     }
 }

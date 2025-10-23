@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('coa_subs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('coa_main_id')->constrained()->onDelete('cascade');
+            $table->string('code')->unique();
             $table->string('title');
-            $table->foreignId('coa_main_id')->constrained('coa_mains')->onDelete('cascade');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('type', ['asset', 'liability', 'capital', 'income', 'expense']);
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
     }

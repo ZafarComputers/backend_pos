@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('coa_mains', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('title');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('type', ['asset', 'liability', 'capital', 'income', 'expense']);
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
+
     }
 
     /**

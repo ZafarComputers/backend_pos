@@ -19,4 +19,11 @@ class IncomeCategory extends Model
     {
         return $this->hasMany(Income::class, 'income_category_id');
     }
+
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+
+    
 }
