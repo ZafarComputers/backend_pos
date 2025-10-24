@@ -1,16 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller;
 
+// Controllers
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 
 // Resources
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SalesReportResource;
 use App\Http\Resources\PurchaseResource;
-
 use App\Http\Resources\Reports\Inventory\InventoryHistoryResources;
 use App\Http\Resources\Reports\Inventory\InventorySoldResources;
 use App\Http\Resources\Reports\Inventory\InvtInhandResources;
@@ -18,10 +19,7 @@ use App\Http\Resources\Reports\Vendor\VendorResource;
 use App\Http\Resources\Reports\Vendor\VendorDuesResource;
 use App\Http\Resources\Reports\Expenses\ExpenseReportResource;
 
-
-
 // Models
-use Illuminate\Http\Request;
 use App\Models\Pos;
 use App\Models\PosDetail;
 use App\Models\Product;
@@ -30,21 +28,18 @@ use App\Models\Vendor;
 use App\Models\Customer;
 use App\Models\Expense;
 
-
-
-
 class SalesRepApiController extends Controller
 {
     public function getSalesReport(Request $request)
     {
         $sales = Pos::with([
-            'posDetails.product.vendor:id,first_name',
-            'posDetails.product.subCategory:id,title',
+            'details.product.vendor:id,first_name',
+            'details.product.subCategory:id,title',
         ])
         ->select('id')
         ->get()
         ->flatMap(function ($invoice) {
-            return $invoice->posDetails->map(function ($detail) use ($invoice) {
+            return $invoice->details->map(function ($detail) use ($invoice) {
                 return [
                     'pos_inv_no' => $invoice->id,
                     'product_name' => $detail->product->title ?? null,
@@ -60,7 +55,7 @@ class SalesRepApiController extends Controller
                 ];
             });
         });
-
+            // dd($sales);
         return response()->json([
             'status' => true,
             'data' => SalesReportResource::collection($sales->values()),

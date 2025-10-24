@@ -20,5 +20,12 @@ class Material extends Model
         return $this->status === 'Active';
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+    }
+
+
+
     
 }

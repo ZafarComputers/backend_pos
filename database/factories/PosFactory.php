@@ -1,13 +1,15 @@
 <?php
 
 namespace Database\Factories;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
+// Models used
 use App\Models\Customer;
 use App\Models\Pos;
 use App\Models\PosBankDetail;
 use App\Models\PaymentMode;
 use App\Models\TransactionType;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Employee;
 
 class PosFactory extends Factory
 {
@@ -24,6 +26,7 @@ class PosFactory extends Factory
         return [
             'inv_date'            => $this->faker->date(),
             'customer_id'         => Customer::inRandomOrder()->value('id') ?? Customer::factory(),
+            'employee_id'         => $employee?->id ?? Employee::factory(), // ✅ new line
             'tax'                 => $this->faker->randomFloat(2, 0, 100),
             'discPer'             => $this->faker->randomFloat(2, 0, 20),
             'discAmount'          => $this->faker->randomFloat(2, 0, 100),

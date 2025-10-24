@@ -19,15 +19,26 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignId('pos_id')
-                ->constrained('pos') // adjust if your main POS table name differs
-                ->cascadeOnDelete();
+            // $table->foreignId('pos_id')
+            //     ->constrained('pos') // adjust if your main POS table name differs
+            //     ->cascadeOnDelete();
+
+            // $table->unsignedBigInteger('pos_id')->nullable()->change();
+
+            $table->foreignId('pos_id')->nullable()->constrained('pos')->nullOnDelete();
+            
 
             // Transactional info
             $table->date('invRet_date');
             $table->string('reason')->nullable();
-            $table->decimal('return_inv_amout', 15, 2)->default(0);
-
+            $table->decimal('return_inv_amount', 15, 2)->default(0);
+            $table->decimal('tax', 10, 2)->default(0);
+            $table->decimal('discPer', 5, 2)->default(0);
+            $table->decimal('discAmount', 10, 2)->default(0);
+            // $table->decimal('return_unit_price', 10, 2)->default(0);
+            
+            $table->decimal('paid', 15, 2)->default(0);
+            
             // Accounting references
             $table->foreignId('transaction_type_id')
                 ->nullable() // ✅ allow null to avoid insert errors

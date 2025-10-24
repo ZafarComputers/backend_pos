@@ -293,9 +293,9 @@ Route::prefix('posDtl')->group(function () {
 Route::prefix('posReturn')->group(function () {
     Route::get('/', [PosReturnApiController::class, 'index']);
     Route::post('/', [PosReturnApiController::class, 'store']);
-    Route::get('/{id}', [PosReturnApiController::class, 'show']);
-    Route::put('/{id}', [PosReturnApiController::class, 'update']);
-    Route::delete('/{id}', [PosReturnApiController::class, 'destroy']);
+    Route::get('/{posReturn}', [PosReturnApiController::class, 'show']);
+    Route::put('/{posReturn}', [PosReturnApiController::class, 'update']);
+    Route::delete('/{posReturn}', [PosReturnApiController::class, 'destroy']);
 
     // POS-Return-Detail Routes
     Route::apiResource('pos_return_details', PosReturnDetailApiController::class);

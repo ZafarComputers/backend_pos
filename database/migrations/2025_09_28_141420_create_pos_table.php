@@ -27,6 +27,11 @@ return new class extends Migration
             $table->foreignId('payment_mode_id')
                   ->constrained('payment_modes')
                   ->cascadeOnDelete();
+
+            // ✅ New foreign key for Employee
+            $table->foreignId('employee_id')
+                  ->constrained('employees')
+                  ->cascadeOnDelete();
         });
     }
 

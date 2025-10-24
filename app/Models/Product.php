@@ -103,5 +103,26 @@ class Product extends Model
         return $this->status === 'Active';
     }
 
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class);
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class);
+    }
+
+    public function seasons()
+    {
+        return $this->belongsToMany(Season::class);
+    }
+
+    public function materials()
+    {
+        return $this->belongsToMany(Material::class);
+    }
+
+
     
 }

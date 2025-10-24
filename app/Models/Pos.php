@@ -20,6 +20,7 @@ class Pos extends Model
         'paid',
         'transaction_type_id', // ✅ new column
         'payment_mode_id', // ✅ new column
+         'employee_id', // ✅ added column
     ];
 
 
@@ -53,7 +54,10 @@ class Pos extends Model
         return $this->status === 'Active';
     }
 
-    
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }   
 
 
 }

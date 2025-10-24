@@ -51,4 +51,9 @@ class Employee extends Model
         return $this->status === 'Active';
     }
 
+    public function posRecords()
+    {
+        return $this->hasMany(Pos::class);
+    }
+
 }

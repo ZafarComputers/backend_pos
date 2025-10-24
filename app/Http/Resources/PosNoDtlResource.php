@@ -22,6 +22,8 @@ class PosNoDtlResource extends JsonResource
             'payment_mode' => $this->payment_mode,
             // 'created_at'   => $this->created_at,
             // 'updated_at'   => $this->updated_at,
+            'salesman'    => $this->employee ? $this->employee->first_name . " " .$this->employee->last_name  : null,
+
         ];
 
         // Add bank info only when payment mode is 'Bank'

@@ -15,14 +15,23 @@ class PosReturnFactory extends Factory
 
     public function definition(): array
     {
+        // Randomly decide whether this return is linked to a POS
+        $posId = $this->faker->boolean(70) // 70% chance it belongs to a POS
+            ? (POS::inRandomOrder()->value('id') ?? POS::factory())
+            : null; // otherwise null (no linked POS)
+
         return [
             'customer_id' => Customer::inRandomOrder()->value('id') ?? Customer::factory(),
-            'pos_id' => POS::inRandomOrder()->value('id') ?? POS::factory(),
+            'pos_id' => $posId,
             'invRet_date' => $this->faker->date(),
             'reason' => $this->faker->sentence(),
-            'return_inv_amout' => $this->faker->randomFloat(2, 100, 3000),
+            
+            'return_inv_amount' => $this->faker->randomFloat(2, 100, 3000),
+            'tax'               => $this->faker->randomFloat(2, 0, 100),
+            'discPer'           => $this->faker->randomFloat(2, 0, 20),
+            'discAmount'        => $this->faker->randomFloat(2, 0, 100),
+            'paid'              => $this->faker->randomFloat(2, 10, 1000),
 
-            // ✅ New Fields to prevent the error
             'transaction_type_id' => TransactionType::where('code', 'SRT')->value('id')
                 ?? TransactionType::inRandomOrder()->value('id')
                 ?? TransactionType::factory(),

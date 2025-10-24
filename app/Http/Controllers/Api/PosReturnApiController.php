@@ -39,22 +39,25 @@ class PosReturnApiController extends Controller
     /**
      * Store a new POS Return.
      */
-    public function storeReturn(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'inv_date'             => 'required|date',
+            'invRet_date'          => 'required|date',
             'payment_mode_id'      => 'required|exists:payment_modes,id',
             'transaction_type_id'  => 'nullable|exists:transaction_types,id',
             'customer_id'          => 'required|exists:customers,id',
             'bank_acc_id'          => 'nullable|exists:coas,id',
+            'pos_id'               => 'nullable|numeric|min:0',
             'tax'                  => 'nullable|numeric|min:0',
             'discPer'              => 'nullable|numeric|min:0',
             'discAmount'           => 'nullable|numeric|min:0',
             'paid'                 => 'nullable|numeric|min:0',
+            'return_inv_amount'    => 'nullable|numeric|min:0',
             'details'              => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty'        => 'required|numeric|min:1',
-            'details.*.sale_price' => 'required|numeric|min:0',
+            'details.*.return_unit_price' => 'required|numeric|min:0',
+            
         ]);
 
         if ($validator->fails()) {
@@ -65,10 +68,10 @@ class PosReturnApiController extends Controller
 
         try {
             // ✅ Calculate totals
-            $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['sale_price']);
+            $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['return_unit_price']);
             $discAmount = $request->discAmount ?? 0;
             $tax = $request->tax ?? 0;
-            $finalAmount = $subtotal - $discAmount + $tax;
+            $finalAmount = $subtotal - $discAmount - $tax;
             $paid = (float) ($request->paid ?? 0);
 
             $payment_status = match (true) {
@@ -79,15 +82,17 @@ class PosReturnApiController extends Controller
 
             // ✅ Create POS Return
             $posReturn = PosReturn::create([
-                'inv_date'            => $request->inv_date,
+                'invRet_date'         => $request->invRet_date,
                 'customer_id'         => $request->customer_id,
+                'pos_id'              => $request->pos_id ?? 0,
                 'tax'                 => $tax,
                 'discPer'             => $request->discPer ?? 0,
                 'discAmount'          => $discAmount,
-                'inv_amount'          => $finalAmount,
+                'return_inv_amount'   => $finalAmount,
                 'paid'                => $paid,
                 'payment_mode_id'     => $request->payment_mode_id,
                 'transaction_type_id' => $request->transaction_type_id ?? 4, // 4 = Sale Return
+                'reason'              => $request->reason ?? '',
                 'payment_status'      => $payment_status,
             ]);
 
@@ -96,8 +101,8 @@ class PosReturnApiController extends Controller
                 $posReturn->details()->create([
                     'product_id' => $detail['product_id'],
                     'qty'        => $detail['qty'],
-                    'sale_price' => $detail['sale_price'],
-                    'total'      => $detail['qty'] * $detail['sale_price'],
+                    'return_unit_price' => $detail['return_unit_price'],
+                    'total'      => $detail['qty'] * $detail['return_unit_price'],
                 ]);
 
                 $product = Product::find($detail['product_id']);
@@ -126,7 +131,7 @@ class PosReturnApiController extends Controller
 
             // ✅ Debit Sale Return
             Transaction::create([
-                'date' => $request->inv_date,
+                'date' => $request->invRet_date,
                 'invRef_id' => $posReturn->id,
                 'transaction_types_id' => $transTypeId,
                 'coas_id' => $coaSalesReturn,
@@ -140,7 +145,7 @@ class PosReturnApiController extends Controller
             // ✅ Credit Cash/Bank/Customer
             if ($payment_status === 'Refunded') {
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
                     'transaction_types_id' => $transTypeId,
                     'coas_id' => $coaRefId,
@@ -154,7 +159,7 @@ class PosReturnApiController extends Controller
                 $balance = $finalAmount - $paid;
 
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
                     'transaction_types_id' => $transTypeId,
                     'coas_id' => $coaRefId,
@@ -166,7 +171,7 @@ class PosReturnApiController extends Controller
                 ]);
 
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
                     'transaction_types_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
@@ -178,7 +183,7 @@ class PosReturnApiController extends Controller
                 ]);
             } else {
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
                     'transaction_types_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
@@ -231,14 +236,16 @@ class PosReturnApiController extends Controller
     /**
      * Update a POS Return.
      */
-    public function updateReturn(Request $request, PosReturn $posReturn)
+    public function update(Request $request, PosReturn $posReturn)
     {
+        // dd($posReturn->id);
         $validator = Validator::make($request->all(), [
-            'inv_date'             => 'required|date',
+            'invRet_date'          => 'required|date',
             'payment_mode_id'      => 'required|exists:payment_modes,id',
             'transaction_type_id'  => 'nullable|exists:transaction_types,id',
             'customer_id'          => 'required|exists:customers,id',
             'bank_acc_id'          => 'nullable|exists:coas,id',
+            'pos_id'               => 'nullable|numeric|min:0',
             'tax'                  => 'nullable|numeric|min:0',
             'discPer'              => 'nullable|numeric|min:0',
             'discAmount'           => 'nullable|numeric|min:0',
@@ -246,7 +253,7 @@ class PosReturnApiController extends Controller
             'details'              => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty'        => 'required|numeric|min:1',
-            'details.*.sale_price' => 'required|numeric|min:0',
+            'details.*.return_unit_price' => 'required|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -256,22 +263,10 @@ class PosReturnApiController extends Controller
         DB::beginTransaction();
 
         try {
-            // ✅ Revert old stock
-            foreach ($posReturn->details as $oldDetail) {
-                $product = Product::find($oldDetail->product_id);
-                if ($product) {
-                    $product->decrement('in_stock_quantity', $oldDetail->qty);
-                    $product->increment('stock_out_quantity', $oldDetail->qty);
-                }
-            }
-
-            // Delete old details
-            $posReturn->details()->delete();
-
             // Recalculate totals
-            $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['sale_price']);
-            $discAmount = $request->discAmount ?? 0;
-            $tax = $request->tax ?? 0;
+            $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['return_unit_price']);
+            $discAmount = (float) ($request->discAmount ?? 0);
+            $tax = (float) ($request->tax ?? 0);
             $finalAmount = $subtotal - $discAmount + $tax;
             $paid = (float) ($request->paid ?? 0);
 
@@ -281,29 +276,49 @@ class PosReturnApiController extends Controller
                 default => 'Partial Refund',
             };
 
-            // ✅ Update POS Return
+            // Update parent pos return
             $posReturn->update([
-                'inv_date'            => $request->inv_date,
+                'invRet_date'         => $request->invRet_date,
                 'customer_id'         => $request->customer_id,
+                'pos_id'              => $request->pos_id ?? $posReturn->pos_id ?? 0,
                 'tax'                 => $tax,
-                'discPer'             => $request->discPer ?? 0,
+                'discPer'             => $request->discPer ?? $posReturn->discPer ?? 0,
                 'discAmount'          => $discAmount,
-                'inv_amount'          => $finalAmount,
+                'return_inv_amount'   => $finalAmount,
                 'paid'                => $paid,
                 'payment_mode_id'     => $request->payment_mode_id,
-                'transaction_type_id' => $request->transaction_type_id ?? 4,
+                'transaction_type_id' => $request->transaction_type_id ?? $posReturn->transaction_type_id ?? 4,
+                'reason'              => $request->reason ?? $posReturn->reason ?? '',
                 'payment_status'      => $payment_status,
             ]);
+            // logger('Updating POS Return ID: ' . $posReturn->id);
 
-            // ✅ Add new details and adjust stock
+
+            // Remove old details and adjust stock/transactions as needed
+            // If you prefer to preserve history, consider soft-delete or move them elsewhere.
+            foreach ($posReturn->details as $oldDetail) {
+                // *Reverse* the earlier stock changes for old details
+                $product = Product::find($oldDetail->product_id);
+                if ($product) {
+                    // remove previously added back stock (since we will re-add based on new details)
+                    $product->decrement('in_stock_quantity', $oldDetail->qty);
+                    $product->increment('stock_out_quantity', $oldDetail->qty);
+                }
+            }
+
+            // Delete old details
+            $posReturn->details()->delete();
+
+            // Create new details via relationship so pos_return_id is set automatically
             foreach ($request->details as $detail) {
-                $posReturn->details()->create([
+                $created = $posReturn->details()->create([
                     'product_id' => $detail['product_id'],
                     'qty'        => $detail['qty'],
-                    'sale_price' => $detail['sale_price'],
-                    'total'      => $detail['qty'] * $detail['sale_price'],
+                    'return_unit_price' => $detail['return_unit_price'],
+                    'total'      => $detail['qty'] * $detail['return_unit_price'],
                 ]);
 
+                // Update product stock (return adds stock back)
                 $product = Product::find($detail['product_id']);
                 if ($product) {
                     $product->increment('in_stock_quantity', $detail['qty']);
@@ -311,83 +326,89 @@ class PosReturnApiController extends Controller
                 }
             }
 
-            // ✅ Recreate Transactions
-            Transaction::where('invRef_id', $posReturn->id)
-                ->where('transaction_types_id', 4)
-                ->delete();
-
+            // TODO: Recreate transactions logic: remove old transactions for this pos_return and recreate.
+            // You should delete or reverse previous Transaction rows related to this posReturn->id before creating new ones.
+            // Below is a simplified recreation that assumes you've already removed old transactions for this invRef_id.
             $userId = Auth::id() ?? 1;
-            $coaSalesReturn = 8;
+            $transTypeId = 4; // Sale Return
+            $coaSalesReturn = 8; // COA for Sale Return (example)
             $paymentModeId = (int) $request->payment_mode_id;
 
             $coaRefId = match ($paymentModeId) {
-                1 => 3,
+                1 => 3, // Cash
                 2 => $request->bank_acc_id,
                 3 => $request->customer_id,
                 default => throw new \Exception("Invalid payment mode selected."),
             };
 
+            if (empty($coaRefId) || !is_numeric($coaRefId)) {
+                throw new \Exception('Invalid COA reference detected.');
+            }
+
+            // Remove old transactions for this pos return (recommended)
+            Transaction::where('invRef_id', $posReturn->id)->delete();
+
             // Debit Sale Return
             Transaction::create([
-                'date' => $request->inv_date,
+                'date' => $request->invRet_date,
                 'invRef_id' => $posReturn->id,
-                'transaction_types_id' => 4,
+                'transaction_types_id' => $transTypeId,
                 'coas_id' => $coaSalesReturn,
                 'coaRef_id' => $coaRefId,
                 'users_id' => $userId,
-                'description' => 'POS Return Update: INV-' . $posReturn->id,
+                'description' => 'POS Return: INV-' . $posReturn->id,
                 'debit' => $finalAmount,
                 'credit' => 0,
             ]);
 
-            // Credit Side Logic (Refund / Partial / Credit)
+            // Credit according to payment_status
             if ($payment_status === 'Refunded') {
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => 4,
+                    'transaction_types_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
-                    'description' => 'POS Return Update (Full Refund): INV-' . $posReturn->id,
+                    'description' => 'POS Return (Full Refund): INV-' . $posReturn->id,
                     'debit' => 0,
                     'credit' => $finalAmount,
                 ]);
             } elseif ($payment_status === 'Partial Refund') {
-                $balance = $finalAmount - $paid;
-
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => 4,
+                    'transaction_types_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
-                    'description' => 'POS Return Update (Partial Refund): INV-' . $posReturn->id,
+                    'description' => 'POS Return (Partial Refund): INV-' . $posReturn->id,
                     'debit' => 0,
                     'credit' => $paid,
                 ]);
 
+                $balance = $finalAmount - $paid;
+
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => 4,
+                    'transaction_types_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
-                    'description' => 'POS Return Update (Balance Unpaid): INV-' . $posReturn->id,
+                    'description' => 'POS Return (Balance Unpaid): INV-' . $posReturn->id,
                     'debit' => 0,
                     'credit' => $balance,
                 ]);
             } else {
                 Transaction::create([
-                    'date' => $request->inv_date,
+                    'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => 4,
+                    'transaction_types_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
-                    'description' => 'POS Return Update (Credit): INV-' . $posReturn->id,
+                    'description' => 'POS Return (On Credit): INV-' . $posReturn->id,
                     'debit' => 0,
                     'credit' => $finalAmount,
                 ]);
@@ -396,17 +417,22 @@ class PosReturnApiController extends Controller
             DB::commit();
 
             $posReturn->load(['details.product', 'customer']);
+
             return response()->json([
                 'status' => true,
                 'message' => 'POS Return updated successfully.',
                 'data' => new PosReturnResource($posReturn),
-            ]);
-
-        } catch (\Exception $e) {
+            ], 200);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json(['status' => false, 'message' => 'Failed to update POS Return', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to update POS Return',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
+
 
 
 

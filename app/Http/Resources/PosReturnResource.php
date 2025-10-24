@@ -14,18 +14,18 @@ class PosReturnResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'invRet_date' => $this->invRet_date,
-            'return_inv_amout' => $this->return_inv_amout,
-            'Description' => $this->reason,
-
+            'return_id' => $this->id,
+            'customerName' => $this->customer->name ?? null,
             'pos_id' => $this->pos_id,
-            // 'pos_invoice' => $this->pos ? $this->pos->inv_no ?? null : null,
-
-            'customer' => [
-                'id' => $this->customer->id ?? null,
-                'name' => $this->customer->name ?? null,
-            ],
+            'invRet_date' => $this->invRet_date,
+            'reason'   => $this->reason,
+            'return_inv_amount' => $this->return_inv_amount,
+            'tax' => $this->tax,
+            'discPer' => $this->discPer,
+            'discAmount' => $this->discAmount,
+            'paid' => $this->paid, 
+            'transaction_type_id' =>$this->transaction_type_id , // ✅ new column
+            'payment_mode_id' => $this->payment_mode_id , // ✅ new column
 
             'details' => PosReturnDetailResource::collection($this->whenLoaded('details')),
 

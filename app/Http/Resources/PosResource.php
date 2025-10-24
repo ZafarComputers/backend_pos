@@ -21,6 +21,9 @@ class PosResource extends JsonResource
                 2 => 'Bank',
                 default => 'Credit',
             },
+            'transaction_type_id' => $this->transaction_type_id,
+            'salesman'    => $this->employee ? $this->employee->first_name . " " .$this->employee->last_name  : null,
+
             // 'note'         => $this->note,
         ];
         

@@ -11,11 +11,14 @@ class PosReturn extends Model
 
     protected $fillable = [
         'customer_id',
-        'vendor_id',
-        'invRet_date',
         'pos_id',
+        'invRet_date',
         'reason',
-        'return_inv_amout',
+        'return_inv_amount',
+        'tax',
+        'discPer',
+        'discAmount',
+        'paid', 
         'transaction_type_id', // ✅ new column
         'payment_mode_id', // ✅ new column
     ];
@@ -32,10 +35,15 @@ class PosReturn extends Model
         return $this->belongsTo(Pos::class, 'pos_id');
     }
 
+    // public function details()
+    // {
+    //     return $this->hasMany(PosReturnDetail::class, 'pos_return_id');
+    // }
     public function details()
     {
-        return $this->hasMany(PosReturnDetail::class, 'pos_return_id');
+        return $this->hasMany(PosReturnDetail::class, 'pos_return_id', 'id');
     }
+
     
     public function paymentMode()
     {
@@ -47,7 +55,6 @@ class PosReturn extends Model
         return $this->belongsTo(Vendor::class);
     }
 
-
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'transactionable');
@@ -57,7 +64,12 @@ class PosReturn extends Model
     {
         return $this->belongsTo(TransactionType::class, 'transaction_type_id');
     }
-
+    
+    public function isActive()
+    {
+        return $this->status === 'Active';
+    }
+    
     // public function transactions()
     // {
     //     return $this->morphMany(Transaction::class, 'transactionable');
@@ -69,11 +81,6 @@ class PosReturn extends Model
     // {
     //     return $this->hasMany(Transaction::class, 'pos_return_id');
     // }
-
-    public function isActive()
-    {
-        return $this->status === 'Active';
-    }
 
     
 
