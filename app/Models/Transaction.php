@@ -11,22 +11,27 @@ class Transaction extends Model
 
     protected $fillable = [
         'date',
+        'transaction_type_id',
         'invRef_id',
-        'transaction_types_id',
         'coas_id',
         'coaRef_id',
         'description',
         'debit',
         'credit',
-        'users_id', // optional if you want to track who created
-
+        'users_id',
+    
     ];
 
     // Relations (optional)
     public function transactionType()
     {
-        return $this->belongsTo(TransactionType::class, 'transaction_types_id');
+        return $this->belongsTo(TransactionType::class);
     }
+
+    // public function transactionType()
+    // {
+    //     return $this->belongsTo(TransactionType::class, 'transaction_types_id');
+    // }
 
     public function coa()
     {

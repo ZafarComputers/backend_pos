@@ -27,7 +27,8 @@ class PosApiController extends Controller
     public function index()
     {
         // ✅ Include employee relationship
-        $pos = Pos::with(['details', 'employee'])->latest()->get();
+        $pos = Pos::with(['details', 'employee', 'paymentMode'])->latest()->get();
+        // dd($pos);
         return PosNoDtlResource::collection($pos);
     }
 
@@ -79,7 +80,7 @@ class PosApiController extends Controller
             $pos = Pos::create([
                 'inv_date'            => $request->inv_date,
                 'customer_id'         => $request->customer_id,
-                'employee_id'         => $request->employee_id, // ✅ new line
+                'employee_id'        => $request->employee_id, // ✅ new line
                 'tax'                 => $tax,
                 'discPer'             => $request->discPer ?? 0,
                 'discAmount'          => $discAmount,
@@ -128,7 +129,7 @@ class PosApiController extends Controller
             Transaction::create([
                 'date' => $request->inv_date,
                 'invRef_id' => $pos->id,
-                'transaction_types_id' => $transTypeId,
+                'transaction_type_id' => $transTypeId,
                 'coas_id' => $coaSales,
                 'coaRef_id' => $coaRefId,
                 'users_id' => $userId,
@@ -142,7 +143,7 @@ class PosApiController extends Controller
                 Transaction::create([
                     'date' => $request->inv_date,
                     'invRef_id' => $pos->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSales,
                     'users_id' => $userId,
@@ -156,7 +157,7 @@ class PosApiController extends Controller
                 Transaction::create([
                     'date' => $request->inv_date,
                     'invRef_id' => $pos->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSales,
                     'users_id' => $userId,
@@ -168,7 +169,7 @@ class PosApiController extends Controller
                 Transaction::create([
                     'date' => $request->inv_date,
                     'invRef_id' => $pos->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSales,
                     'users_id' => $userId,
@@ -180,7 +181,7 @@ class PosApiController extends Controller
                 Transaction::create([
                     'date' => $request->inv_date,
                     'invRef_id' => $pos->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSales,
                     'users_id' => $userId,
@@ -227,17 +228,25 @@ class PosApiController extends Controller
     /**
      * Update POS with transactions.
      */
-    public function update(Request $request, Pos $pos)
+    public function update(Request $request, $id)
     {
+        // 🔍 Find POS by ID (manual model lookup since route uses {id})
+        $pos = Pos::with('details')->find($id);
+
+        if (!$pos) {
+            return response()->json([
+                'status' => false,
+                'message' => 'POS record not found.',
+            ], 404);
+        }
+
+        // ✅ Validation
         $validator = Validator::make($request->all(), [
             'inv_date'             => 'required|date',
             'payment_mode_id'      => 'required|exists:payment_modes,id',
             'transaction_type_id'  => 'nullable|exists:transaction_types,id',
             'customer_id'          => 'required|exists:customers,id',
-            'employee_id'          => 'required|exists:employees,id', // ✅ new validation
-            'coa_id'               => 'nullable|exists:coas,id',
-            'coaRef_id'            => 'nullable|exists:coas,id',
-            'bank_acc_id'          => 'nullable|exists:coas,id',
+            'employee_id'          => 'required|exists:employees,id',
             'tax'                  => 'nullable|numeric|min:0',
             'discPer'              => 'nullable|numeric|min:0',
             'discAmount'           => 'nullable|numeric|min:0',
@@ -249,13 +258,16 @@ class PosApiController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
         DB::beginTransaction();
 
         try {
-            // ✅ Update POS data (with employee_id)
+            // 🧮 Calculate totals
             $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['sale_price']);
             $discAmount = $request->discAmount ?? 0;
             $tax = $request->tax ?? 0;
@@ -268,7 +280,7 @@ class PosApiController extends Controller
                 default => 'Partial',
             };
 
-            // Revert old stock
+            // 🔄 Revert old stock
             foreach ($pos->details as $oldDetail) {
                 $product = Product::find($oldDetail->product_id);
                 if ($product) {
@@ -277,13 +289,14 @@ class PosApiController extends Controller
                 }
             }
 
-            // Delete old details
+            // ❌ Delete old details
             $pos->details()->delete();
 
+            // ✏️ Update POS main record
             $pos->update([
                 'inv_date'            => $request->inv_date,
                 'customer_id'         => $request->customer_id,
-                'employee_id'         => $request->employee_id, // ✅ new line
+                'employee_id'         => $request->employee_id,
                 'tax'                 => $tax,
                 'discPer'             => $request->discPer ?? 0,
                 'discAmount'          => $discAmount,
@@ -294,13 +307,26 @@ class PosApiController extends Controller
                 'payment_status'      => $payment_status,
             ]);
 
-            // Store new details + adjust stock (same logic)
+            // 🆕 Add new details + update stock
+            foreach ($request->details as $detail) {
+                $pos->details()->create([
+                    'product_id' => $detail['product_id'],
+                    'qty'        => $detail['qty'],
+                    'sale_price' => $detail['sale_price'],
+                ]);
 
-            // ... [rest of update method remains same] ...
+                $product = Product::find($detail['product_id']);
+                if ($product) {
+                    $product->increment('stock_out_quantity', $detail['qty']);
+                    $product->decrement('in_stock_quantity', $detail['qty']);
+                }
+            }
 
             DB::commit();
 
-            $pos->load(['details.product', 'customer', 'employee']); // ✅ include employee
+            // 🔁 Reload relationships for the response
+            $pos->load(['details.product', 'customer', 'employee', 'paymentMode', 'transactionType']);
+
             return response()->json([
                 'status' => true,
                 'message' => 'POS updated successfully.',
@@ -353,6 +379,50 @@ class PosApiController extends Controller
                 'Earning' => round($todaysEarning, 2), 
             ], 
         ]); 
+    }
+
+
+
+    /**
+     * Fetch POS records and summary for a specific salesman (employee).
+     */
+    public function getSalesmanReport($employee_id)
+    {
+        // Fetch all POS for this salesman with relationships
+        $posRecords = Pos::with([
+            'customer:id,name',
+            'details.product:id,title',
+        ])
+        ->where('employee_id', $employee_id)
+        ->orderByDesc('inv_date')
+        ->get();
+
+        if ($posRecords->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No sales records found for this salesman.',
+            ], 404);
+        }
+
+        // ✅ Summary Calculations
+        $summary = [
+            // 'salesman' => Employee::find($employee_id)->first_name . " " . ->last_name ?? 'Unknown',
+            'salesman' => optional(Employee::find($employee_id))->first_name
+                ? optional(Employee::find($employee_id))->first_name . ' ' . optional(Employee::find($employee_id))->last_name
+                : 'Unknown',
+            'total_invoices' => $posRecords->count(),
+            'total_sales_amount' => $posRecords->sum('inv_amount'),
+            'total_paid' => $posRecords->sum('paid'),
+            'total_discount' => $posRecords->sum('discAmount'),
+            'total_tax' => $posRecords->sum('tax'),
+        ];
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Salesman report retrieved successfully.',
+            'summary' => $summary,
+            'data' => PosResource::collection($posRecords),
+        ]);
     }
 
 

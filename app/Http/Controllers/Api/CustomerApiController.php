@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\Api;
 
+// Controllers
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 
+// Resources
+use App\Http\Resources\CustomerResource;
+
+// Models
+use App\Models\Customer;
+
 class CustomerApiController extends Controller
 {
     /**
-     * Display a listing of customers with their city.
+     * Display all customers.
      */
     public function index(Request $request): JsonResponse
     {
-        $perPage = $request->input('per_page', 10);
-        $customers = Customer::with('city')->paginate($perPage);
+        $customers = Customer::with('city')->latest()->get();
 
         return response()->json([
             'success' => true,
-            'data' => $customers->items(),
-            'pagination' => [
-                'current_page' => $customers->currentPage(),
-                'per_page' => $customers->perPage(),
-                'total' => $customers->total(),
-                'last_page' => $customers->lastPage(),
-            ],
+            'data' => CustomerResource::collection($customers),
+            'total' => $customers->count(),
         ], 200);
     }
 
@@ -39,7 +39,8 @@ class CustomerApiController extends Controller
         $validator = Validator::make($request->all(), [
             'cnic' => 'required|string|max:20|unique:customers,cnic',
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:customers,email',
+            // 'email' => 'nullable|email|unique:customers,email',
+            'email' => 'nullable|email',
             'address' => 'nullable|string|max:500',
             'city_id' => 'required|exists:cities,id',
             'cell_no1' => 'required|string|max:15',
@@ -64,7 +65,7 @@ class CustomerApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Customer created successfully',
-            'data' => $customer->load('city'),
+            'data' => new CustomerResource($customer->load('city')),
         ], 201);
     }
 
@@ -75,7 +76,7 @@ class CustomerApiController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => $customer->load('city'),
+            'data' => new CustomerResource($customer->load('city')),
         ], 200);
     }
 
@@ -87,7 +88,8 @@ class CustomerApiController extends Controller
         $validator = Validator::make($request->all(), [
             'cnic' => 'required|string|max:20|unique:customers,cnic,' . $customer->id,
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:customers,email,' . $customer->id,
+            // 'email' => 'nullable|email|unique:customers,email,' . $customer->id,
+            'email' => 'nullable|email',
             'address' => 'nullable|string|max:500',
             'city_id' => 'required|exists:cities,id',
             'cell_no1' => 'required|string|max:15',
@@ -112,7 +114,7 @@ class CustomerApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Customer updated successfully',
-            'data' => $customer->load('city'),
+            'data' => new CustomerResource($customer->load('city')),
         ], 200);
     }
 

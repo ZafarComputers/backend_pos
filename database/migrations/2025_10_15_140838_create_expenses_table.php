@@ -16,9 +16,18 @@ return new class extends Migration {
                   ->constrained('transaction_types')
                   ->cascadeOnDelete();
 
+            // $table->foreignId('expense_category_id')
+            //       ->constrained('expense_categories')
+            //       ->cascadeOnDelete();
+
             $table->foreignId('expense_category_id')
-                  ->constrained('expense_categories')
+                  ->constrained('coas')
                   ->cascadeOnDelete();
+
+
+            //  $table->foreignId('coa_id')
+            //       ->constrained('coas')
+            //       ->cascadeOnDelete();
 
             $table->foreignId('payment_mode_id')
                   ->constrained('payment_modes')

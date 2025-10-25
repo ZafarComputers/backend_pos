@@ -27,7 +27,9 @@ class Expense extends Model
      */
     public function category()
     {
-        return $this->belongsTo(ExpenseCategory::class, 'expense_category_id');
+        // return $this->belongsTo(ExpenseCategory::class, 'expense_category_id');
+        return $this->belongsTo(Coa::class, 'expense_category_id');
+
     }
 
     /**
@@ -60,5 +62,31 @@ class Expense extends Model
     {
         return $this->status === 'Active';
     }
+    
+    public function payOut()
+    {
+        return $this->hasOne(PayOut::class, 'transaction_type_id', 'transaction_type_id');
+    }   
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id', 'id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by', 'id');
+    }   
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id', 'id');
+    }
+
     
 }

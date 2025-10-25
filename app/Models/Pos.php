@@ -44,6 +44,11 @@ class Pos extends Model
         return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
     }
 
+    public function transactionType()
+    {
+        return $this->belongsTo(TransactionType::class, 'transaction_type_id');
+    }
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'invRef_id');

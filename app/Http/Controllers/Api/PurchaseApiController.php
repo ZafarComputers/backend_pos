@@ -3,25 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PurchaseResource;
 use App\Models\Purchase;
-use Illuminate\Http\Request;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\TransactionHelper;
-
 
 class PurchaseApiController extends Controller
 {
     /**
-     * Display a listing of purchases.
+     * Display all purchases with relationships.
      */
     public function index(Request $request)
     {
-        $query = Purchase::with(['vendor', 'details.product', 'details.product.category', 'paymentMode'])->latest();
-
-            //    $pos = Pos::with('details')->latest()->get();
- 
+        $query = Purchase::with(['vendor', 'details.product.category', 'paymentMode'])
+            ->latest();
 
         if ($request->filled('payment_status')) {
             $status = strtolower($request->query('payment_status'));
@@ -30,63 +28,65 @@ class PurchaseApiController extends Controller
             }
         }
 
-        return PurchaseResource::collection($query->get());
+        return response()->json([
+            'status' => true,
+            'data' => PurchaseResource::collection($query->get()),
+        ]);
     }
 
     /**
-     * Store a newly created purchase.
+     * Store a new Purchase (with transactions and details)
      */
-    
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'pur_date' => 'required|date',
+            'pur_inv_barcode' => 'required|string|max:255|unique:purchases,pur_inv_barcode',
+            'vendor_id' => 'required|exists:vendors,id',
+            'ven_inv_no' => 'nullable|string|max:255',
+            'ven_inv_date' => 'nullable|date',
+            'ven_inv_ref' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'discount_percent' => 'nullable|numeric|min:0',
+            'discount_amt' => 'nullable|numeric|min:0',
+            'payment_status' => 'required|in:paid,unpaid,overdue',
+            'payment_mode_id' => 'required|exists:payment_modes,id',
+            'transaction_type_id' => 'required|exists:transaction_types,id',
+            'details' => 'required|array|min:1',
+            'details.*.product_id' => 'required|exists:products,id',
+            'details.*.qty' => 'required|numeric|min:1',
+            'details.*.unit_price' => 'required|numeric|min:0',
+            'details.*.discAmount' => 'nullable|numeric|min:0',
+        ]);
+
         DB::beginTransaction();
 
         try {
-            // ✅ Step 1: Validate and store Purchase (your existing validation)
-            $data = $request->validate([
-                'pur_date' => 'required|date',
-                'pur_inv_barcode' => 'required|string|max:255',
-                'vendor_id' => 'required|integer|exists:vendors,id',
-                'ven_inv_no' => 'nullable|string|max:255',
-                'ven_inv_date' => 'nullable|date',
-                'ven_inv_ref' => 'nullable|string|max:255',
-                'description' => 'nullable|string',
-                'discount_percent' => 'nullable|numeric|min:0',
-                'discount_amt' => 'nullable|numeric|min:0',
-                'payment_status' => 'required|in:paid,unpaid,overdue',
-                'payment_mode_id' => 'required|exists:payment_modes,id',
-                'transaction_type_id' => 'required|exists:transaction_types,id',
-                'details' => 'required|array|min:1',
-                'details.*.product_id' => 'required|exists:products,id',
-                'details.*.qty' => 'required|numeric|min:1',
-                'details.*.unit_price' => 'required|numeric|min:0',
-                'details.*.discAmount' => 'nullable|numeric|min:0',
-            ]);
+            // ✅ Calculate total
+            $totalAmount = collect($validated['details'])->sum(function ($item) {
+                return ($item['qty'] * $item['unit_price']) - ($item['discAmount'] ?? 0);
+            });
 
-            // ✅ Step 2: Calculate total amount
-            $totalAmount = collect($data['details'])->sum(fn($d) =>
-                ($d['qty'] * $d['unit_price']) - ($d['discAmount'] ?? 0)
-            );
-
-            // ✅ Step 3: Create Purchase
+            // ✅ Create Purchase
             $purchase = Purchase::create([
-                'pur_date' => $data['pur_date'],
-                'pur_inv_barcode' => $data['pur_inv_barcode'],
-                'vendor_id' => $data['vendor_id'],
-                'ven_inv_no' => $data['ven_inv_no'] ?? null,
-                'ven_inv_date' => $data['ven_inv_date'] ?? null,
-                'ven_inv_ref' => $data['ven_inv_ref'] ?? null,
-                'description' => $data['description'] ?? null,
-                'discount_percent' => $data['discount_percent'] ?? 0,
-                'discount_amt' => $data['discount_amt'] ?? 0,
+                'pur_date' => $validated['pur_date'],
+                'pur_inv_barcode' => $validated['pur_inv_barcode'],
+                'vendor_id' => $validated['vendor_id'],
+                'ven_inv_no' => $validated['ven_inv_no'] ?? null,
+                'ven_inv_date' => $validated['ven_inv_date'] ?? null,
+                'ven_inv_ref' => $validated['ven_inv_ref'] ?? null,
+                'description' => $validated['description'] ?? null,
+                'discount_percent' => $validated['discount_percent'] ?? 0,
+                'discount_amt' => $validated['discount_amt'] ?? 0,
                 'inv_amount' => $totalAmount,
-                'payment_status' => $data['payment_status'],
-                'transaction_type_id' => $data['transaction_type_id'],
-                'payment_mode_id' => $data['payment_mode_id'],
+                'payment_status' => $validated['payment_status'],
+                'transaction_type_id' => $validated['transaction_type_id'],
+                'payment_mode_id' => $validated['payment_mode_id'],
+                'users_id' => Auth::id(),
             ]);
 
-            // ✅ Step 4: Store Details
-            foreach ($data['details'] as $detail) {
+            // ✅ Add details
+            foreach ($validated['details'] as $detail) {
                 $purchase->details()->create([
                     'product_id' => $detail['product_id'],
                     'qty' => $detail['qty'],
@@ -96,213 +96,198 @@ class PurchaseApiController extends Controller
                 ]);
             }
 
-            // Add double-entry transactions
-            if ($purchase->payment_mode_id == 1) {
-                // Cash purchase
-                TransactionHelper::createDoubleEntry(
-                    $purchase->pur_date,
-                    $purchase->id,
-                    $purchase->transaction_type_id,
-                    6, // coa_id for Purchases (example)
-                    3, // coa_id for Cash
-                    auth()->id(),
-                    $purchase->description,
-                    $purchase->inv_amount
-                );
-            } elseif ($purchase->payment_mode_id == 2) {
-                // Bank purchase
-                TransactionHelper::createDoubleEntry(
-                    $purchase->pur_date,
-                    $purchase->id,
-                    $purchase->transaction_type_id,
-                    6, // Purchases
-                    4, // Bank
-                    auth()->id(),
-                    $purchase->description,
-                    $purchase->inv_amount
-                );
-            } elseif ($purchase->payment_mode_id == 3) {
-                // Credit purchase
-                TransactionHelper::createDoubleEntry(
-                    $purchase->pur_date,
-                    $purchase->id,
-                    $purchase->transaction_type_id,
-                    6, // Purchases
-                    $purchase->vendor_id, // Vendor as COA reference
-                    auth()->id(),
-                    $purchase->description,
-                    $purchase->inv_amount
-                );
-            }
+            // ✅ Create double-entry transactions (same logic as PosApiController)
+            $this->createPurchaseTransaction($purchase);
 
             DB::commit();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Purchase and related transactions stored successfully.',
-                'data' => $purchase->load('details', 'vendor'),
+                'message' => 'Purchase stored successfully with related transactions.',
+                'data' => new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode'])),
             ]);
-
-        } catch (\Exception $e) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to store purchase: ' . $e->getMessage(),
+                'message' => 'Failed to store purchase: ' . $th->getMessage(),
             ], 500);
         }
     }
 
-
-    // public function store(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'pur_date' => 'required|date',
-    //         'pur_inv_barcode' => 'required|string|max:255',
-    //         'vendor_id' => 'required|integer|exists:vendors,id',
-    //         'ven_inv_no' => 'nullable|string|max:255',
-    //         'ven_inv_date' => 'nullable|date',
-    //         'ven_inv_ref' => 'nullable|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'discount_percent' => 'nullable|numeric|min:0',
-    //         'discount_amt' => 'nullable|numeric|min:0',
-    //         'payment_status' => 'required|in:paid,unpaid,overdue',
-
-    //         // ✅ Must be provided
-    //         'payment_mode_id' => 'required|exists:payment_modes,id',
-    //         'transaction_type_id' => 'required|exists:transaction_types,id',
-
-    //         // ✅ Details validation
-    //         'details' => 'required|array|min:1',
-    //         'details.*.product_id' => 'required|exists:products,id',
-    //         'details.*.qty' => 'required|numeric|min:1',
-    //         'details.*.unit_price' => 'required|numeric|min:0',
-    //         'details.*.discAmount' => 'nullable|numeric|min:0',
-    //     ]);
-
-    //     // ✅ Calculate total amount
-    //     $totalAmount = collect($data['details'])->sum(function ($detail) {
-    //         return ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0);
-    //     });
-
-    //     // ✅ Create Purchase
-    //     $purchase = Purchase::create([
-    //         'pur_date' => $data['pur_date'],
-    //         'pur_inv_barcode' => $data['pur_inv_barcode'],
-    //         'vendor_id' => $data['vendor_id'],
-    //         'ven_inv_no' => $data['ven_inv_no'] ?? null,
-    //         'ven_inv_date' => $data['ven_inv_date'] ?? null,
-    //         'ven_inv_ref' => $data['ven_inv_ref'] ?? null,
-    //         'description' => $data['description'] ?? null,
-    //         'discount_percent' => $data['discount_percent'] ?? 0,
-    //         'discount_amt' => $data['discount_amt'] ?? 0,
-    //         'inv_amount' => $totalAmount,
-    //         'payment_status' => $data['payment_status'],
-    //         'transaction_type_id' => $data['transaction_type_id'],
-    //         'payment_mode_id' => $data['payment_mode_id'],
-    //     ]);
-
-    //     // ✅ Save details
-    //     foreach ($data['details'] as $detail) {
-    //         $purchase->details()->create([
-    //             'product_id' => $detail['product_id'],
-    //             'qty' => $detail['qty'],
-    //             'unit_price' => $detail['unit_price'],
-    //             'discAmount' => $detail['discAmount'] ?? 0,
-    //             'amount' => ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0),
-    //         ]);
-    //     }
-
-    //     return new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode']));
-    // }
-
     /**
-     * Display the specified purchase.
-     */
-    public function show(Purchase $purchase)
-    {
-        return new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode']));
-    }
-
-    /**
-     * Update the specified purchase.
+     * Update an existing purchase.
      */
     public function update(Request $request, Purchase $purchase)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'pur_date' => 'required|date',
+            'pur_inv_barcode' => 'required|string|max:255|unique:purchases,pur_inv_barcode,' . $purchase->id,
+            'vendor_id' => 'required|exists:vendors,id',
+            'ven_inv_no' => 'nullable|string|max:255',
+            'ven_inv_date' => 'nullable|date',
+            'ven_inv_ref' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'inv_amount' => 'required|numeric|min:0',
+            'discount_percent' => 'nullable|numeric|min:0',
+            'discount_amt' => 'nullable|numeric|min:0',
+            'payment_status' => 'required|in:paid,unpaid,overdue',
             'payment_mode_id' => 'required|exists:payment_modes,id',
+            'transaction_type_id' => 'required|exists:transaction_types,id',
+            'details' => 'required|array|min:1',
+            'details.*.product_id' => 'required|exists:products,id',
+            'details.*.qty' => 'required|numeric|min:1',
+            'details.*.unit_price' => 'required|numeric|min:0',
+            'details.*.discAmount' => 'nullable|numeric|min:0',
         ]);
 
-        // ✅ Update the purchase
-        $purchase->update($data);
+        DB::beginTransaction();
 
-        // ✅ Delete old transactions for this purchase
-        Transaction::where('invRef_id', $purchase->id)
-            ->where('transaction_types_id', $purchase->transaction_type_id)
-            ->delete();
+        try {
+            $totalAmount = collect($validated['details'])->sum(function ($item) {
+                return ($item['qty'] * $item['unit_price']) - ($item['discAmount'] ?? 0);
+            });
 
-        // ✅ Recreate double entries
-        if ($purchase->payment_mode_id == 1) {
-            // Cash Purchase
-            TransactionHelper::createDoubleEntry(
-                $purchase->pur_date,
-                $purchase->id,
-                $purchase->transaction_type_id,
-                6, // Purchases
-                3, // Cash
-                auth()->id(),
-                $purchase->description,
-                $purchase->inv_amount
-            );
-        } elseif ($purchase->payment_mode_id == 2) {
-            // Bank Purchase
-            TransactionHelper::createDoubleEntry(
-                $purchase->pur_date,
-                $purchase->id,
-                $purchase->transaction_type_id,
-                6, // Purchases
-                4, // Bank
-                auth()->id(),
-                $purchase->description,
-                $purchase->inv_amount
-            );
-        } elseif ($purchase->payment_mode_id == 3) {
-            // Credit Purchase
-            TransactionHelper::createDoubleEntry(
-                $purchase->pur_date,
-                $purchase->id,
-                $purchase->transaction_type_id,
-                6, // Purchases
-                $purchase->vendor_id, // Vendor
-                auth()->id(),
-                $purchase->description,
-                $purchase->inv_amount
-            );
+            $purchase->update([
+                'pur_date' => $validated['pur_date'],
+                'pur_inv_barcode' => $validated['pur_inv_barcode'],
+                'vendor_id' => $validated['vendor_id'],
+                'ven_inv_no' => $validated['ven_inv_no'] ?? null,
+                'ven_inv_date' => $validated['ven_inv_date'] ?? null,
+                'ven_inv_ref' => $validated['ven_inv_ref'] ?? null,
+                'description' => $validated['description'] ?? null,
+                'discount_percent' => $validated['discount_percent'] ?? 0,
+                'discount_amt' => $validated['discount_amt'] ?? 0,
+                'inv_amount' => $totalAmount,
+                'payment_status' => $validated['payment_status'],
+                'transaction_type_id' => $validated['transaction_type_id'],
+                'payment_mode_id' => $validated['payment_mode_id'],
+                'users_id' => Auth::id(),
+            ]);
+
+            // ✅ Refresh purchase details
+            $purchase->details()->delete();
+            foreach ($validated['details'] as $detail) {
+                $purchase->details()->create([
+                    'product_id' => $detail['product_id'],
+                    'qty' => $detail['qty'],
+                    'unit_price' => $detail['unit_price'],
+                    'discAmount' => $detail['discAmount'] ?? 0,
+                    'amount' => ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0),
+                ]);
+            }
+
+            // ✅ Recreate transactions
+            Transaction::where('invRef_id', $purchase->id)
+                ->where('transaction_type_id', $purchase->transaction_type_id)
+                ->delete();
+
+            $this->createPurchaseTransaction($purchase);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Purchase updated successfully.',
+                'data' => new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode'])),
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to update purchase: ' . $th->getMessage(),
+            ], 500);
         }
-
-        return new PurchaseResource($purchase->load(['transactions']));
     }
 
+    /**
+     * Show a single purchase.
+     */
+    public function show(Purchase $purchase)
+    {
+        return response()->json([
+            'status' => true,
+            'data' => new PurchaseResource($purchase->load(['vendor', 'details.product', 'paymentMode'])),
+        ]);
+    }
 
     /**
-     * Remove the specified purchase.
+     * Delete a purchase and its transactions.
      */
     public function destroy(Purchase $purchase)
     {
-        // Delete related transactions
-        Transaction::where('invRef_id', $purchase->id)
-            ->where('transaction_types_id', $purchase->transaction_type_id)
-            ->delete();
+        DB::beginTransaction();
 
-        // Delete purchase
-        $purchase->delete();
+        try {
+            Transaction::where('invRef_id', $purchase->id)
+                ->where('transaction_type_id', $purchase->transaction_type_id)
+                ->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Purchase and related transactions deleted successfully.'
-        ]);
+            $purchase->details()->delete();
+            $purchase->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Purchase and related transactions deleted successfully.',
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to delete purchase: ' . $th->getMessage(),
+            ], 500);
+        }
     }
 
+    /**
+     * Handle transaction creation (same logic as POS).
+     */
+    private function createPurchaseTransaction(Purchase $purchase)
+    {
+        $coaPurchase = 6; // Example COA ID for Purchases
+        $coaCash = 3;     // COA ID for Cash
+        $coaBank = 4;     // COA ID for Bank
+
+        switch ($purchase->payment_mode_id) {
+            case 1: // Cash Purchase
+                TransactionHelper::createDoubleEntry(
+                    $purchase->pur_date,
+                    $purchase->id,
+                    $purchase->transaction_type_id,
+                    $coaPurchase,
+                    $coaCash,
+                    Auth::id(),
+                    $purchase->description,
+                    $purchase->inv_amount
+                );
+                break;
+
+            case 2: // Bank Purchase
+                TransactionHelper::createDoubleEntry(
+                    $purchase->pur_date,
+                    $purchase->id,
+                    $purchase->transaction_type_id,
+                    $coaPurchase,
+                    $coaBank,
+                    Auth::id(),
+                    $purchase->description,
+                    $purchase->inv_amount
+                );
+                break;
+
+            case 3: // Credit Purchase
+                TransactionHelper::createDoubleEntry(
+                    $purchase->pur_date,
+                    $purchase->id,
+                    $purchase->transaction_type_id,
+                    $coaPurchase,
+                    $purchase->vendor_id,
+                    Auth::id(),
+                    $purchase->description,
+                    $purchase->inv_amount
+                );
+                break;
+        }
+    }
 }

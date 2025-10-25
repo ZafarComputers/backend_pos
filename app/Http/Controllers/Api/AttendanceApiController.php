@@ -36,27 +36,52 @@ class AttendanceApiController extends Controller
         ]);
     }
 
+
+    // ✅ Flat: get all attendances across all employees
+    public function indexAll()
+    {
+        $attendances = Attendance::with('employee:id,first_name,last_name,email')->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'All attendances retrieved successfully.',
+            'data' => AttendanceResource::collection($attendances),
+        ]);
+    }
+
+    // ✅ Nested: attendances for one specific employee
+    public function index($employeeId)
+    {
+        $attendances = Attendance::where('employee_id', $employeeId)->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Employee attendances retrieved successfully.',
+            'data' => AttendanceResource::collection($attendances),
+        ]);
+    }
+
     /**
      * 🧩 Get attendance for one employee
      */
-    public function index($employeeId)
-    {
-        $employee = Employee::with(['attendances' => fn($q) => $q->latest(), 'role', 'city'])
-            ->find($employeeId);
+    // public function index($employeeId)
+    // {
+    //     $employee = Employee::with(['attendances' => fn($q) => $q->latest(), 'role', 'city'])
+    //         ->find($employeeId);
 
-        if (!$employee) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Employee not found.',
-            ], 404);
-        }
+    //     if (!$employee) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Employee not found.',
+    //         ], 404);
+    //     }
 
-        return response()->json([
-            'success' => true,
-            'message' => "Attendance list for {$employee->first_name} retrieved successfully.",
-            'data' => new EmployeeAttendanceResource($employee),
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => "Attendance list for {$employee->first_name} retrieved successfully.",
+    //         'data' => new EmployeeAttendanceResource($employee),
+    //     ]);
+    // }
 
     /**
      * 🧩 Store attendance for an employee

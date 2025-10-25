@@ -12,8 +12,8 @@ class ExpenseSeeder extends Seeder
     {
         $category = ExpenseCategory::first() ?? ExpenseCategory::factory()->create();
 
-        Expense::factory(10)->create([
-            'expense_category_id' => $category->id,
-        ]);
+        // Expense::factory(10)->create([
+        //     'expense_category_id' => $category->id,
+        // ]);
     }
 }

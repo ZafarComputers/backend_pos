@@ -26,7 +26,7 @@ class PosFactory extends Factory
         return [
             'inv_date'            => $this->faker->date(),
             'customer_id'         => Customer::inRandomOrder()->value('id') ?? Customer::factory(),
-            'employee_id'         => $employee?->id ?? Employee::factory(), // ✅ new line
+            'employee_id'        => $employee?->id ?? Employee::factory(), // ✅ new line
             'tax'                 => $this->faker->randomFloat(2, 0, 100),
             'discPer'             => $this->faker->randomFloat(2, 0, 20),
             'discAmount'          => $this->faker->randomFloat(2, 0, 100),

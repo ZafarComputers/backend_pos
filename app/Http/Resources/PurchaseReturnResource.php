@@ -13,7 +13,7 @@ class PurchaseReturnResource extends JsonResource
             'purchase_return_id' => $this->id,
             'return_date' => $this->return_date,
             'return_inv_no' => $this->return_inv_no,
-            'reason' => $this->reason,
+            'reason' => $this->description,
             'discount_percent' => $this->discount_percent,
             'return_amount' => $this->return_amount,
             'vendor' => new VendorResource($this->whenLoaded('vendor')),

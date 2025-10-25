@@ -4,115 +4,241 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnDetail;
 use App\Models\Transaction;
 use App\Http\Resources\PurchaseReturnResource;
-use Illuminate\Support\Facades\Auth;
 
 class PurchaseReturnApiController extends Controller
 {
     /**
-     * Get all purchase returns with relations
+     * Display a listing of the purchase returns.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $purchaseReturns = PurchaseReturn::with(['vendor', 'purchase', 'details.product'])->get();
-        return PurchaseReturnResource::collection($purchaseReturns);
+        $returns = PurchaseReturn::with(['vendor', 'user', 'details', 'transactions'])
+            ->latest()
+            ->paginate(20);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Purchase returns retrieved successfully.',
+            'data' => PurchaseReturnResource::collection($returns),
+        ]);
     }
 
     /**
-     * Store a new purchase return
+     * Store a newly created purchase return in storage.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'vendor_id' => 'required|exists:vendors,id',
+            // 'pur_return_barcode' => 'required|string|unique:purchase_returns,pur_return_barcode',
+            'return_inv_no' => 'nullable|string',
             'purchase_id' => 'nullable|exists:purchases,id',
-            'return_date' => 'required|date',
             'reason' => 'nullable|string',
-            'discount_percent' => 'nullable|numeric|min:0',
-            'details' => 'required|array',
+            'return_date' => 'required|date',
+            'vendor_id' => 'required|exists:vendors,id',
+            'users_id' => 'required|exists:users,id',
+            'coas_id' => 'required|exists:coas,id', // Vendor Account
+            'payment_mode_id' => 'required|in:1,2', // 1=Cash, 2=Bank
+            'description' => 'nullable|string',
+            'return_amount' => 'required|numeric|min:0.01',
+            'details' => 'required|array|min:1',
             'details.*.product_id' => 'required|exists:products,id',
             'details.*.qty' => 'required|numeric|min:1',
-            'details.*.unit_price' => 'required|numeric|min:0',
-            'details.*.discAmount' => 'nullable|numeric|min:0',
-            'payment_mode_id' => 'required|exists:payment_modes,id', // numeric id expected
+            'details.*.unit_price' => 'required|numeric|min:0.01',
         ]);
 
-        // Calculate total return amount
-        $return_amount = 0;
-        foreach ($validated['details'] as $detail) {
-            $lineAmount = ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0);
-            $return_amount += $lineAmount;
-        }
+        DB::beginTransaction();
 
-        // Generate invoice number
-        $returnNo = 'PR-' . str_pad(PurchaseReturn::count() + 1, 4, '0', STR_PAD_LEFT);
-
-        // Create Purchase Return (persist payment_mode_id too)
-        $purchaseReturn = PurchaseReturn::create([
-            'vendor_id' => $validated['vendor_id'],
-            'purchase_id' => $validated['purchase_id'] ?? null,
-            'return_inv_no' => $returnNo,
-            'return_date' => $validated['return_date'],
-            'reason' => $validated['reason'] ?? null,
-            'discount_percent' => $validated['discount_percent'] ?? 0,
-            'return_amount' => $return_amount,
-            'payment_mode_id' => $validated['payment_mode_id'], // store payment mode
-        ]);
-
-        // Create related details
-        foreach ($validated['details'] as $detail) {
-            $purchaseReturn->details()->create([
-                'product_id' => $detail['product_id'],
-                'qty' => $detail['qty'],
-                'unit_price' => $detail['unit_price'],
-                'discAmount' => $detail['discAmount'] ?? 0,
-                'amount' => ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0),
+        try {
+            // ✅ Create Purchase Return record
+            $purchaseReturn = PurchaseReturn::create([
+                'return_inv_no' => $validated['return_inv_no'] ?? null,
+                'purchase_id' => $validated['purchase_id'] ?? null,
+                'reason' => $validated['reason'] ?? null,
+                'return_date' => $validated['return_date'],
+                'vendor_id' => $validated['vendor_id'],
+                'users_id' => $validated['users_id'],
+                'coas_id' => $validated['coas_id'],
+                'payment_mode_id' => $validated['payment_mode_id'],
+                'transaction_type_id' => 3, // Purchase Return transaction type
+                'description' => $validated['description'] ?? null,
+                'return_amount' => $validated['return_amount'],
             ]);
+
+            // ✅ Create related Purchase Return Details
+            foreach ($validated['details'] as $detail) {
+                PurchaseReturnDetail::create([
+                    'purchase_return_id' => $purchaseReturn->id,
+                    'product_id' => $detail['product_id'],
+                    'qty' => $detail['qty'],
+                    'unit_price' => $detail['unit_price'],
+                    'subtotal' => $detail['qty'] * $detail['unit_price'],
+                ]);
+            }
+
+            // ✅ Determine COA references
+            $vendorCoaId = $validated['coas_id'];
+            $paymentModeCoaId = $validated['payment_mode_id'] == 1 ? 3 : 7; // Cash=3, Bank=7
+
+            // 🔹 Reverse Entries compared to Purchase
+            // CREDIT: Stock/Inventory decreases
+            Transaction::create([
+                'date' => $validated['return_date'],
+                'transaction_type_id' => 3, // e.g. Purchase Return Type ID
+                'invRef_id' => $purchaseReturn->id,
+                'coas_id' => 5, // Stock COA (example)
+                'coaRef_id' => $vendorCoaId,
+                'description' => $validated['description'] ?? 'Purchase Return Credit Entry',
+                'debit' => 0,
+                'credit' => $validated['return_amount'],
+                'users_id' => $validated['users_id'],
+            ]);
+
+            // DEBIT: Vendor/Payable decreases
+            Transaction::create([
+                'date' => $validated['return_date'],
+                'transaction_type_id' => 3,
+                'invRef_id' => $purchaseReturn->id,
+                'coas_id' => $vendorCoaId,
+                'coaRef_id' => 5, // Stock
+                'description' => $validated['description'] ?? 'Purchase Return Debit Entry',
+                'debit' => $validated['return_amount'],
+                'credit' => 0,
+                'users_id' => $validated['users_id'],
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Purchase return created successfully.',
+                'data' => new PurchaseReturnResource(
+                    $purchaseReturn->load(['vendor', 'user', 'details', 'transactions'])
+                ),
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to store purchase return: ' . $e->getMessage(),
+            ], 500);
         }
+    }
 
-        // Create double-entry transactions
-        $userId = Auth::id() ?? 1;
-        $transTypeId = 3; // adjust if your TransactionType ids differ
+    /**
+     * Update an existing purchase return.
+     */
+    public function update(Request $request, $id)
+    {
+        $purchaseReturn = PurchaseReturn::findOrFail($id);
 
-        // determine coa ids based on payment_mode_id (integers)
-        $coaId = 3; // Return / Inventory COA (example)
-        $coaRefId = match ($validated['payment_mode_id']) {
-            1 => 6, // cash => COA id 6 (example)
-            2 => 7, // bank => COA id 7 (example)
-            3 => $validated['vendor_id'], // credit => vendor's COA (using vendor id as COA ref)
-            default => 6, // fallback to cash
-        };
-
-        // 1st Entry (Debit)
-        Transaction::create([
-            'date' => $validated['return_date'],
-            'invRef_id' => $purchaseReturn->id,
-            'transaction_types_id' => $transTypeId,
-            'coas_id' => $coaId,
-            'coaRef_id' => $coaRefId,
-            'users_id' => $userId,
-            'description' => 'Purchase Return: ' . $returnNo,
-            'debit' => $return_amount,
-            'credit' => 0,
+        $validated = $request->validate([
+            // 'pur_return_barcode' => 'required|string|unique:purchase_returns,pur_return_barcode,' . $purchaseReturn->id,
+            'return_inv_no' => 'nullable|string',
+            'purchase_id' => 'nullable|exists:purchases,id',
+            'reason' => 'nullable|string',
+            'return_date' => 'required|date',
+            'vendor_id' => 'required|exists:vendors,id',
+            'users_id' => 'required|exists:users,id',
+            'coas_id' => 'required|exists:coas,id',
+            'payment_mode_id' => 'required|in:1,2',
+            'description' => 'nullable|string',
+            'return_amount' => 'required|numeric|min:0.01',
+            'details' => 'required|array|min:1',
+            'details.*.product_id' => 'required|exists:products,id',
+            'details.*.qty' => 'required|numeric|min:1',
+            'details.*.unit_price' => 'required|numeric|min:0.01',
         ]);
 
-        // 2nd Entry (Credit)
-        Transaction::create([
-            'date' => $validated['return_date'],
-            'invRef_id' => $purchaseReturn->id,
-            'transaction_types_id' => $transTypeId,
-            'coas_id' => $coaRefId,
-            'coaRef_id' => $coaId,
-            'users_id' => $userId,
-            'description' => 'Purchase Return: ' . $returnNo,
-            'debit' => 0,
-            'credit' => $return_amount,
-        ]);
+        DB::beginTransaction();
 
-        return new PurchaseReturnResource($purchaseReturn->load(['vendor', 'details.product']));
+        try {
+            // ✅ Update main Purchase Return record
+            $purchaseReturn->update([
+                'return_inv_no' => $validated['return_inv_no'] ?? null,
+                'purchase_id' => $validated['purchase_id'] ?? null,
+                'reason' => $validated['reason'] ?? null, // ✅ now saving reason
+                'return_date' => $validated['return_date'],
+                'vendor_id' => $validated['vendor_id'],
+                'users_id' => $validated['users_id'],
+                'coas_id' => $validated['coas_id'],
+                'payment_mode_id' => $validated['payment_mode_id'],
+                'transaction_type_id' => 3, // ✅ ensure consistency
+                'description' => $validated['description'] ?? null,
+                'total_amount' => $validated['return_amount'], // ✅ rename for consistency
+            ]);
+
+            // ✅ Remove old details
+            PurchaseReturnDetail::where('purchase_return_id', $purchaseReturn->id)->delete();
+
+            // ✅ Insert updated details
+            foreach ($validated['details'] as $detail) {
+                PurchaseReturnDetail::create([
+                    'purchase_return_id' => $purchaseReturn->id,
+                    'product_id' => $detail['product_id'],
+                    'qty' => $detail['qty'],
+                    'unit_price' => $detail['unit_price'],
+                    'subtotal' => $detail['qty'] * $detail['unit_price'],
+                ]);
+            }
+
+            // ✅ Delete previous transactions
+            Transaction::where('invRef_id', $purchaseReturn->id)
+                ->where('transaction_type_id', 3)
+                ->delete();
+
+            // ✅ Recreate transactions (same as store)
+            $vendorCoaId = $validated['coas_id'];
+            $paymentModeCoaId = $validated['payment_mode_id'] == 1 ? 3 : 7;
+
+            // CREDIT: Stock/Inventory decreases
+            Transaction::create([
+                'date' => $validated['return_date'],
+                'transaction_type_id' => 3,
+                'invRef_id' => $purchaseReturn->id,
+                'coas_id' => 5,
+                'coaRef_id' => $vendorCoaId,
+                'description' => $validated['description'] ?? 'Purchase Return Credit Entry (Updated)',
+                'debit' => 0,
+                'credit' => $validated['return_amount'],
+                'users_id' => $validated['users_id'],
+            ]);
+
+            // DEBIT: Vendor/Payable decreases
+            Transaction::create([
+                'date' => $validated['return_date'],
+                'transaction_type_id' => 3,
+                'invRef_id' => $purchaseReturn->id,
+                'coas_id' => $vendorCoaId,
+                'coaRef_id' => 5,
+                'description' => $validated['description'] ?? 'Purchase Return Debit Entry (Updated)',
+                'debit' => $validated['return_amount'],
+                'credit' => 0,
+                'users_id' => $validated['users_id'],
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Purchase return updated successfully.',
+                'data' => new PurchaseReturnResource(
+                    $purchaseReturn->load(['vendor', 'user', 'details', 'transactions'])
+                ),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to update purchase return: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -125,102 +251,35 @@ class PurchaseReturnApiController extends Controller
     }
 
     /**
-     * Update purchase return
+     * Remove a purchase return from storage.
      */
-    public function update(Request $request, PurchaseReturn $purchaseReturn)
+    public function destroy($id)
     {
-        $data = $request->validate([
-            'vendor_id' => 'sometimes|exists:vendors,id',
-            'purchase_id' => 'nullable|exists:purchases,id',
-            'return_date' => 'sometimes|date',
-            'reason' => 'nullable|string',
-            'details' => 'sometimes|array|min:1',
-            'details.*.product_id' => 'required_with:details|exists:products,id',
-            'details.*.qty' => 'required_with:details|numeric|min:1',
-            'details.*.unit_price' => 'required_with:details|numeric|min:0',
-            'details.*.discAmount' => 'nullable|numeric|min:0',
-            'payment_mode_id' => 'sometimes|exists:payment_modes,id',
-        ]);
+        $purchaseReturn = PurchaseReturn::findOrFail($id);
 
-        // Delete old transactions for this return
-        Transaction::where('invRef_id', $purchaseReturn->id)->delete();
+        DB::beginTransaction();
 
-        // Update main record (include payment_mode_id if provided)
-        $purchaseReturn->update($data);
+        try {
+            PurchaseReturnDetail::where('purchase_return_id', $purchaseReturn->id)->delete();
+            Transaction::where('invRef_id', $purchaseReturn->id)
+                ->where('transaction_type_id', 3)
+                ->delete();
 
-        // Recalculate total return amount and replace details (if provided)
-        $return_amount = $purchaseReturn->return_amount ?? 0;
-        if (!empty($data['details'])) {
-            $purchaseReturn->details()->delete();
-            $return_amount = 0;
-            foreach ($data['details'] as $item) {
-                $line = ($item['qty'] * $item['unit_price']) - ($item['discAmount'] ?? 0);
-                $return_amount += $line;
-                $purchaseReturn->details()->create([
-                    'product_id' => $item['product_id'],
-                    'qty' => $item['qty'],
-                    'unit_price' => $item['unit_price'],
-                    'discAmount' => $item['discAmount'] ?? 0,
-                    'amount' => $line,
-                ]);
-            }
+            $purchaseReturn->delete();
 
-            // Update the calculated return amount on the model
-            $purchaseReturn->update(['return_amount' => $return_amount]);
-        } else {
-            // If details not provided, keep existing return_amount (or recalc from details if you prefer)
-            $return_amount = $purchaseReturn->return_amount ?? 0;
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Purchase return deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to delete purchase return: ' . $e->getMessage(),
+            ], 500);
         }
-
-        // Recreate transactions using payment_mode_id from request or from model
-        $userId = Auth::id() ?? 1;
-        $transTypeId = 3;
-        $coaId = 3;
-        $paymentModeId = $data['payment_mode_id'] ?? $purchaseReturn->payment_mode_id ?? 1;
-
-        $coaRefId = match ($paymentModeId) {
-            1 => 6,
-            2 => 7,
-            3 => $purchaseReturn->vendor_id,
-            default => 6,
-        };
-
-        Transaction::create([
-            'date' => $data['return_date'] ?? $purchaseReturn->return_date,
-            'invRef_id' => $purchaseReturn->id,
-            'transaction_types_id' => $transTypeId,
-            'coas_id' => $coaId,
-            'coaRef_id' => $coaRefId,
-            'users_id' => $userId,
-            'description' => 'Updated Purchase Return: ' . $purchaseReturn->return_inv_no,
-            'debit' => $return_amount,
-            'credit' => 0,
-        ]);
-
-        Transaction::create([
-            'date' => $data['return_date'] ?? $purchaseReturn->return_date,
-            'invRef_id' => $purchaseReturn->id,
-            'transaction_types_id' => $transTypeId,
-            'coas_id' => $coaRefId,
-            'coaRef_id' => $coaId,
-            'users_id' => $userId,
-            'description' => 'Updated Purchase Return: ' . $purchaseReturn->return_inv_no,
-            'debit' => 0,
-            'credit' => $return_amount,
-        ]);
-
-        return new PurchaseReturnResource($purchaseReturn->load(['vendor', 'purchase', 'details.product']));
-    }
-
-    /**
-     * Delete purchase return
-     */
-    public function destroy(PurchaseReturn $purchaseReturn)
-    {
-        $purchaseReturn->details()->delete();
-        Transaction::where('invRef_id', $purchaseReturn->id)->delete();
-        $purchaseReturn->delete();
-
-        return response()->json(['message' => 'Purchase Return deleted successfully']);
     }
 }

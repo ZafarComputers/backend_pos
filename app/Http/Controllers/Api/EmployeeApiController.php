@@ -84,28 +84,66 @@ class EmployeeApiController extends Controller
 
     public function update(Request $request, Employee $employee)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
+            'cnic' => ['required', Rule::unique('employees', 'cnic')->ignore($employee->id)],
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:employees,email',
-            // 'cnic' => 'required|unique:employees,cnic,' . $employee->id,
-            'cnic' => [
-                'required',
-                Rule::unique('employees', 'cnic')->ignore($employee->id),
+            'email' => [
+                'nullable', // make optional
+                'email',
+                Rule::unique('employees', 'email')->ignore($employee->id), // ignore same record
             ],
-            'cell_no1' => 'string|max:15',
-            'cell_no2' => 'string|max:15',
-            'city_id' => 'required|exists:cities,id',
-            'address' => 'required|string',
-            'status' => 'required|in:Active,Inactive',
-            'role_id' => 'required|exists:roles,id',
-            'status' => 'required|in:Active,Inactive',
-       ]);
+            'address' => 'nullable|string|max:255',
+            'city_id' => 'nullable|integer',
+            'cell_no1' => 'required|string|max:20',
+            'cell_no2' => 'nullable|string|max:20',
+            'image_path' => 'nullable|image',
+            'role_id' => 'nullable|integer',
+            'status' => 'boolean',
+        ]);
 
-        $employee->update($validated);
+        // ✅ If email is not provided, keep old one (do not overwrite with null)
+        if (!$request->filled('email')) {
+            unset($data['email']);
+        }
 
-        return new EmployeeResource($employee);
+        if ($request->hasFile('image_path')) {
+            $data['image_path'] = $request->file('image_path')->store('employees', 'public');
+        }
+
+        $employee->update($data);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Employee updated successfully.',
+            'data' => $employee->fresh(),
+        ]);
     }
+
+    // public function update(Request $request, Employee $employee)
+    // {
+    //     $validated = $request->validate([
+    //         'first_name' => 'required|string|max:255',
+    //         'last_name' => 'required|string|max:255',
+    //         'email' => 'required|email|unique:employees,email',
+    //         // 'cnic' => 'required|unique:employees,cnic,' . $employee->id,
+    //         'cnic' => [
+    //             'required',
+    //             Rule::unique('employees', 'cnic')->ignore($employee->id),
+    //         ],
+    //         'cell_no1' => 'string|max:15',
+    //         'cell_no2' => 'string|max:15',
+    //         'city_id' => 'required|exists:cities,id',
+    //         'address' => 'required|string',
+    //         'status' => 'required|in:Active,Inactive',
+    //         'role_id' => 'required|exists:roles,id',
+    //         'status' => 'required|in:Active,Inactive',
+    //    ]);
+
+    //     $employee->update($validated);
+
+    //     return new EmployeeResource($employee);
+    // }
 
 
     // Delete method with enhanced error handling

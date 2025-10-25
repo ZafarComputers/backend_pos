@@ -133,7 +133,7 @@ class PosReturnApiController extends Controller
             Transaction::create([
                 'date' => $request->invRet_date,
                 'invRef_id' => $posReturn->id,
-                'transaction_types_id' => $transTypeId,
+                'transaction_type_id' => $transTypeId,
                 'coas_id' => $coaSalesReturn,
                 'coaRef_id' => $coaRefId,
                 'users_id' => $userId,
@@ -147,7 +147,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -161,7 +161,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -173,7 +173,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -185,7 +185,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -209,9 +209,6 @@ class PosReturnApiController extends Controller
             return response()->json(['status' => false, 'message' => 'Failed to create POS Return', 'error' => $e->getMessage()], 500);
         }
     }
-
-
-
 
     /**
      * Show a single POS Return.
@@ -352,7 +349,7 @@ class PosReturnApiController extends Controller
             Transaction::create([
                 'date' => $request->invRet_date,
                 'invRef_id' => $posReturn->id,
-                'transaction_types_id' => $transTypeId,
+                'transaction_type_id' => $transTypeId,
                 'coas_id' => $coaSalesReturn,
                 'coaRef_id' => $coaRefId,
                 'users_id' => $userId,
@@ -366,7 +363,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -378,7 +375,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $coaRefId,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -392,7 +389,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -404,7 +401,7 @@ class PosReturnApiController extends Controller
                 Transaction::create([
                     'date' => $request->invRet_date,
                     'invRef_id' => $posReturn->id,
-                    'transaction_types_id' => $transTypeId,
+                    'transaction_type_id' => $transTypeId,
                     'coas_id' => $request->customer_id,
                     'coaRef_id' => $coaSalesReturn,
                     'users_id' => $userId,
@@ -433,9 +430,6 @@ class PosReturnApiController extends Controller
         }
     }
 
-
-
-
     /**
      * Delete a POS Return.
      */
@@ -457,4 +451,5 @@ class PosReturnApiController extends Controller
             ], 500);
         }
     }
+
 }

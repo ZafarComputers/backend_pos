@@ -10,14 +10,18 @@ class PurchaseReturn extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id',
-        'purchase_id',
         'return_inv_no',
-        'return_date',
+        'purchase_id',
         'reason',
-        'discount_percent',
+        'return_date',
+        'vendor_id',
+        // 'users_id',
+        // 'coas_id',
+        'payment_mode_id',
+        'transaction_type_id',
+        // 'description',
         'return_amount',
-        'payment_mode_id'
+
     ];
 
     // Relationships
@@ -46,5 +50,19 @@ class PurchaseReturn extends Model
         return $this->status === 'Active';
     }
 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
+    public function coa()
+    {
+        return $this->belongsTo(Coa::class, 'coas_id');
+    }   
+
+    public function transactions()
+    {
+         return $this->hasMany(Transaction::class, 'invRef_id');    
+    }
+
 }

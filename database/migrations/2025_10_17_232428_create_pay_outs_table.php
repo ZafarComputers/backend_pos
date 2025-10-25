@@ -14,8 +14,18 @@ return new class extends Migration
         Schema::create('pay_outs', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->unsignedBigInteger('transaction_types_id');
+            
+            $table->foreignId('transaction_type_id')
+                  ->default(9) // Default to 'Expenses' in transaction_types
+                  ->constrained('transaction_types')
+                  ->cascadeOnDelete();
+            $table->foreignId('payment_mode_id')
+                  ->constrained('payment_modes')
+                  ->cascadeOnDelete();       
             $table->unsignedBigInteger('coas_id');
+            $table->foreignId('expense_category_id')
+                  ->constrained('coas')
+                  ->cascadeOnDelete();
             $table->unsignedBigInteger('users_id');
             $table->text('naration')->nullable();
             $table->text('description')->nullable();

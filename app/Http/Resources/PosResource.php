@@ -16,12 +16,28 @@ class PosResource extends JsonResource
             'customer_name'=> optional($this->customer)->name,
             'inv_amount'   => $this->inv_amount,
             'paid_amount'  => $this->paid,
-            'payment_mode'  => match ($this->payment_mode_id) {
-                1 => 'Cash',
-                2 => 'Bank',
-                default => 'Credit',
+            'tax'          => $this->tax,
+            'discPer'      => $this->discPer,
+            'discAmount'   => $this->discAmount,
+            
+            // 'payment_mode'  => match ($this->payment_mode_id) {
+                //     1 => 'Cash',
+                //     2 => 'Bank',
+                //     default => 'Credit',
+                // },
+            // 'payment_mode' => $this->paymentMode ? $this->paymentMode->mode_name : null,
+            // 'transaction_type_id' => $this->transaction_type_id,
+            'BankName'  => match ($this->payment_mode_id) {
+                // 2 => optional($this->transactions->first()?->coa)->title,
+                2 => $this->transactions->pluck('coa.title')->filter()->implode(', '),
+                default => '',
             },
-            'transaction_type_id' => $this->transaction_type_id,
+            // 'transaction_type_id' => $this->transaction_type_id,
+            // transactionType
+            'transaction_type' => $this->transactionType ? $this->transactionType->transType : null,
+
+            
+
             'salesman'    => $this->employee ? $this->employee->first_name . " " .$this->employee->last_name  : null,
 
             // 'note'         => $this->note,

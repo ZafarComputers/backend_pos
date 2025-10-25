@@ -25,9 +25,9 @@ return new class extends Migration {
             $table->enum('status', ['active', 'inactive'])->default('active');
 
             // Gurunter Person's Info
-            $table->string('cnic2', 15)->unique();
-            $table->string('name2', 150);
-            $table->string('cell_no3', 11);
+            $table->string('cnic2', 15)->nullable();
+            $table->string('name2', 150)->nullable();
+            $table->string('cell_no3', 11)->nullable();
 
 
             $table->timestamps();

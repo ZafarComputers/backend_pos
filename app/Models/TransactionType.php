@@ -19,5 +19,10 @@ class TransactionType extends Model
         return $this->status === 'Active';
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     
 }

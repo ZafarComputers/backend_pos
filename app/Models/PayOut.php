@@ -16,29 +16,16 @@ class PayOut extends Model
         'naration',
         'description',
         'amount',
-        'transaction_types_id',
+        'transaction_type_id',   // ✅ singular
+        'payment_mode_id',       // ✅ singular
+        'expense_category_id',   // ✅ singular
     ];
 
-    // Relation to TransactionType
-    public function transactionType()
-    {
-        return $this->belongsTo(TransactionType::class, 'transaction_types_id');
-    }
-    
-    public function coa()
-    {
-        return $this->belongsTo(Coa::class, 'coas_id');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'users_id');
-    }
 
     public function transaction()
     {
         return $this->hasMany(Transaction::class, 'invRef_id', 'id')
-            ->where('type', 'PayIn');
+            ->where('type', 'PayOut');
     }
 
     public function isActive()
@@ -46,5 +33,36 @@ class PayOut extends Model
         return $this->status === 'Active';
     }
 
+
+    // 🔹 COA Relationship
+    public function coa()
+    {
+        return $this->belongsTo(Coa::class, 'coas_id');
+    }
+
+    public function transactionType()
+    {
+        return $this->belongsTo(TransactionType::class, 'transaction_type_id');
+    }
+
+    public function paymentMode()
+    {
+        return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
+    }
+
+
+    // 🔹 User Relationship
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id', 'id');
+    }
+
+
+
+    // 🔹 Transaction Relationship
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'invRef_id', 'id');
+    }
     
 }

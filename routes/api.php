@@ -242,9 +242,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('attendances/all', [AttendanceApiController::class, 'all']);
     
 
-    // Keep your resource routes below
+    // ✅ Nested route: attendances under each employee
     Route::apiResource('employees.attendances', AttendanceApiController::class);
 
+    // ✅ Flat route: all attendances (for admin/report view)
+    Route::get('attendances', [AttendanceApiController::class, 'indexAll'])
+        ->name('attendances.indexAll');
 
     // Route::prefix('employees')->group(function () {
     //     Route::get('attendances', [AttendanceApiController::class, 'all']);
@@ -278,6 +281,8 @@ Route::prefix('pos')->group(function () {
     Route::get('/{id}', [PosApiController::class, 'show']);     // Show single invoice
     Route::put('/{id}', [PosApiController::class, 'update']);   // Update invoice
     Route::delete('/{id}', [PosApiController::class, 'destroy']); // Delete invoice
+    Route::get('/salesman/{employees_id}', [PosApiController::class, 'getSalesmanReport']);
+
 });
 
 // POS-Detail Routes
@@ -406,6 +411,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/accountStatement/{id}', [FinanceAccountApiController::class, 'accountStatementById']);
     Route::get('/accountStatement/{accountId}', [FinanceAccountApiController::class, 'accountStatementByDate']);
 
+    // Profit & Loss Report Route
+    Route::get('reports/profit-loss', [FinanceAccountApiController::class, 'getProfitLossReport']);
 
 
 

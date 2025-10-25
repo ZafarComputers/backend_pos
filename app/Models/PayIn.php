@@ -16,15 +16,30 @@ class PayIn extends Model
         'naration',
         'description',
         'amount',
-        'transaction_types_id',
+        'transaction_type_id',   // ✅ singular
+        'payment_mode_id',       // ✅ singular
+        'income_category_id',   // ✅ singular
     ];
 
     // Relation to TransactionType
     public function transactionType()
     {
-        return $this->belongsTo(TransactionType::class, 'transaction_types_id');
+        return $this->belongsTo(TransactionType::class, 'transaction_type_id');
     }
+
     
+    public function paymentMode()
+    {
+        return $this->belongsTo(PaymentMode::class, 'payment_mode_id');
+    }
+
+    // 🔹 Transaction Relationship
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'invRef_id', 'id');
+    }
+
+
     public function coa()
     {
         return $this->belongsTo(Coa::class, 'coas_id');

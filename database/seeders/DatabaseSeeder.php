@@ -88,8 +88,10 @@ class DatabaseSeeder extends Seeder
             | 6. Expenses & Incomes
             |--------------------------------------------------------------------------
             */
-            ExpenseCategorySeeder::class,
-            ExpenseSeeder::class,
+            // ExpenseCategorySeeder::class,
+            // ExpenseSeeder::class,
+            PayOutSeeder::class,
+            PayInSeeder::class,
             IncomeCategorySeeder::class,
             IncomeSeeder::class,
 
