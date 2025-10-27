@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Country extends Model
 {
@@ -11,7 +12,9 @@ class Country extends Model
 
     protected $fillable = [
         'title',
-        'code',
+        'phone_code', 
+        'emoji_u', 
+        'native',
         'currency',
         'status',
     ];
@@ -27,9 +30,14 @@ class Country extends Model
     /**
      * A country has many states.
      */
-    public function states()
+    public function states(): HasMany
     {
         return $this->hasMany(State::class);
+    }
+
+    public function cities(): HasMany
+    {
+        return $this->hasManyThrough(City::class, State::class);
     }
 
     public function isActive()

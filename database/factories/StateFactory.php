@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Country;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\State>
@@ -18,8 +19,9 @@ class StateFactory extends Factory
     {
         return [
             //
-            'title' => $this->faker->state(),
-            'country_id' => \App\Models\Country::inRandomOrder()->first()?->id,
+            'title' => $this->faker->state,
+            'state_code' => strtoupper($this->faker->lexify('??')),
+            'country_id' => Country::factory(),
             'status' => $this->faker->randomElement(['active','inactive']),
         ];
     }

@@ -23,6 +23,7 @@ class City extends Model
      *
      * @var string
      */
+    
     protected $table = 'cities';
 
     /**
@@ -38,6 +39,7 @@ class City extends Model
         'status',
     ];
 
+
     /**
      * Define the relationship with the State model.
      *
@@ -49,6 +51,12 @@ class City extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    public function country()
+    {
+        return $this->state->country();
+    }
+    
 
     // One city has many customers
     public function customers()

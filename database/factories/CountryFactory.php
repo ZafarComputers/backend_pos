@@ -18,8 +18,10 @@ class CountryFactory extends Factory
     {
         return [
             //
-            'title' => $this->faker->country(),
-            'code' => strtoupper($this->faker->unique()->lexify('??')),
+            'title' => $this->faker->country,
+            'phone_code' => '+' . $this->faker->numberBetween(1, 999),
+            'emoji_u' => 'U+1F1E6 U+1F1E8',
+            'native' => $this->faker->word,
             'currency' => $this->faker->currencyCode(),
             'status' => $this->faker->randomElement(['active','inactive']),
         ];

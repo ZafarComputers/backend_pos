@@ -120,32 +120,6 @@ class EmployeeApiController extends Controller
         ]);
     }
 
-    // public function update(Request $request, Employee $employee)
-    // {
-    //     $validated = $request->validate([
-    //         'first_name' => 'required|string|max:255',
-    //         'last_name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:employees,email',
-    //         // 'cnic' => 'required|unique:employees,cnic,' . $employee->id,
-    //         'cnic' => [
-    //             'required',
-    //             Rule::unique('employees', 'cnic')->ignore($employee->id),
-    //         ],
-    //         'cell_no1' => 'string|max:15',
-    //         'cell_no2' => 'string|max:15',
-    //         'city_id' => 'required|exists:cities,id',
-    //         'address' => 'required|string',
-    //         'status' => 'required|in:Active,Inactive',
-    //         'role_id' => 'required|exists:roles,id',
-    //         'status' => 'required|in:Active,Inactive',
-    //    ]);
-
-    //     $employee->update($validated);
-
-    //     return new EmployeeResource($employee);
-    // }
-
-
     // Delete method with enhanced error handling
     public function destroy(Employee $employee): JsonResponse
     {

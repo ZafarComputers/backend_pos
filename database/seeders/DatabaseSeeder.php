@@ -27,7 +27,11 @@ class DatabaseSeeder extends Seeder
             | 1. System Setup
             |--------------------------------------------------------------------------
             */
-            CountrySeeder::class,
+            PakistanSeeder::class,
+            // CountrySeeder::class,
+            // StateSeeder::class,
+            // CitySeeder::class,
+
             PaymentModeSeeder::class,
             RoleSeeder::class,
             // PermissionSeeder::class,
@@ -39,8 +43,9 @@ class DatabaseSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
             UserSeeder::class,
-            EmployeeWithAttendanceSeeder::class,
+            // EmployeeWithAttendanceSeeder::class,
             // EmployeeSeeder::class,
+            EmployeeAttendanceSeeder::class,
             // AttendanceSeeder::class,
             VendorSeeder::class,
             CustomerSeeder::class,

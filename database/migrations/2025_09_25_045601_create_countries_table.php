@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('code', 5)->unique();
-            $table->string('currency', 10);
+            $table->string('phone_code');
+            $table->string('emoji_u')->nullable();
+            $table->string('native')->nullable();
+            $table->string('currency', 10)->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
         });

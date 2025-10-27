@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+// Controller
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Models\Employee;
-use App\Models\Attendance;
+
+// Resource
 use App\Http\Resources\AttendanceResource;
 use App\Http\Resources\EmployeeAttendanceResource;
+
+// Models
+use App\Models\Employee;
+use App\Models\Attendance;
 
 class AttendanceApiController extends Controller
 {
@@ -17,25 +22,13 @@ class AttendanceApiController extends Controller
      */
     public function all()
     {
-
         $employees = Employee::with('attendances')->latest()->get();
-
-    
-        // $employees = Employee::with(['attendances'])
-        //     ->latest()
-        //     ->get();
-
-        // $employees = Employee::with(['attendances' => fn($q) => $q->latest(), 'role', 'city'])
-        //     ->latest()
-        //     ->get();
-
         return response()->json([
             'success' => true,
             'message' => 'All employees with attendances retrieved successfully.',
             'data' => EmployeeAttendanceResource::collection($employees),
         ]);
     }
-
 
     // ✅ Flat: get all attendances across all employees
     public function indexAll()
@@ -53,35 +46,12 @@ class AttendanceApiController extends Controller
     public function index($employeeId)
     {
         $attendances = Attendance::where('employee_id', $employeeId)->get();
-
         return response()->json([
             'status' => true,
             'message' => 'Employee attendances retrieved successfully.',
             'data' => AttendanceResource::collection($attendances),
         ]);
     }
-
-    /**
-     * 🧩 Get attendance for one employee
-     */
-    // public function index($employeeId)
-    // {
-    //     $employee = Employee::with(['attendances' => fn($q) => $q->latest(), 'role', 'city'])
-    //         ->find($employeeId);
-
-    //     if (!$employee) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Employee not found.',
-    //         ], 404);
-    //     }
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => "Attendance list for {$employee->first_name} retrieved successfully.",
-    //         'data' => new EmployeeAttendanceResource($employee),
-    //     ]);
-    // }
 
     /**
      * 🧩 Store attendance for an employee

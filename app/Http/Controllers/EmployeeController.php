@@ -55,7 +55,7 @@ class EmployeeController extends Controller
 
     public function update(Request $request, Employee $employee)
     {
-            dd('you are in update');
+            // dd('you are in update');
         $data = $request->validate([
             'cnic' => ['required', Rule::unique('employees', 'cnic')->ignore($employee->id)],
             'first_name' => 'required|string|max:255',
