@@ -25,7 +25,7 @@ class CoaSeeder extends Seeder
                 'prefix' => '3',
                 'subs'  => [
                     'Paid up Capital / Share Holders' => [
-                        'Zafar Iqbal',
+                        'R Anas Kiani',
                     ],
                     'Retained Earnings' => [
                         'Profit and Loss Account',
@@ -39,7 +39,7 @@ class CoaSeeder extends Seeder
                 'subs'  => [
                     'Cash Account' => ['Cash in Hand'],
                     'Bank Account' => ['HBL Bank Account # 00 0000 0000 0000'],
-                    'Accounts Receivable' => ['Customer A Account'],
+                    'Accounts Receivable' => ['Dummy 1st Customer Account'],
                     'Inventory' => [
                         'Purchase Account',
                         'Sales Account',
@@ -72,7 +72,7 @@ class CoaSeeder extends Seeder
                 'type'  => 'liability',
                 'prefix' => '2',
                 'subs'  => [
-                    'Accounts Payable' => ['Vendor A Account'],
+                    'Accounts Payable' => ['Dummy Vendor A Account'],
                     'Bank Loans' => ['Bank Loan Account'],
                     'Loans from Directors' => ['Director Loan Account'],
                     'Other Current Liabilities' => ['Tax Payable Account'],

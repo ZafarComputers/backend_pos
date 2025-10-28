@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->date('inv_date');
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->string('description', 255)->nullable();
             $table->decimal('tax', 10, 2)->default(0);
             $table->decimal('discPer', 5, 2)->default(0);
             $table->decimal('discAmount', 10, 2)->default(0);

@@ -12,6 +12,8 @@ use Carbon\Carbon;
 // Resources
 use App\Http\Resources\PosResource;
 use App\Http\Resources\PosNoDtlResource;
+use App\Http\Resources\PosExtraResource;
+use App\Http\Resources\PosWithExtrasResource;
 
 // Models
 use App\Models\Pos;
@@ -191,6 +193,18 @@ class PosApiController extends Controller
                 ]);
             }
 
+            // inside store() and update()
+            if ($request->has('extras')) {
+                $pos->extras()->delete(); // clear old extras
+                foreach ($request->extras as $extra) {
+                    $pos->extras()->create([
+                        'title'  => $extra['title'],
+                        'value'  => $extra['value'] ?? null,
+                        'amount' => $extra['amount'] ?? 0,
+                    ]);
+                }
+            }
+
             DB::commit();
 
             // ✅ Include employee in response
@@ -216,7 +230,7 @@ class PosApiController extends Controller
         $pos = Pos::with(['customer', 'details.product', 'employee'])->find($id);
 
         if (!$pos) {
-            return response()->json(['status' => false, 'message' => 'POS not found.'], 404);
+            return response()->json(['status' => false, 'message' => 'POS not found*.'], 404);
         }
 
         return response()->json([
@@ -322,6 +336,18 @@ class PosApiController extends Controller
                 }
             }
 
+            // inside store() and update()
+            if ($request->has('extras')) {
+                $pos->extras()->delete(); // clear old extras
+                foreach ($request->extras as $extra) {
+                    $pos->extras()->create([
+                        'title'  => $extra['title'],
+                        'value'  => $extra['value'] ?? null,
+                        'amount' => $extra['amount'] ?? 0,
+                    ]);
+                }
+            }
+
             DB::commit();
 
             // 🔁 Reload relationships for the response
@@ -424,6 +450,25 @@ class PosApiController extends Controller
             'data' => PosResource::collection($posRecords),
         ]);
     }
+
+    /**
+     * Get all extras for a POS
+     * GET /api/pos/{pos}/extras
+     */
+    // public function bridalOrder(Pos $pos)
+    // {
+    //     $pos->loadMissing(['extras', 'customer']); // Load needed relations
+
+    //     return new PosWithExtrasResource($pos);
+    // }
+
+    // Optional: Include extras in show()
+    // public function showExtra(Pos $pos)
+    // {
+    //     $pos->load(['extras', 'details', 'bankDetail']);
+    //     return new PosWithExtrasResource($pos);
+    // }
+
 
 
 }

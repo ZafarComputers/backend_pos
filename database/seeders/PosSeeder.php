@@ -2,20 +2,24 @@
 
 namespace Database\Seeders;
 
-use App\Models\Pos;
 use Illuminate\Database\Seeder;
-use App\Models\Customer;
-use App\Models\PosDetail;
+use App\Models\Pos;
 
 class PosSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Pos::factory(25)->create()->each(function ($pos) {
-            $pos->details()->saveMany(PosDetail::factory(3)->make());
-        });
+        // Create exactly ONE POS
+        Pos::factory()
+            ->count(1)
+            ->create()
+            ->each(function (Pos $pos) {
+                // 1–3 details
+                $pos->details()->saveMany(
+                    \App\Models\PosDetail::factory()
+                        ->count(rand(1, 3))
+                        ->make()
+                );
+            });
     }
 }

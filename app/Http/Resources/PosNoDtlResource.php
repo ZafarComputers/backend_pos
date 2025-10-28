@@ -10,16 +10,18 @@ class PosNoDtlResource extends JsonResource
     {        
         // Start with basic fields
         $data = [
-            'inv_id'           => $this->id,
+            'inv_id'       => $this->id,
             'inv_date'     => $this->inv_date,
             'customer_id'  => $this->customer_id,
             'customer_name'=> optional($this->customer)->name,
+            'description'  => $this->description,
             // 'tax'          => $this->tax,
             // 'discPer'      => $this->discPer,
             // 'discAmount'   => $this->discAmount,
             'inv_amount'   => $this->inv_amount,
             'paid_amount'         => $this->paid,
             'payment_mode' => $this->paymentMode->mode_name ?? null,
+
             // 'BankName1' => $this->payment_mode_id == 2
             //     ? optional($this->transactions->first()?->coa)->title
             //     : '',

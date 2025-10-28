@@ -12,7 +12,7 @@ class SubCategorySeeder extends Seeder
     public function run(): void {
         $map = [
             'Bridal' => ['Lahnga', 'Maxi', 'LongShirt'],
-            'Fancy' => ['Sharara', 'Garara', 'Shalwar Kameez', 'Lahga Choli'],
+            'Fancy' => ['Sharara', 'Garrara', 'Shalwar Kameez', 'Lahnga Choli'],
             'Casual' => ['Readymade', 'Unstitched'],
         ];
 

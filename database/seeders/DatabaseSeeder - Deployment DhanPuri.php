@@ -45,10 +45,10 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             // EmployeeWithAttendanceSeeder::class,
             // EmployeeSeeder::class,
-            EmployeeAttendanceSeeder::class,
+            // EmployeeAttendanceSeeder::class,
             // AttendanceSeeder::class,
-            VendorSeeder::class,
-            CustomerSeeder::class,
+            // VendorSeeder::class,
+            // CustomerSeeder::class,
             // ProfileSeeder::class,
 
             /*
@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             SeasonSeeder::class,
             MaterialSeeder::class,
-            ProductSeeder::class,
+            // ProductSeeder::class,
 
 
             /*
@@ -79,13 +79,13 @@ class DatabaseSeeder extends Seeder
             | 5. POS & Purchase
             |--------------------------------------------------------------------------
             */
-            PurchaseSeeder::class,
-            PurchaseReturnSeeder::class,
-            PosSeeder::class,
-            PosDetailSeeder::class,
-            PosBankDetailSeeder::class,
-            PosReturnSeeder::class,
-            PosReturnDetailSeeder::class,
+            // PurchaseSeeder::class,
+            // PurchaseReturnSeeder::class,
+            // PosSeeder::class,
+            // PosDetailSeeder::class,
+            // PosBankDetailSeeder::class,
+            // PosReturnSeeder::class,
+            // PosReturnDetailSeeder::class,
 
 
             /*
@@ -95,10 +95,10 @@ class DatabaseSeeder extends Seeder
             */
             // ExpenseCategorySeeder::class,
             // ExpenseSeeder::class,
-            PayOutSeeder::class,
-            PayInSeeder::class,
-            IncomeCategorySeeder::class,
-            IncomeSeeder::class,
+            // PayOutSeeder::class,
+            // PayInSeeder::class,
+            // IncomeCategorySeeder::class,
+            // IncomeSeeder::class,
 
             /*
             |--------------------------------------------------------------------------

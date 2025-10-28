@@ -13,6 +13,7 @@ class Pos extends Model
     protected $fillable = [
         'inv_date', 
         'customer_id', 
+        'description', // ✅ include this
         'tax', 
         'discPer', 
         'discAmount',
@@ -20,9 +21,13 @@ class Pos extends Model
         'paid',
         'transaction_type_id', // ✅ new column
         'payment_mode_id', // ✅ new column
-         'employee_id', // ✅ added column
+        'employee_id', // ✅ added column
     ];
 
+    public function extras()
+    {
+        return $this->hasMany(PosExtra::class);
+    }
 
     public function details()
     {

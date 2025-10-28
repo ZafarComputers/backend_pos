@@ -40,18 +40,18 @@ class EmployeeAttendanceSeeder extends Seeder
 
         // 2. Create 15 employees
         $employees = Employee::factory()
-            ->count(15)
+            ->count(1)
             ->state([
                 'city_id' => fn() => $cityIds[array_rand($cityIds)],
                 'role_id' => fn() => $roleIds[array_rand($roleIds)],
             ])
             ->create();
 
-        $this->command->info('15 employees created.');
+        $this->command->info('1 employees created.');
 
         // 3. Generate attendance (last 30 days, 70% attendance rate)
         foreach ($employees as $employee) {
-            $startDate = now()->subDays(30);
+            $startDate = now()->subDays(3);
             $endDate = now();
             $current = clone $startDate;
 

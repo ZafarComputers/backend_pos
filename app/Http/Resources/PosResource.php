@@ -19,14 +19,8 @@ class PosResource extends JsonResource
             'tax'          => $this->tax,
             'discPer'      => $this->discPer,
             'discAmount'   => $this->discAmount,
+            'description'  => $this->description,
             
-            // 'payment_mode'  => match ($this->payment_mode_id) {
-                //     1 => 'Cash',
-                //     2 => 'Bank',
-                //     default => 'Credit',
-                // },
-            // 'payment_mode' => $this->paymentMode ? $this->paymentMode->mode_name : null,
-            // 'transaction_type_id' => $this->transaction_type_id,
             'BankName'  => match ($this->payment_mode_id) {
                 // 2 => optional($this->transactions->first()?->coa)->title,
                 2 => $this->transactions->pluck('coa.title')->filter()->implode(', '),
@@ -35,8 +29,6 @@ class PosResource extends JsonResource
             // 'transaction_type_id' => $this->transaction_type_id,
             // transactionType
             'transaction_type' => $this->transactionType ? $this->transactionType->transType : null,
-
-            
 
             'salesman'    => $this->employee ? $this->employee->first_name . " " .$this->employee->last_name  : null,
 
@@ -54,6 +46,16 @@ class PosResource extends JsonResource
         // Include POS item details (products, qty, price, etc.)
         $data['details'] = PosDetailResource::collection($this->whenLoaded('details'));
         
+        //  // --- Include invoice extras (like lace, size, embroidery, etc.)
+        // $data['extras'] = $this->extras->map(function ($extra) {
+        //     return [
+        //         'title'  => $extra->title,
+        //         'value'  => $extra->value,
+        //         'amount' => $extra->amount,
+        //     ];
+        // });
+        $data['extras'] = PosExtraResource::collection($this->whenLoaded('extras'));
+
         return $data;
         
         // 'details' => PosDetailResource::collection($this->whenLoaded('details')),

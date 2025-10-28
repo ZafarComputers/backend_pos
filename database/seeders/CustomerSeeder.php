@@ -41,12 +41,12 @@ class CustomerSeeder extends Seeder
 
         // 10 Random Customers
         Customer::factory()
-            ->count(10)
+            ->count(5)
             ->state([
                 'city_id' => fn() => $cityIds[array_rand($cityIds)],
             ])
             ->create();
 
-        $this->command->info('10 random customers created with valid cities & phone numbers.');
+        $this->command->info('5 random customers created with valid cities & phone numbers.');
     }
 }

@@ -40,6 +40,9 @@ use App\Http\Controllers\Api\PurchaseReturnApiController;
 use App\Http\Controllers\Api\PurchaseReturnDetailApiController;
 
 use App\Http\Controllers\Api\PosApiController;
+use App\Http\Controllers\Api\PosBridalApiController;
+
+use App\Http\Controllers\Api\PosExtraApiController;
 use App\Http\Controllers\PosDetailController;
 use App\Http\Controllers\Api\PosReturnApiController;
 
@@ -274,16 +277,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // POS & POS-Detail Routes
 Route::prefix('pos')->group(function () {
-    // PoS Routes
-    Route::get('/', [PosApiController::class, 'index']);     // List all invoices
-    Route::post('/', [PosApiController::class, 'store']);       // Create new invoice
-    Route::get('/todaySummary', [PosApiController::class, 'todaySummary']); // todaySummary 
-    Route::get('/{id}', [PosApiController::class, 'show']);     // Show single invoice
-    Route::put('/{id}', [PosApiController::class, 'update']);   // Update invoice
-    Route::delete('/{id}', [PosApiController::class, 'destroy']); // Delete invoice
+    // Main POS routes
+    Route::get('/', [PosApiController::class, 'index']);
+    Route::post('/', [PosApiController::class, 'store']);
+    Route::get('/todaySummary', [PosApiController::class, 'todaySummary']);
+    Route::put('/{id}', [PosApiController::class, 'update']);
+    Route::delete('/{id}', [PosApiController::class, 'destroy']);
     Route::get('/salesman/{employees_id}', [PosApiController::class, 'getSalesmanReport']);
 
+    // ✅ Place all static/resource routes BEFORE dynamic /{id}
+    Route::apiResource('pos-bridals', PosBridalApiController::class);
+    Route::apiResource('pos-extras', PosExtraApiController::class);
+
+    // Now place this at the bottom
+    Route::get('/{id}', [PosApiController::class, 'show']);
 });
+
 
 // POS-Detail Routes
 Route::prefix('posDtl')->group(function () {

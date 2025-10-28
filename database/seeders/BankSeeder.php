@@ -10,6 +10,6 @@ class BankSeeder extends Seeder
     public function run(): void
     {
         // Create multiple banks using the factory
-        Bank::factory(10)->create();
+        Bank::factory(1)->create();
     }
 }
