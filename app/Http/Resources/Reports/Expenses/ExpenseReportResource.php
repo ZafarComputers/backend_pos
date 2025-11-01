@@ -19,6 +19,15 @@ class ExpenseReportResource extends JsonResource
             'description' => $this->description,
             'date' => $this->date,
             'amount' => $this->amount,
+
+            'id' => $this->id,
+            // 'date' => $this->date ? $this->date->format('Y-m-d') : null,   // format date
+            'amount' => $this->amount ?? 0,
+            'description' => $this->description ?? '',
+            // 'category_id' => $this->expense_category_id,
+            // 'category_name' => optional($this->category)->title,           // fetch category title safely
+            // 'status' => $this->status ?? 'Active',
+            'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
         ];
     }
 }

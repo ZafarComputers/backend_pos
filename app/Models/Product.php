@@ -4,12 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SubCategory;
-use App\Models\Category;
-use App\Models\PurchaseDetail;
-use App\Models\PosDetail;
-use App\Models\User;
-use App\Models\Vendor;
 
 class Product extends Model
 {
@@ -24,7 +18,7 @@ class Product extends Model
         'opening_stock_quantity',
         'stock_in_quantity',
         'stock_out_quantity',
-        'in_stock_quantity',   // ✅ Add this if you’re maintaining stock directly
+        'in_stock_quantity',
         'user_id',
         'vendor_id',
         'barcode',
@@ -38,30 +32,38 @@ class Product extends Model
 
     public function subCategory()
     {
-        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+        // return $this->belongsToThrough(Category::class, SubCategory::class);
+        // or
+        return $this->belongsTo(Category::class, 'category_id');
+
+        // return $this->belongsTo(SubCategory::class, 'sub_category_id')
+        //     ->select('id', 'title', 'category_id');
     }
 
     public function category()
     {
-        // ✅ Corrected hasOneThrough mapping
+        // ✅ Corrected relation: use hasOneThrough for indirect category access
         return $this->hasOneThrough(
-            Category::class,        // Final related model
-            SubCategory::class,     // Intermediate model
-            'id',                   // Foreign key on SubCategory table
-            'id',                   // Foreign key on Category table
-            'sub_category_id',      // Local key on Product table
-            'category_id'           // Local key on SubCategory table
-        );
+            Category::class,
+            SubCategory::class,
+            'id',            // Foreign key on SubCategory table
+            'id',            // Foreign key on Category table
+            'sub_category_id', // Local key on Product table
+            'category_id'    // Local key on SubCategory table
+        )->select('categories.id', 'categories.title');
+    }
+
+    public function vendor()
+    {
+        // return $this->belongsTo(Vendor::class, 'vendor_id')
+            // ->select('id', 'title', 'status');
+        return $this->belongsTo(Vendor::class, 'vendor_id')
+            ->select('id', 'first_name', 'last_name', 'status');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function vendor()
-    {
-        return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
     public function purchaseDetails()
@@ -75,23 +77,19 @@ class Product extends Model
     }
 
     /* ==========================
-       🔹 STOCK CALCULATIONS (Optional Helper)
+       🔹 ACCESSORS & HELPERS
        ========================== */
 
-    /**
-     * Compute stock information dynamically
-     * (used only for reporting/debugging, not actual updates)
-     */
     public function getStockSummaryAttribute()
     {
         $purchased = $this->purchaseDetails()->sum('qty');
-        $sold      = $this->posDetails()->sum('qty');
+        $sold = $this->posDetails()->sum('qty');
 
-        $openingStock = $this->opening_stock_quantity ?? 0;
-        $inStock = $openingStock + $purchased - $sold;
+        $opening = $this->opening_stock_quantity ?? 0;
+        $inStock = $opening + $purchased - $sold;
 
         return [
-            'opening_stock' => $openingStock,
+            'opening_stock' => $opening,
             'purchased'     => $purchased,
             'sold'          => $sold,
             'in_stock'      => $inStock,
@@ -102,6 +100,10 @@ class Product extends Model
     {
         return $this->status === 'Active';
     }
+
+    /* ==========================
+       🔹 MANY-TO-MANY RELATIONS
+       ========================== */
 
     public function colors()
     {
@@ -122,7 +124,4 @@ class Product extends Model
     {
         return $this->belongsToMany(Material::class);
     }
-
-
-    
 }

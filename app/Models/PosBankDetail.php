@@ -9,9 +9,10 @@ class PosBankDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+  protected $fillable = [
         'pos_id',
         'bank_name',
+        'account_title',
         'account_number',
     ];
 

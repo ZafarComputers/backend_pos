@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Pos;
+use App\Models\PosDetail;
 
 class PosSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class PosSeeder extends Seeder
             ->each(function (Pos $pos) {
                 // 1–3 details
                 $pos->details()->saveMany(
-                    \App\Models\PosDetail::factory()
+                    PosDetail::factory()
                         ->count(rand(1, 3))
                         ->make()
                 );

@@ -31,6 +31,24 @@ class Customer extends Model
         'cell_no3'
     ];
 
+    // Relationship: multiple COAs (all linked to this customer)
+    public function coas()
+    {
+        return $this->hasMany(Coa::class, 'customer_id');
+    }
+
+    // Each customer has one COA
+    public function coa()
+    {
+        return $this->hasOne(Coa::class, 'customer_id', 'id');
+    }
+
+    // Optional: main/default COA (if you want a single reference)
+    public function mainCoa()
+    {
+        return $this->hasOne(Coa::class, 'customer_id')->orderBy('id'); // first COA
+    }
+
     /**
      * Relation: Customer belongs to a City
      */

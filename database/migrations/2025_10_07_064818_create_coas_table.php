@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('coas', function (Blueprint $table) {
+        Schema::create('coas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('coa_sub_id')->constrained()->onDelete('cascade');
+
+
+            // ✅ Add new nullable relational columns
+            $table->foreignId('vendor_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('employee_id')->nullable()->constrained()->onDelete('set null');
+
             $table->string('code')->unique();
             $table->string('title');
             $table->enum('type', ['asset', 'liability', 'capital', 'income', 'expense']);

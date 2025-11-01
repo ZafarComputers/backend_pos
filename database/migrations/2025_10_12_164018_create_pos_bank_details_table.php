@@ -17,7 +17,8 @@ return new class extends Migration
                 ->constrained('pos')
                 ->onDelete('cascade');
             $table->string('bank_name');
-            $table->string('account_number');
+            $table->string('account_title')->nullable();
+            $table->string('account_number')->nullable();
             $table->timestamps();
         });
     }

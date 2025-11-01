@@ -31,5 +31,10 @@ class ExpenseCategory extends Model
     // {
     //     return $this->belongsTo(Coa::class, 'coas_id');
     // }
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+
 
 }

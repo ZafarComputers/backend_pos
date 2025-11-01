@@ -16,6 +16,10 @@ class PosDetailResource extends JsonResource
             'quantity' => $this->qty,
             'price' => $this->sale_price,
             'subtotal' => $subtotal,
+            'bal_stock' => $this->product?->in_stock_quantity
+
+            // $data['extras'] = PosExtraResource::collection($this->whenLoaded('extras'));
+
         
             // 'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),   

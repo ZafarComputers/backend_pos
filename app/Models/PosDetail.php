@@ -13,13 +13,16 @@ class PosDetail extends Model
         'pos_id',
         'product_id',
         'qty',
+        'discPer', 
+        'discAmount',
         'sale_price',
     ];
 
-    // public function pos()
-    // {
-    //     return $this->belongsTo(Pos::class, 'pos_id', 'id');
-    // }
+
+    public function extras()
+    {
+        return $this->hasMany(PosExtra::class);
+    }
 
     public function pos()
     {

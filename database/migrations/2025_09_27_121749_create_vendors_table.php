@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();;
-            $table->string('cnic')->unique();
+            $table->string('cnic')->nullable();
             $table->text('address')->nullable();
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');

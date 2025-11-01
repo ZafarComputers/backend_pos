@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PurchaseResource;
 use App\Models\Purchase;
+use App\Models\Product;
 use App\Models\Transaction;
 use App\Helpers\TransactionHelper;
 
@@ -94,11 +95,20 @@ class PurchaseApiController extends Controller
                     'discAmount' => $detail['discAmount'] ?? 0,
                     'amount' => ($detail['qty'] * $detail['unit_price']) - ($detail['discAmount'] ?? 0),
                 ]);
+
+               // Update product stock
+                $product = Product::find($detail['product_id']);
+                if ($product) {
+                    $product->decrement('stock_out_quantity', $detail['qty']);
+                    $product->increment('in_stock_quantity', $detail['qty']);
+                }
+
             }
 
             // ✅ Create double-entry transactions (same logic as PosApiController)
             $this->createPurchaseTransaction($purchase);
 
+         
             DB::commit();
 
             return response()->json([

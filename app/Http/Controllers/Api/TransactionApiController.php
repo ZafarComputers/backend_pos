@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+// Controllers
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// Resources
 use App\Http\Resources\FinanceAccount\CashFlowResource2;
+use App\Http\Resources\TransactionResource;
 
+
+// ✅ Make sure this is included
 use App\Models\Transaction;
+use App\Models\Customer;
 
 class TransactionApiController extends Controller
     {
@@ -44,6 +50,64 @@ class TransactionApiController extends Controller
 
             return response()->json(['status' => true, 'data' => $transactions]);
         }
+
+        /**
+     * Show all transactions for a specific customer.
+     *
+     * @param int $customer_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showByCustomer($customer_id)
+    {
+        $customer = Customer::with('coa')->find($customer_id);
+
+        if (!$customer) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Customer not found.',
+            ], 404);
+        }
+
+        $customerCoaId = $customer->coa?->id;
+
+        if (!$customerCoaId) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Customer COA not found.',
+            ], 404);
+        }
+
+        // $transactions = Transaction::with(['coa', 'coaRef'])
+        //     ->where('coas_id', $customerCoaId)
+        //     ->orderByDesc('date')
+        //     ->get();
+            
+        $transactions = Transaction::with(['coa', 'coaRef'])
+            ->where('coas_id', $customerCoaId)
+            ->orderByDesc('date')
+            ->get();
+
+            
+            // dd(transactions);
+        if ($transactions->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No transactions found for this customer.',
+                'data' => [],
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Transactions retrieved successfully.',
+            'customer' => [
+                'id' => $customer->id,
+                'name' => $customer->name,
+                'coa_id' => $customerCoaId,
+            ],
+            'data' => TransactionResource::collection($transactions),
+        ]);
+    }
 
         
 }

@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator; // ✅ Add this
 
 //  Resources
 use App\Http\Resources\EmployeeResource;
 
 // Models
 use App\Models\Employee;
+use App\Models\Coa;
 
 class EmployeeApiController extends Controller
 {
@@ -28,21 +31,37 @@ class EmployeeApiController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email',
             'cnic' => 'required|string|unique:employees,cnic',
-            'cell_no1' => 'string|max:15',
-            'cell_no2' => 'string|max:15',
+            'cell_no1' => 'nullable|string|max:15',
+            'cell_no2' => 'nullable|string|max:15',
             'city_id' => 'required|exists:cities,id',
             'address' => 'required|string',
-            'status' => 'required|in:Active,Inactive',
             'role_id' => 'required|exists:roles,id',
             'status' => 'required|in:Active,Inactive',
-
-            // 'salary' => 'required|numeric|min:0',
         ]);
 
-        $employee = Employee::create($validated);
+        return DB::transaction(function () use ($validated) {
+            // ✅ 1. Create Employee
+            $employee = Employee::create($validated);
 
-        return new EmployeeResource($employee);
+            // ✅ 2. Create related COA
+            Coa::create([
+                'coa_sub_id'   => 17,
+                'code'         => 'EMP-' . str_pad($employee->id, 4, '0', STR_PAD_LEFT),
+                'title'        => "{$employee->first_name} {$employee->last_name}",
+                'type'         => 'expense',
+                'status'       => 'Active',
+                'employee_id'  => $employee->id,
+            ]);
+
+            // ✅ 3. Return Response
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee and related COA created successfully.',
+                'data' => new EmployeeResource($employee->load('city', 'role')),
+            ], 201);
+        });
     }
+
 
     // Show method with improved error handling   
     public function show($id): JsonResponse
@@ -82,43 +101,64 @@ class EmployeeApiController extends Controller
         }
     }
 
+
     public function update(Request $request, Employee $employee)
     {
-        $data = $request->validate([
-            'cnic' => ['required', Rule::unique('employees', 'cnic')->ignore($employee->id)],
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => [
-                'nullable', // make optional
-                'email',
-                Rule::unique('employees', 'email')->ignore($employee->id), // ignore same record
-            ],
-            'address' => 'nullable|string|max:255',
-            'city_id' => 'nullable|integer',
-            'cell_no1' => 'required|string|max:20',
-            'cell_no2' => 'nullable|string|max:20',
-            'image_path' => 'nullable|image',
-            'role_id' => 'nullable|integer',
-            'status' => 'boolean',
+            'last_name'  => 'required|string|max:255',
+            'email'      => ['required','email', Rule::unique('employees','email')->ignore($employee->id)],
+            'cnic'       => ['required','string', Rule::unique('employees','cnic')->ignore($employee->id)],
+            'cell_no1'   => 'nullable|string|max:15',
+            'cell_no2'   => 'nullable|string|max:15',
+            'city_id'    => 'required|exists:cities,id',
+            'address'    => 'required|string',
+            'role_id'    => 'required|exists:roles,id',
+            'status'     => 'required|in:Active,Inactive',
         ]);
 
-        // ✅ If email is not provided, keep old one (do not overwrite with null)
-        if (!$request->filled('email')) {
-            unset($data['email']);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors(),
+            ], 422);
         }
 
-        if ($request->hasFile('image_path')) {
-            $data['image_path'] = $request->file('image_path')->store('employees', 'public');
-        }
+        return DB::transaction(function () use ($employee, $request) {
+            // ✅ 1. Update Employee record
+            $employee->update($request->all());
 
-        $employee->update($data);
+            // ✅ 2. Find existing COA record
+            $coa = Coa::where('employee_id', $employee->id)->first();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Employee updated successfully.',
-            'data' => $employee->fresh(),
-        ]);
+            if ($coa) {
+                // ✅ 3. Update existing COA
+                $coa->update([
+                    'title'  => "{$employee->first_name} {$employee->last_name}",
+                    'status' => ucfirst($employee->status),
+                ]);
+            } else {
+                // ✅ 4. Recreate COA if missing
+                Coa::create([
+                    'coa_sub_id'  => 17,
+                    'code'        => 'EMP-' . str_pad($employee->id, 4, '0', STR_PAD_LEFT),
+                    'title'       => "{$employee->first_name} {$employee->last_name}",
+                    'type'        => 'expense',
+                    'status'      => ucfirst($employee->status ?? 'Active'),
+                    'employee_id' => $employee->id,
+                ]);
+            }
+
+            // ✅ 5. Return Response
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee and related COA updated successfully.',
+                'data' => new EmployeeResource($employee->load('city', 'role')),
+            ]);
+        });
     }
+
 
     // Delete method with enhanced error handling
     public function destroy(Employee $employee): JsonResponse

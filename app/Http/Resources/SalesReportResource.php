@@ -6,26 +6,25 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SalesReportResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function toArray($request)
     {
         return [
-            'pos_inv_no' => $this->resource['pos_inv_no'],
-            'product_name' => $this->resource['product_name'],
-            'vendor' => $this->resource['vendor'],
-            'category' => $this->resource['category'],
-            'qty' => $this->resource['qty'],
-            'sale_price' => $this->resource['sale_price'],
-            'amount' => $this->resource['amount'],
-            'opening_stock_qty' => $this->resource['opening_stock_qty'],
-            'new_stock_qty' => $this->resource['new_stock_qty'],
-            'sold_stock_qty' => $this->resource['sold_stock_qty'],
-            'instock_qty' => $this->resource['instock_qty'],
+            'invoice_no'      => $this->id,
+            'invoice_date'    => $this->inv_date,
+            'ProductName'   => $this->details
+            
+            
+            
+            // these are final (but use another resource file - don't delete from here)
+            // 'invoice_no'      => $this->id,
+            // 'invoice_date'    => $this->inv_date,
+            // 'customer_name'   => optional($this->customer)->name,
+            // 'salesman'        => optional($this->employee)->first_name . ' ' . optional($this->employee)->last_name,
+            // 'total_amount'    => $this->inv_amount,
+            // 'discount'        => $this->discAmount,
+            // 'paid_amount'     => $this->paid,
+            // 'balance_amount'  => $this->inv_amount - $this->paid,
+            // 'details'         => PosInvoiceDetailResource::collection($this->details),
         ];
     }
 }

@@ -21,6 +21,11 @@ class Vendor extends Model
         'status',
     ];
 
+    public function coas()
+    {
+        return $this->hasMany(Coa::class, 'vendor_id');
+    }
+
     public function city() {
         return $this->belongsTo(City::class);
     }

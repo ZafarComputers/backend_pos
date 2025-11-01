@@ -23,7 +23,7 @@ class CustomerSeeder extends Seeder
         Customer::firstOrCreate(
             ['cnic' => '00000-0000000-0'],
             [
-                'cnic2'      => '11111-1111111-1',
+                'cnic2'      => '00000-0000000-0',
                 'name'       => 'Walk In Customer',
                 'name2'      => 'Customer',
                 'email'      => 'walkin@pos.local',

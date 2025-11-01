@@ -30,7 +30,6 @@ class Employee extends Model
         return $this->hasMany(Attendance::class);
     }
 
-
     // Example relationships
     public function city()
     {
@@ -55,5 +54,12 @@ class Employee extends Model
     {
         return $this->hasMany(Pos::class);
     }
+
+    public function coas()
+    {
+        return $this->hasMany(Coa::class, 'employee_id');
+    }
+
+
 
 }

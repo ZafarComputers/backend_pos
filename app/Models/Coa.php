@@ -6,12 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Coa extends Model
 {
-    protected $fillable = ['coa_sub_id', 'code', 'title', 'type', 'status'];
+    protected $fillable = ['coa_sub_id', 'code', 'title', 'type', 'status', 'vendor_id', 'customer_id', 'employee_id'];
+
 
     public function coaSub()
     {
         return $this->belongsTo(CoaSub::class);
     }
+
+ // Each COA may belong to a Vendor
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
+
+    // Each COA may belong to a Customer
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    // Each COA may belong to an Employee
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
+   
 
     /**
      * 🔗 A COA account may have many child accounts (hierarchical structure)

@@ -18,6 +18,8 @@ use App\Http\Resources\Reports\Inventory\InvtInhandResources;
 use App\Http\Resources\Reports\Vendor\VendorResource;
 use App\Http\Resources\Reports\Vendor\VendorDuesResource;
 use App\Http\Resources\Reports\Expenses\ExpenseReportResource;
+use App\Http\Resources\ProductSalesReportResource;
+
 
 // Models
 use App\Models\Pos;
@@ -26,42 +28,92 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Vendor;
 use App\Models\Customer;
-use App\Models\Expense;
+use App\Models\PayOut;
+// use App\Models\Expense;
+
 
 class SalesRepApiController extends Controller
 {
+    
+    
+    // public function getSalesReport(Request $request)
     public function getSalesReport(Request $request)
     {
-        $sales = Pos::with([
-            'details.product.vendor:id,first_name',
-            'details.product.subCategory:id,title',
-        ])
-        ->select('id')
-        ->get()
-        ->flatMap(function ($invoice) {
-            return $invoice->details->map(function ($detail) use ($invoice) {
-                return [
-                    'pos_inv_no' => $invoice->id,
-                    'product_name' => $detail->product->title ?? null,
-                    'vendor' => $detail->product->vendor->first_name ?? null,
-                    'category' => $detail->product->category->title ?? null,
-                    'qty' => $detail->qty,
-                    'sale_price' => $detail->sale_price,
-                    'amount' => $detail->sale_price * $detail->qty,
-                    'opening_stock_qty' => $detail->product->opening_stock_quantity,
-                    'new_stock_qty' => $detail->product->stock_in_quantity,
-                    'sold_stock_qty' => $detail->product->stock_out_quantity,
-                    'instock_qty' => $detail->product->in_stock_quantity,
-                ];
-            });
-        });
-            // dd($sales);
+        $query = Pos::with(['details.product', 'customer', 'employee'])->orderByDesc('inv_date');
+
+        if ($request->has('from_date') && $request->has('to_date')) {
+            $query->whereBetween('inv_date', [$request->from_date, $request->to_date]);
+        }
+
+        if ($request->has('employee_id')) {
+            $query->where('employee_id', $request->employee_id);
+        }
+
+        if ($request->has('customer_id')) {
+            $query->where('customer_id', $request->customer_id);
+        }
+
+        $invoices = $query->get();
+
+        if ($invoices->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No sales invoices found for the given criteria.',
+            ], 404);
+        }
+
         return response()->json([
             'status' => true,
-            'data' => SalesReportResource::collection($sales->values()),
+            'message' => 'Sales invoice report retrieved successfully.',
+            'data' => SalesReportResource::collection($invoices),
         ]);
     }
- 
+
+    // Products Sale Reprot
+    public function getProductSalesRep(Request $request)
+    {
+        $query = PosDetail::select(
+                'product_id',
+                DB::raw('SUM(qty) as total_sold_qty'),
+                DB::raw('MAX(pos_id) as last_pos_id')
+            )
+            ->groupBy('product_id')
+            ->with([
+                // ✅ Fully qualify columns to prevent ambiguity
+                'product.category' => function ($q) {
+                    $q->select('categories.id', 'categories.title');
+                },
+                'product.vendor' => function ($q) {
+                    $q->select('vendors.id', 'vendors.first_name', 'vendors.last_name');
+                },
+                'pos:id,inv_date'
+            ])
+            ->orderByDesc('total_sold_qty');
+
+        // ✅ Optional date filter
+        if ($request->has(['from_date', 'to_date'])) {
+            $query->whereHas('pos', function ($q) use ($request) {
+                $q->whereBetween('inv_date', [$request->from_date, $request->to_date]);
+            });
+        }
+
+        $report = $query->get();
+
+        if ($report->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No product sales found for the given criteria.',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Product sales report retrieved successfully.',
+            'data' => ProductSalesReportResource::collection($report),
+        ]);
+    }
+
+
 
     public function bestSellingProducts()
     {
@@ -108,34 +160,35 @@ class SalesRepApiController extends Controller
     }
 
     // Inventory Reports - (Get Inventory in Hand)
+    // public function getInventory(Request $request)
+    // {
+    //     // return response()->json("message: getInventory");
+
+    //         $inventory = Product::with(['subCategory', 'vendor'])
+    //         ->where('in_stock_quantity', '!=', 0)
+    //         ->get();
+
+    //     return InvtInhandResources::collection($inventory);
+    // }
     public function getInventory(Request $request)
     {
-        // return response()->json("message: getInventory");
-
-            $inventory = Product::with(['subCategory', 'vendor'])
-            ->where('in_stock_quantity', '!=', 0)
-            ->get();
-
+        $inventory = Product::where('stock_in_quantity', '!=', 0)->get();
         return InvtInhandResources::collection($inventory);
     }
+
 
     // Inventory Reports - (Get Inventory History:=> Opening,in,out,bal )
     public function getInventoryHistory(Request $request)
     {
-        // return response()->json("message: getInventoryHistory");
-        $inventoryHistory = Product::with(['subCategory', 'vendor'])->get();
-
+        $inventoryHistory = Product::get();
         return InventoryHistoryResources::collection($inventoryHistory);
     }
 
     // Inventory Reports - (Get Inventory Sold)
     public function getInventorySold(Request $request)
     {
-        $inventorySold = Product::with(['subCategory', 'vendor'])
-            ->where('stock_out_quantity', '!=', 0)
-            ->get();
-
-        return InventorySoldResources::collection($inventorySold);
+        $inventory = Product::where('stock_out_quantity', '!=', 0)->get();
+        return InventorySoldResources::collection($inventory);
     }
 
     // Vendor's Reports
@@ -205,18 +258,22 @@ class SalesRepApiController extends Controller
      *
      * This returns a simplified list of expenses for reporting purposes.
      */
-    public function expenseReport(Request $request)
+   public function expenseReport(Request $request)
     {
-        // Optional filters (like date range or category)
-        $query = Expense::with('category');
+        // Use the correct model
+        // $query = PayOut::with('category');
+        // $query = PayOut::all();
+        $query = PayOut::query();  // ✅ Correct way to start a query
+        
 
+        // Optional filters (date range or category)
         if ($request->has('from_date') && $request->has('to_date')) {
             $query->whereBetween('date', [$request->from_date, $request->to_date]);
         }
 
-        if ($request->has('category_id')) {
-            $query->where('expense_category_id', $request->category_id);
-        }
+        // if ($request->has('category_id')) {
+        //     $query->where('expense_category_id', $request->category_id);
+        // }
 
         $expenses = $query->latest()->get();
 

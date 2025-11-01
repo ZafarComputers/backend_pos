@@ -20,6 +20,10 @@ class PurchaseReturnDetailResource extends JsonResource
             'unit_price' => $this->unit_price,
             'discPer' => $this->discPer,
             'discAmount' => $this->discAmount,
+
+            // Stock in Hand
+            'bal_stock' => $this->product?->in_stock_quantity
+
         ];
     }
 }

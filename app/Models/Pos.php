@@ -11,23 +11,20 @@ class Pos extends Model
     use HasFactory;
 
     protected $fillable = [
+        
         'inv_date', 
         'customer_id', 
+        'transaction_type_id', // ✅ new column
+        'payment_mode_id', // ✅ new column
+        'employee_id', // ✅ added column
         'description', // ✅ include this
         'tax', 
         'discPer', 
         'discAmount',
         'inv_amount', 
         'paid',
-        'transaction_type_id', // ✅ new column
-        'payment_mode_id', // ✅ new column
-        'employee_id', // ✅ added column
+        'total_extra_amount'
     ];
-
-    public function extras()
-    {
-        return $this->hasMany(PosExtra::class);
-    }
 
     public function details()
     {

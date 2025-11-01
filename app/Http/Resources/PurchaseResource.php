@@ -26,7 +26,7 @@ class PurchaseResource extends JsonResource
             'inv_amount'     => $this->inv_amount,
             'payment_status' => $this->payment_status,
             'created_at'     => $this->created_at?->format('Y-m-d H:i:s'),
-            'PurDetails'        => PurchaseDetailResource::collection($this->whenLoaded('details')),
+            'PurDetails'     => PurchaseDetailResource::collection($this->whenLoaded('details')),
             // 'PurDetails'        => PurchaseDetailResource::collection($this->whenLoaded('details.product')),
             // 'updated_at'     => $this->updated_at?->format('Y-m-d H:i:s'),
         ];

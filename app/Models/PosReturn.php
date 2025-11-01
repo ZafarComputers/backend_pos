@@ -70,17 +70,11 @@ class PosReturn extends Model
         return $this->status === 'Active';
     }
     
-    // public function transactions()
-    // {
-    //     return $this->morphMany(Transaction::class, 'transactionable');
-    // }
-
-
-    // // // If your system uses direct foreign key (like pos_return_id column in transactions table):
-    // public function transactions()
-    // {
-    //     return $this->hasMany(Transaction::class, 'pos_return_id');
-    // }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }  
+    
 
     
 

@@ -11,10 +11,10 @@ return new class extends Migration {
             $table->id();
 
             // Pakistani CNIC format: 37405-1234567-1 (15 characters including dashes)
-            $table->string('cnic', 15)->unique();
+            $table->string('cnic', 15)->nullable();
 
             $table->string('name', 150);
-            $table->string('email', 150)->unique();
+            $table->string('email', 150)->nullable();
             $table->string('address', 255)->nullable();
             // FK relation to cities table
             $table->foreignId('city_id')->constrained()->onDelete('cascade');

@@ -8,28 +8,32 @@ class PosReturnResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'return_id' => $this->id,
-            'customerName' => $this->customer->name ?? null,
-            'pos_id' => $this->pos_id,
+            'id' => $this->id,
             'invRet_date' => $this->invRet_date,
-            'reason'   => $this->reason,
-            'return_inv_amount' => $this->return_inv_amount,
+            'customer' => [
+                'id' => $this->customer?->id,
+                'name' => $this->customer?->name,
+            ],
+            'employee' => [
+                'id' => $this->employee?->id,
+                'name' => $this->employee?->name,
+            ],
+            'transaction_type_id' => $this->transaction_type_id,
+            'payment_mode_id' => $this->payment_mode_id,
             'tax' => $this->tax,
             'discPer' => $this->discPer,
             'discAmount' => $this->discAmount,
-            'paid' => $this->paid, 
-            'transaction_type_id' =>$this->transaction_type_id , // ✅ new column
-            'payment_mode_id' => $this->payment_mode_id , // ✅ new column
-
-            'details' => PosReturnDetailResource::collection($this->whenLoaded('details')),
-
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'return_inv_amount' => $this->return_inv_amount,
+            'paid' => $this->paid,
+            'description' => $this->description,
+            'details' => PosReturnDetailResource::collection($this->details ?? []),
+            // 'details' => PosReturnDetailResource::collection($this->whenLoaded('details')),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

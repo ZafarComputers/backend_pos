@@ -11,13 +11,15 @@ return new class extends Migration
         Schema::create('pos', function (Blueprint $table) {
             $table->id();
             $table->date('inv_date');
+            $table->date('due_date')->nullable();
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->string('description', 255)->nullable();
             $table->decimal('tax', 10, 2)->default(0);
-            $table->decimal('discPer', 5, 2)->default(0);
-            $table->decimal('discAmount', 10, 2)->default(0);
+            $table->decimal('discPer', 5, 2)->nullable()->default(0);
+            $table->decimal('discAmount', 10, 2)->nullable()->default(0);
             $table->decimal('inv_amount', 10, 2)->default(0);
             $table->decimal('paid', 10, 2)->default(0);
+            $table->decimal('total_extra_amount', 10, 2)->nullable()->default(0);
             $table->timestamps();
 
             // Foreign keys

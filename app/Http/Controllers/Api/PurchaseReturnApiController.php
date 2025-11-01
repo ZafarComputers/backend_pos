@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\PurchaseReturnResource;
+
+// Models
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnDetail;
 use App\Models\Transaction;
-use App\Http\Resources\PurchaseReturnResource;
+use App\Models\Product;
 
 class PurchaseReturnApiController extends Controller
 {
@@ -78,6 +81,15 @@ class PurchaseReturnApiController extends Controller
                     'unit_price' => $detail['unit_price'],
                     'subtotal' => $detail['qty'] * $detail['unit_price'],
                 ]);
+
+                // Update product stock
+                $product = Product::find($detail['product_id']);
+                if ($product) {
+                    $product->increment('stock_out_quantity', $detail['qty']);
+                    $product->decrement('in_stock_quantity', $detail['qty']);
+                }
+
+
             }
 
             // ✅ Determine COA references

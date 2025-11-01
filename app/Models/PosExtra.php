@@ -10,14 +10,15 @@ class PosExtra extends Model
     use HasFactory;
 
     protected $fillable = [
-        'pos_id',
+        'pos_detail_id',
         'title',
         'value',
         'amount',
     ];
 
-    public function pos()
+    public function posDetail()
     {
-        return $this->belongsTo(Pos::class);
+        return $this->belongsTo(PosDetail::class);
     }
+
 }

@@ -3,28 +3,27 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Pos;
-use App\Models\Product;
+use App\Models\{Pos, Product, PosExtra};
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PosDetail>
- */
 class PosDetailFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            // 'pos_id' => Pos::factory(),
-            'pos_id' => Pos::inRandomOrder()->value('id'),
-            // 'product_id' => Product::factory(),                      // It generate new products and use them
-            'product_id' => Product::inRandomOrder()->value('id'),      // It takes previously saved Prodcuts
-            'qty' => $this->faker->numberBetween(1, 10),
-            'sale_price' => $this->faker->randomFloat(2, 5, 50),
+            'pos_id'      => Pos::inRandomOrder()->value('id'),
+            'product_id'  => Product::inRandomOrder()->value('id'),
+            'qty'         => $this->faker->numberBetween(1, 10),
+            'sale_price'  => $this->faker->randomFloat(2, 5, 50),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function ($detail) {
+            // Create extras for this detail
+            PosExtra::factory(rand(1, 2))->create([
+                'pos_detail_id' => $detail->id,
+            ]);
+        });
     }
 }

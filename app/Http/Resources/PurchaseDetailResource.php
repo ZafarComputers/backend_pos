@@ -24,6 +24,10 @@ class PurchaseDetailResource extends JsonResource
             // 'amount' => ($this->qty * $this->unit_price) - $this->discAmount,
             'amount' => number_format(($this->qty * $this->unit_price) - $this->discAmount, 2, '.', ''),
 
+            // Stock in Hand
+            'bal_stock' => $this->product?->in_stock_quantity
+
+
 
             // optional if you want product name too
         ];

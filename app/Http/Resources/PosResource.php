@@ -8,57 +8,61 @@ class PosResource extends JsonResource
 {
     public function toArray($request)
     {
-          // Start with basic fields
-        $data = [
-            'inv_id'       => $this->id,
-            'inv_date'     => $this->inv_date,
-            'customer_id'  => $this->customer_id,
-            'customer_name'=> optional($this->customer)->name,
-            'inv_amount'   => $this->inv_amount,
-            'paid_amount'  => $this->paid,
-            'tax'          => $this->tax,
-            'discPer'      => $this->discPer,
-            'discAmount'   => $this->discAmount,
-            'description'  => $this->description,
-            
-            'BankName'  => match ($this->payment_mode_id) {
-                // 2 => optional($this->transactions->first()?->coa)->title,
-                2 => $this->transactions->pluck('coa.title')->filter()->implode(', '),
-                default => '',
-            },
-            // 'transaction_type_id' => $this->transaction_type_id,
-            // transactionType
-            'transaction_type' => $this->transactionType ? $this->transactionType->transType : null,
+        // Calculate totals dynamically
+        $totalQty = $this->details->sum('qty');
+        $totalProductAmount = $this->details->sum(function ($detail) {
+            $extrasAmount = $detail->extras->sum('amount');
+            return ($detail->qty * $detail->sale_price) - $detail->discAmount + $extrasAmount;
+        });
 
-            'salesman'    => $this->employee ? $this->employee->first_name . " " .$this->employee->last_name  : null,
+        $grandTotal = $totalProductAmount + $this->tax - $this->discAmount;
 
-            // 'note'         => $this->note,
+        return [
+            'id' => $this->id,
+            'inv_date' => $this->inv_date,
+            'description' => $this->description,
+            'tax' => $this->tax,
+            'discPer' => $this->discPer,
+            'discAmount' => $this->discAmount,
+            'inv_amount' => $this->inv_amount,
+            'paid' => $this->paid,
+            'total_extra_amount' => $this->total_extra_amount,
+            'transaction_type_id' => $this->transaction_type_id,
+            'payment_mode_id' => $this->payment_mode_id,
+            'employee_id' => $this->employee_id,
+            'employeeName' => $this->employee->first_name ." " .$this->employee->last_name,
+
+            // Customer Info
+            'customer_id' => $this->customer->id,
+            'customerName' => $this->customer->name,
+            'customerCnic' => $this->customer->cnic,
+
+            // Salesman
+            'saleman_id' => $this->employee->id,
+            'salemanName' => $this->employee->first_name ." " .$this->employee->last_name,
+
+            // Coa ID of current Selected Customer
+            'coa_id' => optional($this->customer->coa)->id, // ✅ safe access
+
+
+            // ✅ Related Models
+            // 'customer' => new CustomerResource($this->whenLoaded('customer')),
+            // 'employee' => new EmployeeResource($this->whenLoaded('employee')),
+            'details' => PosDetailResource::collection($this->whenLoaded('details')),
+            'bank_detail' => new PosBankDetailResource($this->whenLoaded('bankDetail')),
+            'payment_mode' => new PaymentModeResource($this->whenLoaded('paymentMode')),
+            'transaction_type' => new TransactionTypeResource($this->whenLoaded('transactionType')),
+
+            // ✅ Computed fields
+            'computed' => [
+                'total_qty' => $totalQty,
+                'total_product_amount' => round($totalProductAmount, 2),
+                'grand_total' => round($grandTotal, 2),
+                'balance_due' => round($grandTotal - $this->paid, 2),
+            ],
+
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];
-        
-        // Add bank info only when payment mode is 'Bank'
-        if ($this->payment_mode === 'Bank' && $this->bankDetail) {
-            $data['bank_detail'] = [
-                'bank_name'      => $this->bankDetail->bank_name,
-                'account_number' => $this->bankDetail->account_number,
-            ];
-        }
-        
-        // Include POS item details (products, qty, price, etc.)
-        $data['details'] = PosDetailResource::collection($this->whenLoaded('details'));
-        
-        //  // --- Include invoice extras (like lace, size, embroidery, etc.)
-        // $data['extras'] = $this->extras->map(function ($extra) {
-        //     return [
-        //         'title'  => $extra->title,
-        //         'value'  => $extra->value,
-        //         'amount' => $extra->amount,
-        //     ];
-        // });
-        $data['extras'] = PosExtraResource::collection($this->whenLoaded('extras'));
-
-        return $data;
-        
-        // 'details' => PosDetailResource::collection($this->whenLoaded('details')),
-        
     }
 }

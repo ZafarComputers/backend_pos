@@ -9,7 +9,9 @@ return new class extends Migration {
     {
         Schema::create('pos_extras', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pos_id')->constrained('pos')->onDelete('cascade');
+             $table->foreignId('pos_detail_id')
+                  ->constrained('pos_details')
+                  ->onDelete('cascade');
             $table->string('title');           // e.g. "Lace", "Size", "Embroidery"
             $table->string('value')->nullable(); // e.g. "Golden", "Medium"
             $table->decimal('amount', 10, 2)->default(0); // Extra charge amount

@@ -233,6 +233,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // General Setting's Routes
 Route::middleware('auth:sanctum')->group(function () {
     // Customer's Routes
+    Route::get('custOrderInvoices', [CustomerApiController::class, 'getCustomerOrderInvoices']);
     Route::apiResource('customers', CustomerApiController::class);
    
     // Employee's Routes
@@ -278,12 +279,14 @@ Route::middleware('auth:sanctum')->group(function () {
 // POS & POS-Detail Routes
 Route::prefix('pos')->group(function () {
     // Main POS routes
+    Route::get('/showAllInvoices', [PosApiController::class, 'getAllInvoices']);
+    Route::get('/salesman/{employee_id}', [PosApiController::class, 'getSalesmanReport']);
     Route::get('/', [PosApiController::class, 'index']);
     Route::post('/', [PosApiController::class, 'store']);
     Route::get('/todaySummary', [PosApiController::class, 'todaySummary']);
     Route::put('/{id}', [PosApiController::class, 'update']);
     Route::delete('/{id}', [PosApiController::class, 'destroy']);
-    Route::get('/salesman/{employees_id}', [PosApiController::class, 'getSalesmanReport']);
+
 
     // ✅ Place all static/resource routes BEFORE dynamic /{id}
     Route::apiResource('pos-bridals', PosBridalApiController::class);
@@ -361,6 +364,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     // Sale Report's Routes
     Route::get('/salesRep', [SalesRepApiController::class, 'getSalesReport']);
+    Route::get('/productSalesRep', [SalesRepApiController::class, 'getProductSalesRep']);
     Route::get('/reports/best-selling-products', [SalesRepApiController::class, 'bestSellingProducts']);
     
     // Inventory's Reports
@@ -410,8 +414,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Transacton Test Route
     Route::get('/transactions2', [TransactionApiController::class, 'index2']);
-    Route::get('/cashflow2', [TransactionApiController::class, 'cashFlow2']);
+    Route::get('/cashflow2', [FinanceAccountApiController::class, 'cashFlow']);
+    Route::get('transactions/customer/{customer_id}', [TransactionApiController::class, 'showByCustomer']);
+    // Route::get('/cashflow2', [TransactionApiController::class, 'cashFlow2']);
     Route::apiResource('transactions', TransactionApiController::class);
+    // Get all transactions for a specific customer
+
 
 
     // Cash Flow Report Route

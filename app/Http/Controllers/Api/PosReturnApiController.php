@@ -5,451 +5,243 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use App\Helpers\TransactionHelper;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
-// Resources
-use App\Http\Resources\PosReturnResource;
-
-// Models
-use App\Models\Product;
-use App\Models\Transaction;
 use App\Models\PosReturn;
+use App\Models\Product;
 
-
+use App\Http\Resources\PosReturnResource;
 
 class PosReturnApiController extends Controller
 {
     /**
-     * Display all POS Returns.
+     * Display a listing of the POS Returns.
      */
     public function index()
     {
-        $returns = PosReturn::with(['customer', 'pos', 'details.product'])
+        $posReturns = PosReturn::with(['customer', 'employee', 'details.product'])
             ->latest()
             ->get();
 
         return response()->json([
             'status' => true,
-            'data'   => PosReturnResource::collection($returns),
+            'message' => 'POS Return list retrieved successfully.',
+            'data' => PosReturnResource::collection($posReturns),
         ]);
     }
 
     /**
-     * Store a new POS Return.
+     * Store a newly created POS Return.
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'invRet_date'          => 'required|date',
-            'payment_mode_id'      => 'required|exists:payment_modes,id',
-            'transaction_type_id'  => 'nullable|exists:transaction_types,id',
-            'customer_id'          => 'required|exists:customers,id',
-            'bank_acc_id'          => 'nullable|exists:coas,id',
-            'pos_id'               => 'nullable|numeric|min:0',
-            'tax'                  => 'nullable|numeric|min:0',
-            'discPer'              => 'nullable|numeric|min:0',
-            'discAmount'           => 'nullable|numeric|min:0',
-            'paid'                 => 'nullable|numeric|min:0',
-            'return_inv_amount'    => 'nullable|numeric|min:0',
-            'details'              => 'required|array|min:1',
-            'details.*.product_id' => 'required|exists:products,id',
-            'details.*.qty'        => 'required|numeric|min:1',
-            'details.*.return_unit_price' => 'required|numeric|min:0',
-            
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
-        }
-
         DB::beginTransaction();
 
         try {
-            // ✅ Calculate totals
-            $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['return_unit_price']);
-            $discAmount = $request->discAmount ?? 0;
-            $tax = $request->tax ?? 0;
-            $finalAmount = $subtotal - $discAmount - $tax;
-            $paid = (float) ($request->paid ?? 0);
+            $validated = $this->validatePosReturn($request);
 
-            $payment_status = match (true) {
-                $paid >= $finalAmount => 'Refunded',
-                $paid <= 0 => 'Unrefunded',
-                default => 'Partial Refund',
-            };
-
-            // ✅ Create POS Return
             $posReturn = PosReturn::create([
-                'invRet_date'         => $request->invRet_date,
-                'customer_id'         => $request->customer_id,
-                'pos_id'              => $request->pos_id ?? 0,
-                'tax'                 => $tax,
-                'discPer'             => $request->discPer ?? 0,
-                'discAmount'          => $discAmount,
-                'return_inv_amount'   => $finalAmount,
-                'paid'                => $paid,
-                'payment_mode_id'     => $request->payment_mode_id,
-                'transaction_type_id' => $request->transaction_type_id ?? 4, // 4 = Sale Return
-                'reason'              => $request->reason ?? '',
-                'payment_status'      => $payment_status,
+                'invRet_date' => $validated['invRet_date'],
+                'customer_id' => $validated['customer_id'],
+                'employee_id' => $validated['employee_id'],
+                'transaction_type_id' => $validated['transaction_type_id'] ?? 3, // default Return
+                'payment_mode_id' => $validated['payment_mode_id'],
+                'tax' => $validated['tax'] ?? 0,
+                'discPer' => $validated['discPer'] ?? 0,
+                'discAmount' => $validated['discAmount'] ?? 0,
+                'return_inv_amount' => $validated['return_inv_amount'],
+                'paid' => $validated['paid'] ?? 0,
+                'description' => $validated['description'] ?? null,
             ]);
 
-            // ✅ Store details and update stock (return adds stock back)
-            foreach ($request->details as $detail) {
-                $posReturn->details()->create([
-                    'product_id' => $detail['product_id'],
-                    'qty'        => $detail['qty'],
-                    'return_unit_price' => $detail['return_unit_price'],
-                    'total'      => $detail['qty'] * $detail['return_unit_price'],
-                ]);
-
-                $product = Product::find($detail['product_id']);
-                if ($product) {
-                    $product->increment('in_stock_quantity', $detail['qty']);
-                    $product->decrement('stock_out_quantity', $detail['qty']);
-                }
-            }
-
-            // ✅ Transactions
-            $userId = Auth::id() ?? 1;
-            $transTypeId = 4; // Sale Return
-            $coaSalesReturn = 8; // COA for Sale Return
-            $paymentModeId = (int) $request->payment_mode_id;
-
-            $coaRefId = match ($paymentModeId) {
-                1 => 3, // Cash
-                2 => $request->bank_acc_id, // Bank
-                3 => $request->customer_id, // Credit
-                default => throw new \Exception("Invalid payment mode selected."),
-            };
-
-            if (empty($coaRefId) || !is_numeric($coaRefId)) {
-                throw new \Exception('Invalid COA reference detected.');
-            }
-
-            // ✅ Debit Sale Return
-            Transaction::create([
-                'date' => $request->invRet_date,
-                'invRef_id' => $posReturn->id,
-                'transaction_type_id' => $transTypeId,
-                'coas_id' => $coaSalesReturn,
-                'coaRef_id' => $coaRefId,
-                'users_id' => $userId,
-                'description' => 'POS Return: INV-' . $posReturn->id,
-                'debit' => $finalAmount,
-                'credit' => 0,
-            ]);
-
-            // ✅ Credit Cash/Bank/Customer
-            if ($payment_status === 'Refunded') {
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $coaRefId,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (Full Refund): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $finalAmount,
-                ]);
-            } elseif ($payment_status === 'Partial Refund') {
-                $balance = $finalAmount - $paid;
-
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $coaRefId,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (Partial Refund): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $paid,
-                ]);
-
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $request->customer_id,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (Balance Unpaid): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $balance,
-                ]);
-            } else {
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $request->customer_id,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (On Credit): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $finalAmount,
-                ]);
-            }
+            $this->saveDetailsAndAdjustStock($posReturn, $validated['details']);
 
             DB::commit();
 
-            $posReturn->load(['details.product', 'customer']);
             return response()->json([
                 'status' => true,
                 'message' => 'POS Return created successfully.',
-                'data' => new PosReturnResource($posReturn),
+                'data' => new PosReturnResource($posReturn->load(['details.product', 'customer', 'employee'])),
             ], 201);
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['status' => false, 'message' => 'Failed to create POS Return', 'error' => $e->getMessage()], 500);
-        }
-    }
-
-    /**
-     * Show a single POS Return.
-     */
-    public function show($id)
-    {
-        $posReturn = PosReturn::with(['customer', 'pos', 'details.product'])->find($id);
-
-        if (!$posReturn) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'POS Return not found.',
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => true,
-            'data'   => new PosReturnResource($posReturn),
-        ]);
-    }
-
-    /**
-     * Update a POS Return.
-     */
-    public function update(Request $request, PosReturn $posReturn)
-    {
-        // dd($posReturn->id);
-        $validator = Validator::make($request->all(), [
-            'invRet_date'          => 'required|date',
-            'payment_mode_id'      => 'required|exists:payment_modes,id',
-            'transaction_type_id'  => 'nullable|exists:transaction_types,id',
-            'customer_id'          => 'required|exists:customers,id',
-            'bank_acc_id'          => 'nullable|exists:coas,id',
-            'pos_id'               => 'nullable|numeric|min:0',
-            'tax'                  => 'nullable|numeric|min:0',
-            'discPer'              => 'nullable|numeric|min:0',
-            'discAmount'           => 'nullable|numeric|min:0',
-            'paid'                 => 'nullable|numeric|min:0',
-            'details'              => 'required|array|min:1',
-            'details.*.product_id' => 'required|exists:products,id',
-            'details.*.qty'        => 'required|numeric|min:1',
-            'details.*.return_unit_price' => 'required|numeric|min:0',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
-        }
-
-        DB::beginTransaction();
-
-        try {
-            // Recalculate totals
-            $subtotal = collect($request->details)->sum(fn($d) => $d['qty'] * $d['return_unit_price']);
-            $discAmount = (float) ($request->discAmount ?? 0);
-            $tax = (float) ($request->tax ?? 0);
-            $finalAmount = $subtotal - $discAmount + $tax;
-            $paid = (float) ($request->paid ?? 0);
-
-            $payment_status = match (true) {
-                $paid >= $finalAmount => 'Refunded',
-                $paid <= 0 => 'Unrefunded',
-                default => 'Partial Refund',
-            };
-
-            // Update parent pos return
-            $posReturn->update([
-                'invRet_date'         => $request->invRet_date,
-                'customer_id'         => $request->customer_id,
-                'pos_id'              => $request->pos_id ?? $posReturn->pos_id ?? 0,
-                'tax'                 => $tax,
-                'discPer'             => $request->discPer ?? $posReturn->discPer ?? 0,
-                'discAmount'          => $discAmount,
-                'return_inv_amount'   => $finalAmount,
-                'paid'                => $paid,
-                'payment_mode_id'     => $request->payment_mode_id,
-                'transaction_type_id' => $request->transaction_type_id ?? $posReturn->transaction_type_id ?? 4,
-                'reason'              => $request->reason ?? $posReturn->reason ?? '',
-                'payment_status'      => $payment_status,
-            ]);
-            // logger('Updating POS Return ID: ' . $posReturn->id);
-
-
-            // Remove old details and adjust stock/transactions as needed
-            // If you prefer to preserve history, consider soft-delete or move them elsewhere.
-            foreach ($posReturn->details as $oldDetail) {
-                // *Reverse* the earlier stock changes for old details
-                $product = Product::find($oldDetail->product_id);
-                if ($product) {
-                    // remove previously added back stock (since we will re-add based on new details)
-                    $product->decrement('in_stock_quantity', $oldDetail->qty);
-                    $product->increment('stock_out_quantity', $oldDetail->qty);
-                }
-            }
-
-            // Delete old details
-            $posReturn->details()->delete();
-
-            // Create new details via relationship so pos_return_id is set automatically
-            foreach ($request->details as $detail) {
-                $created = $posReturn->details()->create([
-                    'product_id' => $detail['product_id'],
-                    'qty'        => $detail['qty'],
-                    'return_unit_price' => $detail['return_unit_price'],
-                    'total'      => $detail['qty'] * $detail['return_unit_price'],
-                ]);
-
-                // Update product stock (return adds stock back)
-                $product = Product::find($detail['product_id']);
-                if ($product) {
-                    $product->increment('in_stock_quantity', $detail['qty']);
-                    $product->decrement('stock_out_quantity', $detail['qty']);
-                }
-            }
-
-            // TODO: Recreate transactions logic: remove old transactions for this pos_return and recreate.
-            // You should delete or reverse previous Transaction rows related to this posReturn->id before creating new ones.
-            // Below is a simplified recreation that assumes you've already removed old transactions for this invRef_id.
-            $userId = Auth::id() ?? 1;
-            $transTypeId = 4; // Sale Return
-            $coaSalesReturn = 8; // COA for Sale Return (example)
-            $paymentModeId = (int) $request->payment_mode_id;
-
-            $coaRefId = match ($paymentModeId) {
-                1 => 3, // Cash
-                2 => $request->bank_acc_id,
-                3 => $request->customer_id,
-                default => throw new \Exception("Invalid payment mode selected."),
-            };
-
-            if (empty($coaRefId) || !is_numeric($coaRefId)) {
-                throw new \Exception('Invalid COA reference detected.');
-            }
-
-            // Remove old transactions for this pos return (recommended)
-            Transaction::where('invRef_id', $posReturn->id)->delete();
-
-            // Debit Sale Return
-            Transaction::create([
-                'date' => $request->invRet_date,
-                'invRef_id' => $posReturn->id,
-                'transaction_type_id' => $transTypeId,
-                'coas_id' => $coaSalesReturn,
-                'coaRef_id' => $coaRefId,
-                'users_id' => $userId,
-                'description' => 'POS Return: INV-' . $posReturn->id,
-                'debit' => $finalAmount,
-                'credit' => 0,
-            ]);
-
-            // Credit according to payment_status
-            if ($payment_status === 'Refunded') {
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $coaRefId,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (Full Refund): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $finalAmount,
-                ]);
-            } elseif ($payment_status === 'Partial Refund') {
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $coaRefId,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (Partial Refund): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $paid,
-                ]);
-
-                $balance = $finalAmount - $paid;
-
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $request->customer_id,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (Balance Unpaid): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $balance,
-                ]);
-            } else {
-                Transaction::create([
-                    'date' => $request->invRet_date,
-                    'invRef_id' => $posReturn->id,
-                    'transaction_type_id' => $transTypeId,
-                    'coas_id' => $request->customer_id,
-                    'coaRef_id' => $coaSalesReturn,
-                    'users_id' => $userId,
-                    'description' => 'POS Return (On Credit): INV-' . $posReturn->id,
-                    'debit' => 0,
-                    'credit' => $finalAmount,
-                ]);
-            }
-
-            DB::commit();
-
-            $posReturn->load(['details.product', 'customer']);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'POS Return updated successfully.',
-                'data' => new PosReturnResource($posReturn),
-            ], 200);
-        } catch (\Throwable $e) {
+        } catch (ValidationException $e) {
             DB::rollBack();
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to update POS Return',
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to create POS Return.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Delete a POS Return.
+     * Display the specified POS Return.
      */
-    public function destroy(PosReturn $posReturn)
+    public function show(PosReturn $posReturn)
     {
+        $posReturn->load(['details.product', 'customer', 'employee']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'POS Return details retrieved successfully.',
+            'data' => new PosReturnResource($posReturn),
+        ]);
+    }
+
+    /**
+     * Update the specified POS Return.
+     */
+    public function update(Request $request, PosReturn $posReturn)
+    {
+        DB::beginTransaction();
+
         try {
+            $validated = $this->validatePosReturn($request);
+
+            // Reverse old stock adjustments
+            foreach ($posReturn->details as $oldDetail) {
+                $product = Product::find($oldDetail->product_id);
+                if ($product) {
+                    $product->increment('stock_out_quantity', $oldDetail->qty);
+                    $product->decrement('in_stock_quantity', $oldDetail->qty);
+                }
+            }
+
+            // Update main record
+            $posReturn->update([
+                'invRet_date' => $validated['invRet_date'],
+                'customer_id' => $validated['customer_id'],
+                'employee_id' => $validated['employee_id'],
+                'transaction_type_id' => $validated['transaction_type_id'] ?? $posReturn->transaction_type_id,
+                'payment_mode_id' => $validated['payment_mode_id'],
+                'tax' => $validated['tax'] ?? 0,
+                'discPer' => $validated['discPer'] ?? 0,
+                'discAmount' => $validated['discAmount'] ?? 0,
+                'return_inv_amount' => $validated['return_inv_amount'],
+                'paid' => $validated['paid'] ?? 0,
+                'description' => $validated['description'] ?? null,
+            ]);
+
+            // Delete old details and save new ones
             $posReturn->details()->delete();
-            $posReturn->delete();
+            $this->saveDetailsAndAdjustStock($posReturn, $validated['details']);
+
+            DB::commit();
 
             return response()->json([
-                'status'  => true,
-                'message' => 'POS Return deleted successfully.',
+                'status' => true,
+                'message' => 'POS Return updated successfully.',
+                'data' => new PosReturnResource($posReturn->load(['details.product', 'customer', 'employee'])),
             ]);
-        } catch (\Exception $e) {
+
+        } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
-                'status'  => false,
-                'message' => 'Failed to delete POS Return.',
-                'error'   => $e->getMessage(),
+                'status' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to update POS Return.',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
+    /**
+     * Remove the specified POS Return.
+     */
+    public function destroy(PosReturn $posReturn)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Reverse stock
+            foreach ($posReturn->details as $detail) {
+                $product = Product::find($detail->product_id);
+                if ($product) {
+                    $product->increment('stock_out_quantity', $detail->qty);
+                    $product->decrement('in_stock_quantity', $detail->qty);
+                }
+            }
+
+            $posReturn->details()->delete();
+            $posReturn->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'POS Return deleted successfully.',
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to delete POS Return.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Validate POS Return request.
+     */
+    private function validatePosReturn(Request $request)
+    {
+        return $request->validate([
+            'invRet_date' => 'required|date',
+            'customer_id' => 'required|exists:customers,id',
+            'employee_id' => 'required|exists:employees,id',
+            'transaction_type_id' => 'nullable|exists:transaction_types,id',
+            'payment_mode_id' => 'required|exists:payment_modes,id',
+
+            'tax' => 'nullable|numeric|min:0',
+            'discPer' => 'nullable|numeric|min:0',
+            'discAmount' => 'nullable|numeric|min:0',
+            'return_inv_amount' => 'required|numeric|min:0',
+            'paid' => 'nullable|numeric|min:0',
+            'description' => 'nullable|string|max:255',
+
+            'details' => 'required|array|min:1',
+            'details.*.product_id' => 'required|exists:products,id',
+            'details.*.qty' => 'required|numeric|min:1',
+            'details.*.return_unit_price' => 'required|numeric|min:0',
+            'details.*.discPer' => 'nullable|numeric|min:0',
+            'details.*.discAmount' => 'nullable|numeric|min:0',
+        ]);
+    }
+
+    /**
+     * Save POS Return details and adjust stock.
+     */
+    private function saveDetailsAndAdjustStock(PosReturn $posReturn, array $details)
+    {
+        foreach ($details as $detail) {
+            $posReturn->details()->create([
+                'product_id' => $detail['product_id'],
+                'qty' => $detail['qty'],
+                'return_unit_price' => $detail['return_unit_price'],
+                'discPer' => $detail['discPer'] ?? 0,
+                'discAmount' => $detail['discAmount'] ?? 0,
+            ]);
+
+            $product = Product::find($detail['product_id']);
+            if ($product) {
+                $product->decrement('stock_out_quantity', $detail['qty']);
+                $product->increment('in_stock_quantity', $detail['qty']);
+            }
+        }
+    }
 }

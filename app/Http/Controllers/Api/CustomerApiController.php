@@ -8,15 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
+
 
 // Resources
 use App\Http\Resources\CustomerResource;
 
 // Models
 use App\Models\Customer;
+use App\Models\Coa;
+use App\Models\Pos;
 
 class CustomerApiController extends Controller
 {
+
+    // getCustomerOrderInvoices
+    public function getCustomerOrderInvoices() 
+    {
+        $bridalData = Pos::all();
+        return $bridalData;          
+    }
+
+
     /**
      * Display all customers.
      */
@@ -37,9 +50,8 @@ class CustomerApiController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'cnic' => 'required|string|max:20|unique:customers,cnic',
+            'cnic' => 'string|max:20',
             'name' => 'required|string|max:255',
-            // 'email' => 'nullable|email|unique:customers,email',
             'email' => 'nullable|email',
             'address' => 'nullable|string|max:500',
             'city_id' => 'required|exists:cities,id',
@@ -60,13 +72,27 @@ class CustomerApiController extends Controller
             ], 422);
         }
 
-        $customer = Customer::create($request->all());
+        return DB::transaction(function () use ($request) {
+            // ✅ 1. Create Customer
+            $customer = Customer::create($request->all());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Customer created successfully',
-            'data' => new CustomerResource($customer->load('city')),
-        ], 201);
+            // ✅ 2. Create related COA record with coa_sub_id = 5
+            Coa::create([
+                'coa_sub_id' => 5, // Updated sub-account group
+                'code' => 'CUST-' . str_pad($customer->id, 4, '0', STR_PAD_LEFT),
+                'title' => $customer->name,
+                'type' => 'asset',
+                'status' => ucfirst($customer->status ?? 'Active'),
+                'customer_id' => $customer->id,
+            ]);
+
+            // ✅ 3. Return response with COA linkage
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer created successfully and linked with COA.',
+                'data' => new CustomerResource($customer->load('city')),
+            ], 201);
+        });
     }
 
     /**
@@ -76,7 +102,7 @@ class CustomerApiController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => new CustomerResource($customer->load('city')),
+            'data' => new CustomerResource($customer->load(['city','coa'])),
         ], 200);
     }
 
@@ -86,9 +112,8 @@ class CustomerApiController extends Controller
     public function update(Request $request, Customer $customer): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'cnic' => 'required|string|max:20|unique:customers,cnic,' . $customer->id,
+            'cnic' => 'string|max:20',
             'name' => 'required|string|max:255',
-            // 'email' => 'nullable|email|unique:customers,email,' . $customer->id,
             'email' => 'nullable|email',
             'address' => 'nullable|string|max:500',
             'city_id' => 'required|exists:cities,id',
@@ -109,14 +134,40 @@ class CustomerApiController extends Controller
             ], 422);
         }
 
-        $customer->update($request->all());
+        return DB::transaction(function () use ($customer, $request) {
+            // ✅ 1. Update customer record
+            $customer->update($request->all());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Customer updated successfully',
-            'data' => new CustomerResource($customer->load('city')),
-        ], 200);
+            // ✅ 2. Find related COA
+            $coa = Coa::where('customer_id', $customer->id)->first();
+
+            // ✅ 3. Update or create COA record
+            if ($coa) {
+                $coa->update([
+                    'title' => $customer->name,
+                    'status' => ucfirst($customer->status ?? 'Active'),
+                ]);
+            } else {
+                // If COA missing, recreate safely
+                Coa::create([
+                    'coa_sub_id' => 11,
+                    'code' => 'CUST-' . str_pad($customer->id, 4, '0', STR_PAD_LEFT),
+                    'title' => $customer->name,
+                    'type' => 'asset',
+                    'status' => ucfirst($customer->status ?? 'Active'),
+                    'customer_id' => $customer->id,
+                ]);
+            }
+
+            // ✅ 4. Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer and related COA updated successfully.',
+                'data' => new \App\Http\Resources\CustomerResource($customer->load('city')),
+            ]);
+        });
     }
+
 
     /**
      * Remove the specified customer.
@@ -144,4 +195,5 @@ class CustomerApiController extends Controller
             ], 500);
         }
     }
+    
 }

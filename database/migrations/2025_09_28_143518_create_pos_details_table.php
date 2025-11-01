@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('pos_id')->constrained('pos')->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->integer('qty');
+            $table->integer('discPer')->nullable()->default(0);
+            $table->integer('discAmount')->nullable()->default(0);
             $table->decimal('sale_price', 10, 2);
             $table->timestamps();
         });

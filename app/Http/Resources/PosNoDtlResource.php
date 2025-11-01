@@ -20,6 +20,7 @@ class PosNoDtlResource extends JsonResource
             // 'discAmount'   => $this->discAmount,
             'inv_amount'   => $this->inv_amount,
             'paid_amount'         => $this->paid,
+            'due_amount'    => $this->inv_amount - $this->paid,
             'payment_mode' => $this->paymentMode->mode_name ?? null,
 
             // 'BankName1' => $this->payment_mode_id == 2
